@@ -1,0 +1,23 @@
+# Git files
+.git
+.gitignore
+
+# Node modules
+node_modules
+
+# Next.js build output
+.next
+
+# Log files
+*.log
+
+# Environment variables
+.env*
+
+# Docker specific files
+Dockerfile*
+docker-compose.yml
+
+# IDE/Editor specific files
+.vscode
+.idea 
