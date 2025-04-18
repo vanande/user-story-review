@@ -1,10 +1,6 @@
 // app/api/admin/reviews/route.ts
 import { NextResponse } from "next/server"
-import { Pool } from "pg"
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-})
 
 export async function GET() {
   try {
@@ -37,16 +33,11 @@ export async function GET() {
       ORDER BY r.id DESC
     `
 
-    try {
-      const result = await pool.query(query)
-      return NextResponse.json({ reviews: result.rows })
-    } catch (dbError) {
-      console.error("Database query error:", dbError)
-      // Return mock data as fallback
+
       return NextResponse.json({
         reviews: getMockReviews(),
       })
-    }
+    
   } catch (error) {
     console.error("Error fetching reviews:", error)
     return NextResponse.json({ error: "Failed to fetch reviews" }, { status: 500 })
