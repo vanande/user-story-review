@@ -1,14 +1,7 @@
-import { NextResponse } from "next/server"
-import { Pool } from "pg"
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-})
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    // In a real implementation, this would query the database
-    // For now, we'll return mock data
     const mockUserStories = [
       {
         id: 1,
@@ -19,7 +12,7 @@ export async function GET() {
         id: 2,
         title: "Search Functionality",
         description:
-          "As a customer, I want to search for products by name so that I can quickly find what I'm looking for.",
+            "As a customer, I want to search for products by name so that I can quickly find what I'm looking for.",
       },
       {
         id: 3,
@@ -30,7 +23,7 @@ export async function GET() {
         id: 4,
         title: "User Profile",
         description:
-          "As a registered user, I want to update my profile information so that my account details are current.",
+            "As a registered user, I want to update my profile information so that my account details are current.",
       },
       {
         id: 5,
@@ -39,9 +32,10 @@ export async function GET() {
       },
     ]
 
-    return NextResponse.json({ success: true, data: mockUserStories })
+    console.log("Admin stories route returning mock data.");
+    return NextResponse.json({ success: true, data: mockUserStories });
   } catch (error) {
-    console.error("Error fetching stories:", error)
-    return NextResponse.json({ error: "Failed to fetch stories" }, { status: 500 })
+    console.error("Error fetching admin stories (mock fallback):", error);
+    return NextResponse.json({ error: "Failed to fetch stories (returning mock)" }, { status: 500 });
   }
 }

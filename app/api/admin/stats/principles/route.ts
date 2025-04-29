@@ -77,7 +77,6 @@ export async function GET(request: Request) {
       },
     ]
 
-    // Filter by storyId if provided
     const filteredStats = storyId
       ? mockPrincipleStats.filter((stat) => stat.storyId === Number.parseInt(storyId))
       : mockPrincipleStats

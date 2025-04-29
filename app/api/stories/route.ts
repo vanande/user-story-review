@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
-import fs from "fs/promises" // Add fs import
-import path from "path" // Add path import
-import { UserStory } from "@/lib/types" // Import UserStory type
+import fs from "fs/promises"
+import path from "path"
+import { UserStory } from "@/lib/types"
 
 // Function to shuffle an array (Fisher-Yates shuffle)
 function shuffleArray<T>(array: T[]): T[] {
@@ -20,7 +20,7 @@ export async function GET() {
     const data = JSON.parse(jsonData)
 
     let allStories: UserStory[] = []
-    let storyIdCounter = 1 // Simple counter for unique IDs
+    let storyIdCounter = 1
 
     for (const sourceKey of Object.keys(data)) {
       const source = data[sourceKey]
@@ -28,12 +28,9 @@ export async function GET() {
         for (const epic of source.epics) {
           if (epic.user_stories && Array.isArray(epic.user_stories)) {
             for (const story of epic.user_stories) {
-              // Extract data, providing defaults for optional fields
               const description = story.user_story
-              // Generate a title (e.g., first 70 chars)
               const title = description.substring(0, 70) + (description.length > 70 ? "..." : "")
               const acceptance_criteria = story.acceptance_criteria || []
-              // Assign INVEST criteria or null if not present
               const independent = story.independent === undefined ? null : story.independent
               const negotiable = story.negotiable === undefined ? null : story.negotiable
               const valuable = story.valuable === undefined ? null : story.valuable
@@ -59,7 +56,6 @@ export async function GET() {
       }
     }
 
-    // --- Select 5 random stories ---
     const shuffledStories = shuffleArray(allStories);
     const selectedStories = shuffledStories.slice(0, 5);
 
@@ -68,18 +64,16 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      stories: selectedStories, // Return the 5 random stories from JSON
+      stories: selectedStories,
     })
   } catch (error) {
-    console.error("Error fetching stories from merged.json:", error) // Update error message
+    console.error("Error fetching stories from merged.json:", error)
     return NextResponse.json(
       {
-        error: "Failed to fetch stories from file", // Update error message
+        error: "Failed to fetch stories from file",
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },
     )
   }
 }
-
-// No POST method needed for just reading from JSON

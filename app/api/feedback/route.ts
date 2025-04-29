@@ -1,143 +1,143 @@
-import { NextResponse } from "next/server"
-import { Pool } from "pg"
+import { NextResponse } from "next/server";
+import sqlite3 from "sqlite3";
+import path from "path";
+import { open } from "sqlite";
 
-// Create a connection pool
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-})
+const DB_FILE_PATH = path.join(process.cwd(), "data", "reviews.db");
 
-// Rating mapping
 const ratingMap: { [key: string]: number } = {
   yes: 5,
   partial: 3,
   no: 1,
+};
+
+async function openDb() {
+  return open({
+    filename: DB_FILE_PATH,
+    driver: sqlite3.Database,
+  });
 }
 
 export async function POST(request: Request) {
+  let db;
   try {
-    const data = await request.json()
-    console.log("Received feedback data:", data)
+    const data = await request.json();
+    console.log("Received feedback data:", data);
 
-    // Validate the incoming data
+    // Validate incoming data (unchanged)
     if (!data.storyId || !data.evaluations || !data.email) {
-      console.error("Missing required fields:", data)
-      return NextResponse.json({ error: "Missing required fields (storyId, evaluations, email)" }, { status: 400 })
+      console.error("Missing required fields:", data);
+      return NextResponse.json({ error: "Missing required fields (storyId, evaluations, email)" }, { status: 400 });
     }
 
-    // Use email from request, validate format (basic)
-    const testerEmail = data.email
+    const testerEmail = data.email;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testerEmail)) {
-      return NextResponse.json({ error: "Invalid email format" }, { status: 400 })
+      return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
     }
 
-    // Start a database transaction
-    const client = await pool.connect()
+    db = await openDb();
+
+    // Start transaction
+    await db.exec("BEGIN TRANSACTION");
+    console.log("SQLite transaction started.");
+
     try {
-      await client.query("BEGIN")
+      let testerId: number | undefined;
+      let tester = await db.get("SELECT id FROM testers WHERE email = ?", [testerEmail]);
 
-      // Find or create the tester based on email
-      let testerId: number | null = null
-      const testerResult = await client.query(
-        "SELECT id FROM testers WHERE email = $1 LIMIT 1",
-        [testerEmail],
-      )
-
-      if (testerResult.rows.length === 0) {
-        // Create tester if not found (name can be derived or left null initially)
-        const newTesterResult = await client.query(
-          // Changed to use email from data, name can be null or derived
-          "INSERT INTO testers (email, name) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email RETURNING id",
-          [testerEmail, testerEmail.split('@')[0]], // Use email prefix as name for now
-        )
-        if (newTesterResult.rows.length > 0) {
-          testerId = newTesterResult.rows[0].id
-        } else {
-          // If ON CONFLICT DO UPDATE happened, fetch the ID again
-          const existingTester = await client.query("SELECT id FROM testers WHERE email = $1 LIMIT 1", [testerEmail])
-          if (existingTester.rows.length > 0) {
-            testerId = existingTester.rows[0].id
-          } else {
-            throw new Error("Failed to find or create tester.") // Should not happen
-          }
-        }
+      if (!tester) {
+        const testerName = testerEmail.split('@')[0]; // Use email prefix as name
+        const result = await db.run(
+            "INSERT INTO testers (email, name) VALUES (?, ?)",
+            [testerEmail, testerName]
+        );
+        testerId = result.lastID;
+        console.log(`Created new tester with ID: ${testerId}`);
       } else {
-        testerId = testerResult.rows[0].id
+        testerId = tester.id;
+        console.log(`Found existing tester with ID: ${testerId}`);
       }
 
-      // 1. Insert the review
-      const reviewResult = await client.query(
-        `INSERT INTO reviews (story_id, tester_id, additional_feedback) 
-         VALUES ($1, $2, $3) RETURNING id`,
-        [data.storyId, testerId, data.additionalFeedback || ""],
-      )
+      if (!testerId) {
+        throw new Error("Failed to get tester ID.");
+      }
 
-      const reviewId = reviewResult.rows[0].id
-      console.log("Created review with ID:", reviewId)
+      // --- Insert the review ---
+      const reviewResult = await db.run(
+          `INSERT INTO reviews (story_id, tester_id, additional_feedback)
+             VALUES (?, ?, ?)`,
+          [data.storyId, testerId, data.additionalFeedback || ""]
+      );
 
-      // 2. Insert each criterion evaluation
+      const reviewId = reviewResult.lastID;
+      if (!reviewId) {
+        throw new Error("Failed to insert review or get review ID.");
+      }
+      console.log(`Created review with ID: ${reviewId}`);
+
+      // --- Insert each criterion evaluation ---
+      const criteriaMap = new Map<string, number>();
+      const criteria = await db.all("SELECT id, name FROM evaluation_criteria");
+      criteria.forEach(c => criteriaMap.set(c.name, c.id));
+
       for (const [criterionName, ratingStr] of Object.entries(data.evaluations)) {
-        // Validate rating string
         if (!(ratingStr && typeof ratingStr === 'string' && ratingMap[ratingStr.toLowerCase()])) {
-          console.warn(`Invalid or missing rating '${ratingStr}' for criterion ${criterionName}. Skipping.`)
-          continue // Skip this evaluation if rating is invalid
+          console.warn(`Invalid or missing rating '${ratingStr}' for criterion ${criterionName}. Skipping.`);
+          continue;
         }
-        const ratingInt = ratingMap[ratingStr.toLowerCase()] // Convert rating string to integer
+        const ratingInt = ratingMap[ratingStr.toLowerCase()];
 
-        console.log(`Processing criterion: ${criterionName} with rating: ${ratingStr} (${ratingInt})`)
+        const criterionId = criteriaMap.get(criterionName);
 
-        // Get the criterion ID by name
-        const criterionResult = await client.query("SELECT id FROM evaluation_criteria WHERE name = $1", [
-          criterionName,
-        ])
-
-        if (criterionResult.rows.length === 0) {
-          console.error(`Unknown criterion: ${criterionName}`)
-          // Instead of throwing, maybe log and continue? Or handle as needed.
-          await client.query("ROLLBACK") // Rollback if a criterion is unknown
-          client.release()
-          return NextResponse.json({ error: `Unknown criterion: ${criterionName}` }, { status: 400 })
+        if (!criterionId) {
+          console.error(`Unknown criterion: ${criterionName}`);
+          // Rollback and return error if a criterion is unknown
+          await db.exec("ROLLBACK TRANSACTION");
+          return NextResponse.json({ error: `Unknown criterion: ${criterionName}` }, { status: 400 });
         }
 
-        const criterionId = criterionResult.rows[0].id
-        console.log(`Found criterion ID: ${criterionId} for name: ${criterionName}`)
+        console.log(`Processing criterion: ${criterionName} (ID: ${criterionId}) with rating: ${ratingStr} (${ratingInt})`);
 
-        // Insert the evaluation with the integer rating
-        await client.query(
-          `INSERT INTO criterion_evaluations (review_id, criterion_id, rating) 
-           VALUES ($1, $2, $3)`,
-          [reviewId, criterionId, ratingInt], // Use integer rating
-        )
-        console.log(`Inserted evaluation for criterion: ${criterionName}`)
+        await db.run(
+            `INSERT INTO criterion_evaluations (review_id, criterion_id, rating)
+                 VALUES (?, ?, ?)`,
+            [reviewId, criterionId, ratingInt]
+        );
+        console.log(`Inserted evaluation for criterion: ${criterionName}`);
       }
 
       // Commit the transaction
-      await client.query("COMMIT")
-      console.log("Transaction committed successfully")
+      await db.exec("COMMIT TRANSACTION");
+      console.log("SQLite transaction committed successfully");
 
       return NextResponse.json(
-        {
-          success: true,
-          message: "Feedback stored successfully",
-          reviewId,
-        },
-        { status: 201 },
-      )
+          {
+            success: true,
+            message: "Feedback stored successfully",
+            reviewId,
+          },
+          { status: 201 }
+      );
     } catch (err) {
-      // Rollback in case of error
-      console.error("Error in transaction:", err)
-      await client.query("ROLLBACK")
-      throw err
-    } finally {
-      client.release()
+      // Rollback in case of error during transaction
+      console.error("Error in transaction, rolling back:", err);
+      await db.exec("ROLLBACK TRANSACTION");
+      throw err; // Re-throw to be caught by outer catch block
     }
   } catch (error) {
-    console.error("Error processing feedback:", error)
+    // Outer catch block for connection errors or re-thrown transaction errors
+    console.error("Error processing feedback:", error);
     return NextResponse.json(
-      {
-        error: "Failed to process feedback",
-        details: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 },
-    )
+        {
+          error: "Failed to process feedback",
+          details: error instanceof Error ? error.message : String(error),
+        },
+        { status: 500 }
+    );
+  } finally {
+    if (db) {
+      await db.close();
+      console.log("SQLite database connection closed.");
+    }
   }
 }

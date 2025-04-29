@@ -1,17 +1,10 @@
-import { NextResponse } from "next/server"
-import { Pool } from "pg"
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-})
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url)
-    const principleId = searchParams.get("principleId")
+    const { searchParams } = new URL(request.url);
+    const principleId = searchParams.get("principleId");
 
-    // In a real implementation, this would query the database with filters
-    // For now, we'll return mock data
     const mockStoryStats = [
       {
         id: "story-stat1",
@@ -55,14 +48,14 @@ export async function GET(request: Request) {
       },
     ]
 
-    // Filter by principleId if provided
     const filteredStats = principleId
-      ? mockStoryStats.filter((stat) => stat.principleId === principleId)
-      : mockStoryStats
+        ? mockStoryStats.filter((stat) => stat.principleId === principleId)
+        : mockStoryStats;
 
-    return NextResponse.json({ success: true, data: filteredStats })
+    console.log("Admin story stats route returning mock data.");
+    return NextResponse.json({ success: true, data: filteredStats });
   } catch (error) {
-    console.error("Error fetching story statistics:", error)
-    return NextResponse.json({ error: "Failed to fetch story statistics" }, { status: 500 })
+    console.error("Error fetching story statistics (mock fallback):", error);
+    return NextResponse.json({ error: "Failed to fetch story statistics (returning mock)" }, { status: 500 });
   }
 }
