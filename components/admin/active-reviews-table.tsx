@@ -1,60 +1,82 @@
-"use client"
+// components/admin/active-reviews-table.tsx
+"use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { formatDistanceToNow } from "date-fns"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatDistanceToNow } from "date-fns"; // Keep for relative time
 
-interface ActiveReview {
-  id: number
-  testerId: number
-  testerName: string
-  storyId: number
-  storyTitle: string
-  startedAt: string
-  progress: number
+// Interface matching data passed from monitoring page
+interface RecentReviewDisplay {
+  id: number;
+  testerId: number;
+  testerName: string;
+  storyId: number;
+  storyTitle: string; // Short title
+  fullStoryTitle?: string;
+  submittedAt: string; // UTC ISO String from DB
 }
 
-interface ActiveReviewsTableProps {
-  data: ActiveReview[]
+interface RecentReviewsTableProps {
+  data: RecentReviewDisplay[];
 }
 
-export function ActiveReviewsTable({ data }: ActiveReviewsTableProps) {
+// Renamed component for clarity
+export function ActiveReviewsTable({ data }: RecentReviewsTableProps) { // Consider renaming component file too
+
+  // Helper function to format date to Paris time
+  const formatToParisTime = (dateStringUTC: string): string => {
+    try {
+      const date = new Date(dateStringUTC);
+      return date.toLocaleString('fr-FR', { // Use French locale for formatting conventions
+        timeZone: 'Europe/Paris',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false // Use 24-hour format
+      });
+    } catch (e) {
+      console.error("Error formatting date:", e);
+      return "Invalid Date"; // Fallback
+    }
+  };
+
+
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Tester</TableHead>
-            <TableHead>Story</TableHead>
-            <TableHead>Started</TableHead>
-            <TableHead>Progress</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.length === 0 ? (
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={4} className="h-24 text-center">
-                No active reviews
-              </TableCell>
+              <TableHead>Tester</TableHead>
+              <TableHead>Story (Short Title)</TableHead>
+              <TableHead>Submitted At (Paris Time)</TableHead> {/* Updated Header */}
             </TableRow>
-          ) : (
-            data.map((review) => (
-              <TableRow key={review.id}>
-                <TableCell className="font-medium">{review.testerName}</TableCell>
-                <TableCell>{review.storyTitle}</TableCell>
-                <TableCell>{formatDistanceToNow(new Date(review.startedAt), { addSuffix: true })}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
-                      <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${review.progress}%` }}></div>
-                    </div>
-                    <span className="text-xs font-medium">{review.progress}%</span>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </div>
-  )
+          </TableHeader>
+          <TableBody>
+            {data.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={3} className="h-24 text-center">
+                    No recent reviews found for the selected period.
+                  </TableCell>
+                </TableRow>
+            ) : (
+                data.map((review) => (
+                    <TableRow key={review.id}>
+                      <TableCell className="font-medium">{review.testerName}</TableCell>
+                      <TableCell title={review.fullStoryTitle || review.storyTitle}>
+                        {review.storyTitle}
+                      </TableCell>
+                      {/* MODIFIED: Display formatted Paris time and relative time */}
+                      <TableCell>
+                    <span title={review.submittedAt}> {/* Show original UTC on hover */}
+                      {formatToParisTime(review.submittedAt)}
+                    </span>
+                        <span className="block text-xs text-muted-foreground">
+                         ({formatDistanceToNow(new Date(review.submittedAt), { addSuffix: true })})
+                    </span>
+                      </TableCell>
+                    </TableRow>
+                ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+  );
 }

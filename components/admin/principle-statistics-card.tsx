@@ -1,66 +1,65 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+// components/admin/principle-statistics-card.tsx
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { generateShortStatTitle } from "@/lib/utils"; // Import helper
 
+// Update interface to include fields for title generation
 interface PrincipleStatistic {
-  id: string
-  principleId: string
-  principleName: string
-  storyId: number
-  storyTitle: string
-  yesCount: number
-  partialCount: number
-  noCount: number
-  totalReviews: number
+  id: string;
+  principleId: number;
+  principleName: string;
+  storyId: number | null;
+  storyTitle: string | null; // Long title/desc
+  source_key?: string | null; // Added
+  epic_name?: string | null; // Added
+  yesCount: number;
+  partialCount: number;
+  noCount: number;
+  totalReviews: number;
 }
 
 interface PrincipleStatisticsCardProps {
-  data: PrincipleStatistic
+  data: PrincipleStatistic;
 }
 
 export function PrincipleStatisticsCard({ data }: PrincipleStatisticsCardProps) {
-  const total = data.yesCount + data.partialCount + data.noCount
+  // ... (percentage calculations remain same) ...
+  const yesCount = data.yesCount || 0;
+  const partialCount = data.partialCount || 0;
+  const noCount = data.noCount || 0;
+  const total = yesCount + partialCount + noCount;
+  const yesPercentage = total > 0 ? Math.round((yesCount / total) * 100) : 0;
+  const partialPercentage = total > 0 ? Math.round((partialCount / total) * 100) : 0;
+  const noPercentage = total > 0 ? Math.round((noCount / total) * 100) : 0;
 
-  const yesPercentage = total > 0 ? Math.round((data.yesCount / total) * 100) : 0
-  const partialPercentage = total > 0 ? Math.round((data.partialCount / total) * 100) : 0
-  const noPercentage = total > 0 ? Math.round((data.noCount / total) * 100) : 0
+  // Generate short title for display
+  const displayTitle = generateShortStatTitle(data);
 
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg">{data.principleName}</CardTitle>
-        <CardDescription>
-          {data.storyTitle !== "All Stories" ? `For "${data.storyTitle}"` : "Across all stories"}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-green-600">Yes</span>
-            <span className="text-sm font-medium">
-              {data.yesCount} ({yesPercentage}%)
-            </span>
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg">{data.principleName}</CardTitle>
+          <CardDescription>
+            {/* Use the generated short title */}
+            {data.storyId !== null ? `For Story: "${displayTitle}"` : "Across all stories"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {/* ... rest of card content using yesCount, partialCount etc. ... */}
+          <div className="space-y-2">
+            {/* Yes */}
+            <div className="flex items-center justify-between"><span className="text-sm font-medium text-green-600">Yes</span><span className="text-sm font-medium">{yesCount} ({yesPercentage}%)</span></div>
+            <Progress value={yesPercentage} className="h-2 [&>div]:bg-green-500" />
+            {/* Partially */}
+            <div className="flex items-center justify-between mt-1"><span className="text-sm font-medium text-amber-600">Partially</span><span className="text-sm font-medium">{partialCount} ({partialPercentage}%)</span></div>
+            <Progress value={partialPercentage} className="h-2 [&>div]:bg-amber-500" />
+            {/* No */}
+            <div className="flex items-center justify-between mt-1"><span className="text-sm font-medium text-red-600">No</span><span className="text-sm font-medium">{noCount} ({noPercentage}%)</span></div>
+            <Progress value={noPercentage} className="h-2 [&>div]:bg-red-500" />
+            {/* Total */}
+            <div className="pt-2 text-sm text-muted-foreground">Based on {total || 0} evaluations</div>
           </div>
-          <Progress value={yesPercentage} className="h-2" indicator="bg-green-500" />
-
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-amber-600">Partially</span>
-            <span className="text-sm font-medium">
-              {data.partialCount} ({partialPercentage}%)
-            </span>
-          </div>
-          <Progress value={partialPercentage} className="h-2" indicator="bg-amber-500" />
-
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-red-600">No</span>
-            <span className="text-sm font-medium">
-              {data.noCount} ({noPercentage}%)
-            </span>
-          </div>
-          <Progress value={noPercentage} className="h-2" indicator="bg-red-500" />
-
-          <div className="pt-2 text-sm text-muted-foreground">Based on {total} reviews</div>
-        </div>
-      </CardContent>
-    </Card>
-  )
+        </CardContent>
+      </Card>
+  );
 }

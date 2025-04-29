@@ -1,47 +1,79 @@
+// app/api/admin/stats/stories/route.ts
 import { NextResponse } from "next/server";
 import { openDb } from "@/lib/db";
 
-export async function GET() {
+// Get the mapping from lib/db or define it here if needed
+const principleStringToIdMap: { [key: string]: number } = {
+  independent: 1, negotiable: 2, valuable: 3, estimable: 4, small: 5, testable: 6,
+};
+
+
+export async function GET(request: Request) {
   let db;
   try {
     db = await openDb();
+    const { searchParams } = new URL(request.url);
+    const principleIdParam = searchParams.get("principleId"); // String like 'independent'
 
-    // Fetch all stories, join with dataset info
-    const query = `
-        SELECT
-            us.id,
-            us.title,
-            us.description,
-            -- us.acceptance_criteria, -- Maybe not needed for admin list view? Fetch if needed
-            d.name as datasetName,
-            d.filename as datasetFilename,
-            d.is_active as datasetIsActive
-        FROM user_stories us
-        JOIN datasets d ON us.dataset_id = d.id
-        ORDER BY d.name, us.id
+    let criterionIdFilter: number | null = null;
+    if (principleIdParam) {
+      criterionIdFilter = principleStringToIdMap[principleIdParam.toLowerCase()] || null;
+      if (!criterionIdFilter) {
+        console.warn(`Story Stats: Criterion not found for name: ${principleIdParam}`);
+        return NextResponse.json({ success: true, data: [] }); // Return empty if invalid filter
+      }
+    }
+
+    let query = `
+      SELECT
+          s.id AS storyId,
+          s.title AS storyTitle,      -- Long title/description
+          s.source_key,               -- Added
+          s.epic_name,                -- Added
+          ec.id AS principleIdNum,    -- Numeric ID
+          ec.name AS principleName,
+          COUNT(ce.id) AS totalReviews,
+          AVG(ce.rating) AS averageRating,
+          SUM(CASE WHEN ce.rating >= 4 THEN 1 ELSE 0 END) AS meetsCriteria
+      FROM user_stories s
+      LEFT JOIN reviews r ON s.id = r.story_id
+      LEFT JOIN criterion_evaluations ce ON r.id = ce.review_id
+      LEFT JOIN evaluation_criteria ec ON ce.criterion_id = ec.id
+      WHERE s.dataset_id = (SELECT id FROM datasets WHERE is_active = 1 LIMIT 1) -- Only active dataset
     `;
 
-    const stories = await db.all(query);
+    const params: any[] = [];
 
-    // Add the string 'id' expected by frontend components if needed
-    // (Currently admin monitoring uses numeric id, seems ok)
-    // const formattedStories = stories.map(s => ({...s}));
+    if (criterionIdFilter) {
+      query += ` AND ec.id = ?`;
+      params.push(criterionIdFilter);
+    }
 
-    console.log(`Fetched ${stories.length} total stories from DB for admin.`);
-    return NextResponse.json({ success: true, data: stories });
+    // Add GROUP BY including new fields
+    query += ` GROUP BY s.id, s.title, s.source_key, s.epic_name, ec.id, ec.name ORDER BY s.id, ec.name`;
+
+    const stats = await db.all(query, params);
+
+    // Format results
+    const formattedStats = stats.map((stat, index) => ({
+      ...stat,
+      averageRating: stat.averageRating || 0,
+      meetsCriteria: stat.meetsCriteria || 0,
+      totalReviews: stat.totalReviews || 0,
+      id: `storystat-${stat.storyId}-${stat.principleName || 'all'}-${index}`,
+      principleId: stat.principleName?.toLowerCase() // Add string ID for consistency
+    }));
+
+    console.log(`Fetched ${formattedStats.length} story stats from DB.`);
+    return NextResponse.json({ success: true, data: formattedStats });
 
   } catch (error) {
-    console.error("Error fetching admin stories from database:", error);
+    console.error("Error fetching story statistics from database:", error);
     return NextResponse.json(
-        {
-          error: "Failed to fetch stories",
-          details: error instanceof Error ? error.message : String(error)
-        },
+        { error: "Failed to fetch story statistics", details: error instanceof Error ? error.message : String(error) },
         { status: 500 }
     );
   } finally {
-    if (db) {
-      await db.close();
-    }
+    if (db) { await db.close(); }
   }
 }

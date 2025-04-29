@@ -1,12 +1,6 @@
 import { NextResponse } from "next/server";
-import { openDb, getActiveDatasetId } from "@/lib/db"; // Import DB helpers
-import { UserStory } from "@/lib/types"; // Assuming this type exists
-
-// REMOVE: Filesystem imports if they were still here
-// import fs from "fs/promises";
-// import path from "path";
-
-// REMOVE: shuffleArray function if present
+import { openDb, getActiveDatasetId } from "@/lib/db";
+import { UserStory } from "@/lib/types";
 
 export async function GET() {
   let db;
@@ -22,10 +16,11 @@ export async function GET() {
     }
     console.log(`Fetching stories for active dataset ID: ${activeDatasetId}`);
 
-    // 2. Fetch 5 random stories from the active dataset
-    // SQLite uses RANDOM()
+    // 2. Fetch 5 random stories from the active dataset including new fields
     const storiesFromDb = await db.all(
-        `SELECT id, title, description, acceptance_criteria, independent, negotiable, valuable, estimable, small, testable
+        `SELECT
+           id, title, description, acceptance_criteria, independent, negotiable, valuable, estimable, small, testable,
+           source_key, epic_name -- Added new fields
        FROM user_stories
        WHERE dataset_id = ?
        ORDER BY RANDOM()
@@ -35,8 +30,19 @@ export async function GET() {
 
     // 3. Format the data (parse JSON strings, match UserStory type)
     const selectedStories: UserStory[] = storiesFromDb.map(story => ({
-      ...story,
+      id: story.id,
+      title: story.title,
+      description: story.description,
       acceptance_criteria: story.acceptance_criteria ? JSON.parse(story.acceptance_criteria) : [], // Parse JSON string
+      source_key: story.source_key, // Assign new field
+      epic_name: story.epic_name,   // Assign new field
+      // SQLite stores boolean as 1/0, convert back
+      independent: story.independent === null ? null : Boolean(story.independent),
+      negotiable: story.negotiable === null ? null : Boolean(story.negotiable),
+      valuable: story.valuable === null ? null : Boolean(story.valuable),
+      estimable: story.estimable === null ? null : Boolean(story.estimable),
+      small: story.small === null ? null : Boolean(story.small),
+      testable: story.testable === null ? null : Boolean(story.testable),
     }));
 
     console.log(`Fetched ${selectedStories.length} random stories from DB (Dataset ID: ${activeDatasetId}).`);

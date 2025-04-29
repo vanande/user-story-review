@@ -2,33 +2,42 @@
 export const mockUserStories = [
   {
     id: 1,
+    source_key: "mock-llm", // Added
+    epic_name: "Authentication Epic", // Added
     title: "User Authentication",
     description: "As a user, I want to log in to the application so that I can access my personalized dashboard.",
   },
   {
     id: 2,
+    source_key: "mock-llm", // Added
+    epic_name: "Product Search Epic", // Added
     title: "Search Functionality",
     description:
-      "As a customer, I want to search for products by name so that I can quickly find what I'm looking for.",
+        "As a customer, I want to search for products by name so that I can quickly find what I'm looking for.",
   },
   {
     id: 3,
+    source_key: "mock-rag", // Added (example variation)
+    epic_name: "Shopping Experience Epic", // Added
     title: "Shopping Cart",
     description: "As a shopper, I want to add items to my cart so that I can purchase them later.",
   },
   {
     id: 4,
+    source_key: "mock-rag", // Added
+    epic_name: "Account Management Epic", // Added
     title: "User Profile",
     description:
-      "As a registered user, I want to update my profile information so that my account details are current.",
+        "As a registered user, I want to update my profile information so that my account details are current.",
   },
   {
     id: 5,
+    source_key: "mock-llm", // Added
+    epic_name: "Order Management Epic", // Added
     title: "Order History",
     description: "As a customer, I want to view my order history so that I can track my past purchases.",
   },
 ]
-
 // Mock INVEST Principles
 export const mockPrinciples = [
   {
