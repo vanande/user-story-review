@@ -1,89 +1,69 @@
-import { NextResponse } from "next/server"
-
+import { NextResponse } from "next/server";
+import { openDb } from "@/lib/db";
 
 export async function GET(request: Request) {
+  let db;
   try {
-    const { searchParams } = new URL(request.url)
-    const storyId = searchParams.get("storyId")
+    db = await openDb();
+    const { searchParams } = new URL(request.url);
+    const storyIdParam = searchParams.get("storyId");
+    const storyId = storyIdParam ? parseInt(storyIdParam, 10) : null;
 
-    // In a real implementation, this would query the database with filters
-    // For now, we'll return mock data
-    const mockPrincipleStats = [
-      {
-        id: "stat1",
-        principleId: "independent",
-        principleName: "Independent",
-        storyId: 1,
-        storyTitle: "User Authentication",
-        yesCount: 12,
-        partialCount: 5,
-        noCount: 3,
-        totalReviews: 20,
-      },
-      {
-        id: "stat2",
-        principleId: "negotiable",
-        principleName: "Negotiable",
-        storyId: 1,
-        storyTitle: "User Authentication",
-        yesCount: 15,
-        partialCount: 3,
-        noCount: 2,
-        totalReviews: 20,
-      },
-      {
-        id: "stat3",
-        principleId: "valuable",
-        principleName: "Valuable",
-        storyId: 1,
-        storyTitle: "User Authentication",
-        yesCount: 18,
-        partialCount: 2,
-        noCount: 0,
-        totalReviews: 20,
-      },
-      {
-        id: "stat4",
-        principleId: "independent",
-        principleName: "Independent",
-        storyId: 2,
-        storyTitle: "Search Functionality",
-        yesCount: 8,
-        partialCount: 7,
-        noCount: 5,
-        totalReviews: 20,
-      },
-      {
-        id: "stat5",
-        principleId: "negotiable",
-        principleName: "Negotiable",
-        storyId: 2,
-        storyTitle: "Search Functionality",
-        yesCount: 10,
-        partialCount: 6,
-        noCount: 4,
-        totalReviews: 20,
-      },
-      {
-        id: "stat6",
-        principleId: "valuable",
-        principleName: "Valuable",
-        storyId: 2,
-        storyTitle: "Search Functionality",
-        yesCount: 16,
-        partialCount: 3,
-        noCount: 1,
-        totalReviews: 20,
-      },
-    ]
+    let query = `
+        SELECT
+            ec.id AS principleIdStr, -- Use criterion ID as base for unique key if needed
+            ec.name AS principleName,
+            s.id AS storyId,
+            s.title AS storyTitle,
+            COUNT(ce.id) AS totalReviews, -- Total evaluations for this criterion/story combo
+            SUM(CASE WHEN ce.rating = 5 THEN 1 ELSE 0 END) AS yesCount,
+            SUM(CASE WHEN ce.rating = 3 THEN 1 ELSE 0 END) AS partialCount,
+            SUM(CASE WHEN ce.rating = 1 THEN 1 ELSE 0 END) AS noCount
+            -- Note: SQLite doesn't have native string aggregation like string_agg or json_agg easily
+        FROM evaluation_criteria ec
+        LEFT JOIN criterion_evaluations ce ON ec.id = ce.criterion_id
+        LEFT JOIN reviews r ON ce.review_id = r.id
+        LEFT JOIN user_stories s ON r.story_id = s.id
+    `;
 
-    const filteredStats = storyId
-      ? mockPrincipleStats.filter((stat) => stat.storyId === Number.parseInt(storyId))
-      : mockPrincipleStats
+    const params: any[] = [];
 
-    return NextResponse.json({ success: true, data: filteredStats })
+    if (storyId && !isNaN(storyId)) {
+      query += ` WHERE s.id = ?`;
+      params.push(storyId);
+    } else {
+      // If no story filter, maybe only show stats for active dataset? Or all?
+      // Let's fetch for all stories for now if no filter.
+      // Add WHERE s.dataset_id = (SELECT id FROM datasets WHERE is_active = 1 LIMIT 1) if needed
+    }
+
+    query += ` GROUP BY ec.id, ec.name, s.id, s.title ORDER BY s.title, ec.id`;
+
+    const stats = await db.all(query, params);
+
+    // Add a unique string ID for the frontend key prop (can use combo of principle/story id)
+    const formattedStats = stats.map((stat, index) => ({
+      ...stat,
+      id: `principlestat-${stat.principleName}-${stat.storyId || 'all'}-${index}`,
+      principleId: stat.principleName.toLowerCase() // Use lowercase name as string ID
+    }));
+
+
+    console.log(`Fetched ${formattedStats.length} principle stats from DB.`);
+    return NextResponse.json({ success: true, data: formattedStats });
+
   } catch (error) {
-    console.error("Error fetching principle statistics:", error)
-    return NextResponse.json({ error: "Failed to fetch principle statistics" }, { status: 500 })
+    console.error("Error fetching principle statistics from database:", error);
+    return NextResponse.json(
+        {
+          error: "Failed to fetch principle statistics",
+          details: error instanceof Error ? error.message : String(error)
+        },
+        { status: 500 }
+    );
+  } finally {
+    if (db) {
+      await db.close();
+    }
   }
 }

@@ -1,19 +1,44 @@
 "use client"
 
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {LogOut} from "lucide-react";
+
+
 
 export default function DashboardPage() {
   const router = useRouter()
   const [reviewsCompleted, setReviewsCompleted] = useState(0)
   const [pendingReviews, setPendingReviews] = useState(5)
+  const [userName, setUserName] = useState<string | null>(null);
 
+  useEffect(() => {
+    const email = localStorage.getItem("userEmail");
+    if (email) {
+      const namePart = email.split('@')[0];
+      setUserName(namePart);
+    } else {
+      console.warn("User email not found in localStorage on dashboard.");
+      router.push('/login');
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userEmail"); // Clear stored email
+    router.push("/login"); // Redirect to login page
+  };
   return (
     <div className="container mx-auto max-w-5xl p-4">
-      <h1 className="mb-8 text-3xl font-bold">Tester Dashboard</h1>
-
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-3xl font-bold">
+          {userName ? `Hello, ${userName}!` : "Tester Dashboard"}
+        </h1>
+        <Button variant="outline" size="sm" onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" /> Logout
+        </Button>
+      </div>
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>

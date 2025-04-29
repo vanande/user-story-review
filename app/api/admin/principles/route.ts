@@ -1,45 +1,42 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
+import { openDb } from "@/lib/db"; // Import DB helper
 
 export async function GET() {
+  let db;
   try {
-    // In a real implementation, this would query the database
-    // For now, we'll return the INVEST principles
-    const principles = [
-      {
-        id: "independent",
-        label: "Independent",
-        description: "The story is self-contained and not dependent on other stories.",
-      },
-      {
-        id: "negotiable",
-        label: "Negotiable",
-        description: "Details can be discussed and refined between stakeholders.",
-      },
-      {
-        id: "valuable",
-        label: "Valuable",
-        description: "The story delivers value to stakeholders.",
-      },
-      {
-        id: "estimable",
-        label: "Estimable",
-        description: "The size of the story can be estimated with reasonable accuracy.",
-      },
-      {
-        id: "small",
-        label: "Small",
-        description: "The story is small enough to be completed in one sprint.",
-      },
-      {
-        id: "testable",
-        label: "Testable",
-        description: "The story can be tested to verify it meets requirements.",
-      },
-    ]
+    db = await openDb();
 
-    return NextResponse.json({ success: true, data: principles })
+    // Fetch principles from the database table
+    const principles = await db.all(
+        `SELECT id, name as label, description
+         FROM evaluation_criteria
+         ORDER BY id` // Order consistently
+    );
+
+    // Add the 'id' string field expected by the frontend (mapping name to id)
+    // This assumes the names are like 'Independent', 'Negotiable', etc.
+    const formattedPrinciples = principles.map(p => ({
+      ...p,
+      id: p.label.toLowerCase() // Use lowercase name as the string ID
+    }));
+
+
+    console.log(`Fetched ${formattedPrinciples.length} principles from DB.`);
+
+    return NextResponse.json({ success: true, data: formattedPrinciples });
+
   } catch (error) {
-    console.error("Error fetching principles:", error)
-    return NextResponse.json({ error: "Failed to fetch principles" }, { status: 500 })
+    console.error("Error fetching principles from database:", error);
+    return NextResponse.json(
+        {
+          error: "Failed to fetch principles",
+          details: error instanceof Error ? error.message : String(error)
+        },
+        { status: 500 }
+    );
+  } finally {
+    if (db) {
+      await db.close();
+    }
   }
 }

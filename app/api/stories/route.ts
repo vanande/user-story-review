@@ -1,79 +1,63 @@
-import { NextResponse } from "next/server"
-import fs from "fs/promises"
-import path from "path"
-import { UserStory } from "@/lib/types"
+import { NextResponse } from "next/server";
+import { openDb, getActiveDatasetId } from "@/lib/db"; // Import DB helpers
+import { UserStory } from "@/lib/types"; // Assuming this type exists
 
-// Function to shuffle an array (Fisher-Yates shuffle)
-function shuffleArray<T>(array: T[]): T[] {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
+// REMOVE: Filesystem imports if they were still here
+// import fs from "fs/promises";
+// import path from "path";
+
+// REMOVE: shuffleArray function if present
 
 export async function GET() {
+  let db;
   try {
-    // --- Load stories from merged.json ---
-    const jsonPath = path.join(process.cwd(), "data", "merged.json") // Use process.cwd() for correct path in Next.js
-    const jsonData = await fs.readFile(jsonPath, "utf-8")
-    const data = JSON.parse(jsonData)
+    db = await openDb();
 
-    let allStories: UserStory[] = []
-    let storyIdCounter = 1
+    // 1. Find the active dataset
+    const activeDatasetId = await getActiveDatasetId(db);
 
-    for (const sourceKey of Object.keys(data)) {
-      const source = data[sourceKey]
-      if (source.epics && Array.isArray(source.epics)) {
-        for (const epic of source.epics) {
-          if (epic.user_stories && Array.isArray(epic.user_stories)) {
-            for (const story of epic.user_stories) {
-              const description = story.user_story
-              const title = description.substring(0, 70) + (description.length > 70 ? "..." : "")
-              const acceptance_criteria = story.acceptance_criteria || []
-              const independent = story.independent === undefined ? null : story.independent
-              const negotiable = story.negotiable === undefined ? null : story.negotiable
-              const valuable = story.valuable === undefined ? null : story.valuable
-              const estimable = story.estimable === undefined ? null : story.estimable
-              const small = story.small === undefined ? null : story.small
-              const testable = story.testable === undefined ? null : story.testable
-
-              allStories.push({
-                id: storyIdCounter++, // Assign a unique ID
-                title: title,
-                description: description,
-                acceptance_criteria: acceptance_criteria,
-                independent: independent,
-                negotiable: negotiable,
-                valuable: valuable,
-                estimable: estimable,
-                small: small,
-                testable: testable,
-              })
-            }
-          }
-        }
-      }
+    if (!activeDatasetId) {
+      console.error("No active dataset found in the database.");
+      return NextResponse.json({ error: "No active dataset configured" }, { status: 500 });
     }
+    console.log(`Fetching stories for active dataset ID: ${activeDatasetId}`);
 
-    const shuffledStories = shuffleArray(allStories);
-    const selectedStories = shuffledStories.slice(0, 5);
+    // 2. Fetch 5 random stories from the active dataset
+    // SQLite uses RANDOM()
+    const storiesFromDb = await db.all(
+        `SELECT id, title, description, acceptance_criteria, independent, negotiable, valuable, estimable, small, testable
+       FROM user_stories
+       WHERE dataset_id = ?
+       ORDER BY RANDOM()
+       LIMIT 5`,
+        [activeDatasetId]
+    );
 
+    // 3. Format the data (parse JSON strings, match UserStory type)
+    const selectedStories: UserStory[] = storiesFromDb.map(story => ({
+      ...story,
+      acceptance_criteria: story.acceptance_criteria ? JSON.parse(story.acceptance_criteria) : [], // Parse JSON string
+    }));
 
-    console.log(`Fetched ${selectedStories.length} random stories from merged.json. Total stories: ${allStories.length}`)
+    console.log(`Fetched ${selectedStories.length} random stories from DB (Dataset ID: ${activeDatasetId}).`);
 
     return NextResponse.json({
       success: true,
       stories: selectedStories,
-    })
+    });
+
   } catch (error) {
-    console.error("Error fetching stories from merged.json:", error)
+    console.error("Error fetching stories from database:", error);
     return NextResponse.json(
-      {
-        error: "Failed to fetch stories from file",
-        details: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 },
-    )
+        {
+          error: "Failed to fetch stories from database",
+          details: error instanceof Error ? error.message : String(error),
+        },
+        { status: 500 }
+    );
+  } finally {
+    if (db) {
+      await db.close(); // Close connection
+    }
   }
 }
