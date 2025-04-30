@@ -49,6 +49,7 @@ export default function AdminMonitoringPage() {
   const [loadingAll, setLoadingAll] = useState(true); // Start loading true initially
   const [loadingStats, setLoadingStats] = useState(false);
   const [loadingRecent, setLoadingRecent] = useState(false);
+  const [loadingCount, setLoadingCount] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Data states
@@ -57,6 +58,7 @@ export default function AdminMonitoringPage() {
   const [recentReviews, setRecentReviews] = useState<RecentReview[]>([]);
   const [principleStats, setPrincipleStats] = useState<AdminPrincipleStat[]>([]);
   const [storyStats, setStoryStats] = useState<AdminStoryStat[]>([]);
+  const [totalReviewSubmissions, setTotalReviewSubmissions] = useState<number>(0);
 
   // Filter states
   const [selectedStory, setSelectedStory] = useState<string>("all");
@@ -250,7 +252,7 @@ export default function AdminMonitoringPage() {
   // --- Calculations for display ---
   const totalRecentReviewsCount = recentReviews.length;
   const reviewedStoryIds = new Set(storyStats.map(s => s.storyId));
-  const totalCompletedReviewsCount = reviewedStoryIds.size;
+  const totalCompletedReviewsCount = totalReviewSubmissions;
 
   const overallRatings = {
     yes: principleStats.reduce((sum, stat) => sum + (stat.yesCount || 0), 0),
@@ -320,15 +322,18 @@ export default function AdminMonitoringPage() {
 
             {/* Completed Reviews Card */}
             <Card>
-              <CardHeader className="pb-2"><CardTitle>Completed Reviews</CardTitle><CardDescription>Unique stories reviewed</CardDescription></CardHeader>
+              <CardHeader className="pb-2">
+                <CardTitle>Completed Reviews</CardTitle>
+                <CardDescription>Total review submissions</CardDescription>
+              </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-center text-4xl font-bold min-h-[40px]">
-                  {loadingAll || loadingStats ? <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /> : totalCompletedReviewsCount}
+                  {loadingAll || loadingCount ? <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /> : totalCompletedReviewsCount}
                 </div>
                 <div className="mt-4 h-[100px]">
                   {(loadingAll || loadingStats) ? <Skeleton className="h-full w-full" /> :
-                      storyStats.length > 0 ? ( <BarChart data={storyStats.sort((a,b) => (b.totalReviews || 0) - (a.totalReviews || 0)).slice(0, 5).map(s => ({ name: generateShortStatTitle(s).substring(0, 20) + (generateShortStatTitle(s).length > 20 ? '...' : ''), value: s.totalReviews || 0 }))} index="name" categories={["Reviews"]} colors={["#3b82f6"]} valueFormatter={(v) => `${v}`} height={100} />)
-                          : <p className="text-xs text-muted-foreground flex items-center justify-center h-full">No review data.</p>}
+                      storyStats.length > 0 ? ( <BarChart data={storyStats.sort(/*...*/).slice(0, 5).map(s => ({ name: generateShortStatTitle(s).substring(0, 20) + '...', value: s.totalReviews || 0 }))} index="name" categories={["Reviews"]} colors={["#3b82f6"]} valueFormatter={(v) => `${v}`} height={100} />)
+                          : <p className="text-xs text-muted-foreground flex items-center justify-center h-full">No review data for chart.</p>}
                 </div>
               </CardContent>
             </Card>
