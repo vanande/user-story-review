@@ -1,0 +1,2121 @@
+{
+    "llm": {
+        "epics": [
+            {
+                "epic": " Gestion de la remboursement des prêts",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux voir le calendrier de répagement du prêt afin de pouvoir planifier mes finances de manière appropriée.",
+                        "acceptance_criteria": [
+                            " Le calendrier de réimbursement du prêt est affiché à l'utilisateur.",
+                            " Le calendrier indique les dates limites et les montants pour chaque paiement.",
+                            " Le calendrier est facile à comprendre et comprend une synthèse de la somme totale du prêt et de l'intérêt."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux établir des paiements automatiques afin de garantir les remboursements à temps des prêts.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut établir des paiements automatiques pour le remboursement de leurs prêts.",
+                            " Les paiements automatiques sont programmés selon le calendrier de répudiation du prêt.",
+                            " L'utilisateur reçoit un message de confirmation après avoir mis en place les paiements automatiques."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être informé avant chaque date limite de répagement pour pouvoir vérifier que j'ai suffisamment de fonds.",
+                        "acceptance_criteria": [
+                            " L'utilisateur reçoit une notification avant chaque date limite de remboursement des prêts.",
+                            " L'alerte est envoyé par courriel ou SMS.",
+                            " La notification comprend la date limite et le mont à verser."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Conditions et termes de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux voir les termes et conditions du prêt afin de comprendre les détails du prêt.",
+                        "acceptance_criteria": [
+                            " Les termes et conditions du prêt sont affichés à l'utilisateur.",
+                            " Les termes et conditions sont spécifiques au prêt demandé.",
+                            " Les termes et conditions sont accessibles avant de soumettre l'application de prêt."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux accepter les conditions et les termes du prêt afin de pouvoir poursuivre le processus d'application de prêt.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut indiquer son acceptation des termes et conditions du prêt.",
+                            " L'acceptation est enregistrée et associée à l'application de l'utilisateur.",
+                            " L'utilisateur ne peut pas poursuivre le processus d'application sans accepter les conditions générales."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Suivi de l'état de demande de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux vérifier l'état de ma demande de prêt afin de rester informé sur le progrès.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut voir le statut actuel de leur demande de prêt.",
+                            " L'état est mis à jour en temps réel lorsque l'application est traitée."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être informé lorsque le statut de ma demande de prêt change afin de pouvoir prendre les mesures appropriées.",
+                        "acceptance_criteria": [
+                            " L'utilisateur reçoit une notification lorsque le statut de leur demande de prêt change.",
+                            " La notification comprend la nouvelle état et toute information pertinente."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Gestion des documents",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux savoir quel sont les documents nécessaires pour l'application de prêt afin de pouvoir les préparer à l'avance.",
+                        "acceptance_criteria": [
+                            " Une liste des documents nécessaires est affichée dans le formulaire de demande de prêt.",
+                            " La liste est spécifique au type de prêt demandé.",
+                            " La liste comprend des documents courants tels que la preuve d'identité, la preuve d'adresse, la preuve de revenus, etc."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux télécharger les documents nécessaires afin que ceux-ci puissent être examinés avec ma demande de prêt.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut télécharger des documents dans le formulaire de demande de prêt.",
+                            " Les documents téléchargés sont enregistrés dans le système.",
+                            " Le système accepte des formats de fichiers courants tels que PDF, JPEG, PNG."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux vérifier l'état de mes documents téléchargés afin de pouvoir vérifier que tous les documents nécessaires sont acceptés.",
+                        "acceptance_criteria": [
+                            " Le statut de chaque document téléchargé est affiché dans le formulaire d'application de prêt.",
+                            " Le statut comprend 'En attente', 'Accepté', 'Refusé'.",
+                            " Le utilisateur peut ré-envoyer les documents refusés."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Formulaire d'accès à la demande de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux accéder à un formulaire de demande de prêt afin de pouvoir demander un prêt.",
+                        "acceptance_criteria": [
+                            " Un formulaire de demande de prêt est affiché.",
+                            " Le formulaire comprend des champs pour les informations personnelles, montant du prêt, but du prêt et autres détails pertinents."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Statut des documents téléchargés",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux vérifier l'état de mes documents téléchargés afin de pouvoir vérifier que tous les documents nécessaires sont acceptés.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut visualiser le statut de chaque document téléchargé.",
+                            " L'état indique si le document a été accepté, rejeté ou est en attente de révision."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Gestion de la remboursement des prêts",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux voir le calendrier de répagement du prêt afin de pouvoir planifier mes finances de manière appropriée.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut visualiser le calendrier de remboursement du prêt, comprenant les dates limites et les montants pour chaque paiement."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux établir des paiements automatiques afin de garantir les remboursements à temps des prêts.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut établir des paiements automatiques pour les remboursements de prêt.",
+                            " Le système confirme l'établissement des paiements automatiques.",
+                            " L'utilisateur peut visualiser et gérer les paramètres de paiement automatique."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être informé avant chaque date limite de répagement pour pouvoir vérifier que j'ai suffisamment de fonds.",
+                        "acceptance_criteria": [
+                            " L'utilisateur reçoit une notification (courriel, SMS ou intégrée à l'application) avant chaque date limite de remboursement de prêt.",
+                            " La notification comprend la date limite et le mont à verser."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Suivi de la progression de demande d'emprunt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux vérifier l'état de ma demande de prêt afin de rester informé sur le progrès.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut voir le statut actuel de leur demande de prêt.",
+                            " L'état est mis à jour en temps réel lorsque l'application est traitée."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Date de notification de la date limite de réimbursement du prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être informé avant chaque date limite de répagement pour pouvoir vérifier que j'ai suffisamment de fonds.",
+                        "acceptance_criteria": [
+                            " La utilisateur est informé avant chaque date limite de réimbursement des prêts.",
+                            " La notification comprend la date limite et le mont à verser."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Statuts des notifications d'application de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être informé lorsque le statut de ma demande de prêt change afin de pouvoir prendre les mesures appropriées.",
+                        "acceptance_criteria": [
+                            " L'utilisateur reçoit une notification lorsque le statut de leur demande de prêt change.",
+                            " La notification comprend la nouvelle état et toute information pertinente."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Suivi de l'état de demande de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux vérifier l'état de ma demande de prêt afin de rester informé sur le progrès.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut voir le statut actuel de leur demande de prêt.",
+                            " L'état est mis à jour en temps réel lorsque l'application est traitée.",
+                            " La page de statut est accessible via le compte de l'utilisateur."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être informé lorsque le statut de ma demande de prêt change afin de pouvoir prendre les mesures appropriées.",
+                        "acceptance_criteria": [
+                            " L'utilisateur reçoit une notification lorsque le statut de leur demande de prêt change.",
+                            " L'alerte est envoyé par courrier électronique ou par notification dans l'application.",
+                            " La notification comprend la nouvelle état et toute information pertinente."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Conditions et termes de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux voir les termes et conditions du prêt afin de comprendre les détails du prêt.",
+                        "acceptance_criteria": [
+                            " Les termes et conditions du prêt sont affichés dans le formulaire d'application de prêt.",
+                            " Les termes et conditions sont spécifiques au type de prêt demandé.",
+                            " Les termes et conditions comprennent taux d'intérêt, période de remboursement, pénalités pour paiement tardif, etc."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux accepter les conditions et les termes du prêt afin de pouvoir poursuivre le processus d'application de prêt.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut accepter les termes et conditions du formulaire d'application de prêt.",
+                            " L'acceptation est enregistrée dans le système.",
+                            " L'utilisateur ne peut pas poursuivre avec la demande de prêt sans accepter les conditions générales."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Gestion de la remboursement des prêts",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux voir le calendrier de répagement du prêt afin de pouvoir planifier mes finances de manière appropriée.",
+                        "acceptance_criteria": [
+                            " Le calendrier de répagement du prêt est affiché dans le formulaire d'application de prêt.",
+                            " Le calendrier indique la somme à rembourser, la date limite et le nombre total de remboursements.",
+                            " Le calendrier est spécifique au type de prêt demandé."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux établir des paiements automatiques afin de garantir les remboursements à temps des prêts.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut établir des paiements automatiques dans le formulaire de demande de prêt.",
+                            " Les paiements automatiques sont établis avec le compte bancaire de l'utilisateur.",
+                            " L'utilisateur peut choisir la date pour les paiements automatiques."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être informé avant chaque date limite de répagement pour pouvoir vérifier que j'ai suffisamment de fonds.",
+                        "acceptance_criteria": [
+                            " L'utilisateur reçoit une notification par courriel avant chaque date limite de répagement du prêt.",
+                            " L'email comprend l'amount de remboursement et la date limite.",
+                            " L'alerte est envoyé quelques jours avant la date limite."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            }
+        ]
+    },
+    "llm+CoT": {
+        "epics": [
+            {
+                "epic": " Évaluation de la solvabilité creditoire",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux évaluer la solvabilité des demandes individuelles, afin de prendre des décisions de prêt informées.",
+                        "acceptance_criteria": [
+                            " Le système récupère le score de crédit de l'applicant à partir des bureaux de crédit intégrés.",
+                            " Le système calcule le taux de dette à revenu de l'applicant en fonction des informations financières fournies.",
+                            " Le système génère un rapport de solvabilité résumant les résultats de l'évaluation."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Sécurité et conformité",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu utilisateur, je veux que mes données personnelles et financières soient sécurisées afin de pouvoir me confier dans le processus d'application de prêt.",
+                        "acceptance_criteria": [
+                            " Le système utilise l'encryptage pour protéger les données des utilisateurs.",
+                            " Le système dispose de contrôles d'accès pour limiter l'accès aux données à des utilisateurs autorisés.",
+                            " Les journaux de système enregistrent les activités des utilisateurs pour des fins d'audit.",
+                            " Le système respecte les règles de protection des données pertinentes."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux vérifier que le processus d'application de prêt respecte les règles afin que le processus soit légal et équitable.",
+                        "acceptance_criteria": [
+                            " Le système met en œuvre les exigences réglementaires pour les demandes de prêts.",
+                            " Le système fournit des rapports de conformité pour les besoins d'audit.",
+                            " L'agent de prêt peut visualiser et gérer les tâches liées à la conformité.",
+                            " L'agent de prêt est informé de tout problème de conformité."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Support technique client",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être en mesure de contacter le service client pour obtenir de l'aide avec ma demande d'emprunt afin que je puisse avoir de l'aide si je rencontre des problèmes.",
+                        "acceptance_criteria": [
+                            " Le système doit fournir des informations de contact pour le service client.",
+                            " Les utilisateurs doivent être en mesure de contacter le service client via plusieurs canaux (téléphone, courriel, chat)."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": false
+                    }
+                ]
+            },
+            {
+                "epic": " Gestion de la remboursement des prêts",
+                "user_stories": [
+                    {
+                        "user_story": " En tant emprunteur, je veux voir et gérer mon calendrier de remboursement de prêt, afin de rester à jour sur mes paiements de prêt.",
+                        "acceptance_criteria": [
+                            " Le système affiche le calendrier de remboursement du prêt avec les dates limites et montants dus.",
+                            " Le système permet au prêteur de consulter son historique des paiements effectués et les prochaines échéances.",
+                            " Le système envoie des rappels à l'emprunteur pour les prochaines paiements via courriel ou notification intégrée à l'application."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Gestion des prêts",
+                "user_stories": [
+                    {
+                        "user_story": " En tant que détenteur de prêt, je veux voir mes détails de prêt et mon calendrier de remboursement afin de gérer mon prêt.",
+                        "acceptance_criteria": [
+                            " Le titulaire du prêt peut accéder à ses détails de prêt sur son tableau de bord.",
+                            " Les détails du prêt comprennent la somme empruntée, taux d'intérêt, calendrier de remboursement, etc.",
+                            " Le détenteur du prêt peut consulter son historique de remboursement.",
+                            " Le détenteur de prêt peut voir ses prochaines remboursements."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que détenteur de prêt, je veux effectuer des remboursements afin de régler mon prêt.",
+                        "acceptance_criteria": [
+                            " Le détenteur du prêt peut accéder à la fonction de remboursement sur leur tableau de bord.",
+                            " Le détenteur du prêt peut saisir la somme de remboursement.",
+                            " Le système traite le remboursement et met à jour le compte de prêt.",
+                            " Le détenteur de prêt reçoit une confirmation de remboursement."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que détenteur de prêt, je souhaite demander une modification de mon prêt afin de pouvoir modifier les termes de mon prêt si cela est nécessaire.",
+                        "acceptance_criteria": [
+                            " Le titulaire du prêt peut accéder à la fonction de demande de modification de prêt dans leur tableau de bord.",
+                            " Le titulaire du prêt peut entrer les modifications demandées.",
+                            " Le système envoie la demande à l'officier de prêt pour examen.",
+                            " L'agent de prêt peut voir et répondre à la demande.",
+                            " Le prêteur est informé de la décision."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Document de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux préparer et gérer les documents de prêt afin de formuler l'accord de prêt et de maintenir des enregistrements corrects.",
+                        "acceptance_criteria": [
+                            " Les documents de prêt sont préparés et gérés en toute sécurité.",
+                            " L'accord de prêt est signé par les deux parties."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": false
+                    }
+                ]
+            },
+            {
+                "epic": " Demande de soumission d'application de prêt en ligne",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'applicant individuel, je souhaite soumettre une demande de prêt en ligne, afin de pouvoir faire une demande de prêt de manière commode.",
+                        "acceptance_criteria": [
+                            " Le système invite l'applicant à fournir des informations personnelles telles que son nom, son adresse et ses détails de contact.",
+                            " Le système permet à l'applicant de télécharger les documents nécessaires tels que l'identité, la preuve des revenus et les extraits de compte bancaire.",
+                            " Le système vérifie les données saisies pour leur complétude et leur exactitude avant soumission."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Sélection de type de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux sélectionner le type de prêt que j'applique pour pouvoir choisir le prêt qui convient le mieux à mes besoins.",
+                        "acceptance_criteria": [
+                            " Le système devrait fournir une liste des types de prêts disponibles.",
+                            " Les utilisateurs doivent être en mesure de sélectionner un ou plusieurs types de prêt à partir de la liste."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": false
+                    }
+                ]
+            },
+            {
+                "epic": " Évaluation de la solvabilité creditoire",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de crédit, je souhaite que le système évalue automatiquement la solvabilité du client afin que les décisions de prêt puissent être prises rapidement et avec précision.",
+                        "acceptance_criteria": [
+                            " Le système doit évaluer automatiquement le score de crédit de l'utilisateur en fonction des informations fournies.",
+                            " Le système devrait générer un rapport de crédit résumant l'évaluation.",
+                            " Le système devrait fournir une recommandation pour l'approbation ou le refus du prêt en fonction de l'évaluation de la solvabilité financière.",
+                            " Le système devrait permettre aux agents de prêt de pouvoir examiner et surécrire la décision automatisée si cela est nécessaire."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Délivrance de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu approuvé demandeur, je souhaite recevoir la somme de prêt afin que je puisse utiliser les fonds.",
+                        "acceptance_criteria": [
+                            " Le système lance le processus de versement du prêt à l'approbation.",
+                            " L'applicant peut consulter le statut de la dispense dans leur tableau de bord.",
+                            " Le système met à jour le compte de prêt avec l'amount versé.",
+                            " L'applicant reçoit une confirmation de la dispense."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux vérifier les détails bancaires de l'applicant avant le versement afin que les fonds soient transférés sur le compte correct.",
+                        "acceptance_criteria": [
+                            " L'agent de prêt peut accéder aux détails bancaires de l'applicant.",
+                            " Le responsable du prêt peut vérifier les détails bancaires avec l'applicant.",
+                            " Le système met à jour le statut de vérification.",
+                            " L'agent de prêt peut procéder à l'émission après vérification réussie."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Vérification de la demande de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux voir les demandes de prêt en attente pour pouvoir les examiner.",
+                        "acceptance_criteria": [
+                            " L'agent de prêt peut accéder à la liste des demandes de prêts en attente.",
+                            " L'agent de prêt peut trier et classer la liste en fonction de différents critères.",
+                            " L'agent de prêt peut sélectionner une demande de prêt pour visualiser ses détails."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je souhaite approuver ou refuser une demande de prêt afin de prendre une décision sur l'application.",
+                        "acceptance_criteria": [
+                            " L'agent de prêt peut accéder aux détails de la demande de prêt.",
+                            " L'agent de prêt peut saisir des commentaires pour l'approbation ou le refus.",
+                            " L'agent de prêt peut choisir d'approuver ou de refuser l'application.",
+                            " Le système met à jour l'état de l'application.",
+                            " Le système informe l'applicant de la décision."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je souhaite demander des informations supplémentaires à l'applicant afin de pouvoir prendre une décision éclairée.",
+                        "acceptance_criteria": [
+                            " L'agent de prêt peut accéder aux détails de la demande de prêt.",
+                            " L'agent de prêt peut saisir la demande d'informations supplémentaires.",
+                            " Le système envoie une notification à l'applicant avec la demande.",
+                            " Le demandeur peut visualiser la demande et ajouter les informations supplémentaires."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Gestion de l'information des candidats",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu agent de crédit, je veux recueillir et conserver les informations personnelles des candidats afin que nous puissions les identifier et les contacter tout au long du processus de prêt.",
+                        "acceptance_criteria": [
+                            " Les informations personnelles sont collectées et stockées de manière sécurisée.",
+                            " Les informations de contact de l'applicant sont exactes et à jour."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": false
+                    }
+                ]
+            },
+            {
+                "epic": " Calculateur de Prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux calculer mon montant de prêt afin de pouvoir estimer mon montant de prêt.",
+                        "acceptance_criteria": [
+                            " Utilisateur peut calculer la somme prêtée.",
+                            " L'utilisateur peut consulter l'historique de calcul des prêts.",
+                            " Utilisateur peut visualiser les détails de calcul de prêt."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Suivi de l'état de l'application",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux suivre l'état de mon dossier pour pouvoir surveiller la progression de ma demande de prêt.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut voir l'état de l'application.",
+                            " L'utilisateur peut voir l'historique de l'application.",
+                            " Utilisateur peut voir les détails de l'application."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": false
+                    }
+                ]
+            },
+            {
+                "epic": " Support multi-langue",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux que la demande de prêt soit disponible dans plusieurs langues afin de pouvoir terminer l'application dans ma langue préférée.",
+                        "acceptance_criteria": [
+                            " Le système doit supporter plusieurs langues.",
+                            " Les utilisateurs doivent être en mesure de sélectionner leur langue préférée pour l'application."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Téléchargement de Document",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux télécharger les documents nécessaires en lien avec ma demande de prêt afin de pouvoir fournir toutes les informations requises électroniquement.",
+                        "acceptance_criteria": [
+                            " Le système devrait permettre aux utilisateurs de charger des documents dans diverses formats (PDF, JPEG, PNG, etc.).",
+                            " Les documents téléchargés doivent être stockés de manière sûre et accessibles pour revue."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Gestion des prêts",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux gérer les demandes de prêt de manière à pouvoir les traiter efficacement.",
+                        "acceptance_criteria": [
+                            " Un agent de crédit peut visualiser et gérer toutes les demandes de prêt.",
+                            " Un agent de crédit peut approuver ou refuser les demandes de prêts.",
+                            " Un agent de prêt peut demander des informations supplémentaires à l'applicant."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Suivi de l'application de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux suivre la situation de ma demande de prêt en temps réel afin que je sois toujours informé du progrès.",
+                        "acceptance_criteria": [
+                            " Le système doit fournir des mises à jour en temps réel sur le statut de l'application de prêt.",
+                            " Le système devrait envoyer des notifications à l'utilisateur pour tout changement d'état de l'application.",
+                            " Le système doit afficher un calendrier de toutes les modifications de statut et des actions effectuées sur l'application.",
+                            " Le système devrait permettre aux utilisateurs de visualiser l'horodatage prévu pour chaque étape du processus d'application de prêt."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Offre de génération de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'émetteur de crédit, je souhaite générer une offre de prêt pour l'applicant en fonction de leur évaluation de solvabilité, afin que celui-ci puisse la revue et accepter les termes du prêt.",
+                        "acceptance_criteria": [
+                            " L'émetteur devrait générer une offre de prêt en fonction de l'évaluation de solvabilité du demandeur.",
+                            " Le système devrait permettre aux prêteurs de personnaliser les termes et conditions du prêt.",
+                            " L'application devrait envoyer l'offre de prêt à l'applicant pour examen et acceptation."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'applicant, je souhaite examiner et accepter ou refuser l'offre de prêt afin de pouvoir poursuivre le processus de versement du prêt.",
+                        "acceptance_criteria": [
+                            " L'application devrait permettre aux candidats de passer en revue l'offre de prêt et ses conditions générales.",
+                            " Le système devrait permettre aux candidats d'accepter ou de refuser l'offre de prêt.",
+                            " Le système doit confirmer la décision de l'applicant et mettre à jour le statut du prêt de manière correspondante."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            }
+        ]
+    },
+    "rag+CoT": {
+        "epics": [
+            {
+                "epic": " Gestion des Risques",
+                "user_stories": [
+                    {
+                        "user_story": " En tant que gestionnaire de risques, je veux être en mesure d'identifier les demandes de prêt à haut risque afin de pouvoir réduire les défauts potentiels.",
+                        "acceptance_criteria": [
+                            " Développer un modèle de notation des risques à partir de données historiques et des conditions du marché.",
+                            " Évaluez l'évaluation des risques automatisée pour chaque demande de prêt.",
+                            " Fournir un tableau de bord de gestion des risques pour le suivi des prêts à haut risque."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de prêt, je souhaite pouvoir ajuster les termes du prêt en fonction d'une évaluation des risques afin de gérer efficacement le risque.",
+                        "acceptance_criteria": [
+                            " Permettez aux agents de prêt de modifier les conditions du prêt (par exemple, taux d'intérêt, montant du prêt) en fonction des scores de risque.",
+                            " Fournir des directives pour l'ajustement des conditions de prêt en fonction des niveaux de risque.",
+                            " Approbation des flux de travail pour les modifications importantes des conditions de prêt."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que gestionnaire de risques, je veux être en mesure de surveiller l'exposition globale au risque du portefeuille de prêts afin de pouvoir prendre des décisions éclairées.",
+                        "acceptance_criteria": [
+                            " Fournir un tableau de bord de gestion des risques du portefeuille.",
+                            " Afficher les métriques de risque clés et tendances.",
+                            " Permettez aux gestionnaires de risques de définir des seuils et d'alertes de risque."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Portail de Gestion des Prêts",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux gérer mes prêts via un portail en ligne afin de pouvoir visualiser et gérer les détails et les paiements de mes prêts.",
+                        "acceptance_criteria": [
+                            " Le système doit afficher une liste des prêts actifs de l'utilisateur.",
+                            " Le système devrait permettre aux utilisateurs de visualiser les détails de chaque prêt, y compris la somme du prêt, taux d'intérêt, durée du prêt et calendrier de remboursement.",
+                            " L'écran doit permettre aux utilisateurs de visualiser l'historique des paiements pour chaque prêt, comprenant la date, montant et méthode de paiement pour chaque paiement.",
+                            " Le système devrait permettre aux utilisateurs de faire des paiements sur leurs prêts via le portail.",
+                            " Le système devrait permettre aux utilisateurs de visualiser et de gérer leurs documents de prêt, y compris les contrats de prêt et les reçus de paiement."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Accord de génération de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant emprunteur, je veux examiner et signer l'accord de prêt afin de pouvoir formellement accepter les termes du prêt.",
+                        "acceptance_criteria": [
+                            " L'accord de prêt devrait être généré par le système en fonction de l'application de prêt approuvée.",
+                            " L'échantillon doit permettre au prêteur de passer en revue et de signer l'accord de prêt.",
+                            " L'accord de prêt signé devrait être conservé pour une référence futures."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux personnaliser et envoyer l'accord de prêt à l'emprunteur afin que le prêt puisse être définitivement conclu.",
+                        "acceptance_criteria": [
+                            " Le système devrait permettre aux agents de prêt de personnaliser le modèle d'accord de prêt."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Évaluation du risque et d'évaluation des scores de crédit",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux voir mon score de crédit et les facteurs qui ont contribué à lui afin de comprendre ma solvabilité.",
+                        "acceptance_criteria": [
+                            " Le système doit calculer un score de crédit pour l'utilisateur en fonction de leur histoire de crédit et d'autres facteurs.",
+                            " Le système devrait afficher le score de crédit de l'utilisateur et les facteurs qui ont contribué à celui-ci.",
+                            " Le système devrait permettre aux utilisateurs de voir une analyse détaillée de leur note de crédit, y compris le poids de chaque facteur et son effet sur la note.",
+                            " L'éventuel système devrait permettre aux utilisateurs de consulter leur historique de crédit, y compris tout élément négatif qui pourrait affecter leur note.",
+                            " Le système devrait permettre aux utilisateurs de contester toute inexactitude dans leur histoire de crédit."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Étatannuel de remboursement des capitaux",
+                "user_stories": [
+                    {
+                        "user_story": " En tant emprunteur, je souhaite recevoir un état annuel résumant mes remboursements de capitaux afin que je puisse suivre mon avancement dans la rémunération de mon prêt.",
+                        "acceptance_criteria": [
+                            " Le système émet un rapport annuel résumant les remboursements de capitaux effectués par l'emprunteur.",
+                            " Le prêteur peut accéder et télécharger le compte-rendu annuel des remboursements de capitaux."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant emprunteur, je veux voir une décomposition détaillée de mes remboursements de capitaux afin de vérifier la précision de l'état annuel.",
+                        "acceptance_criteria": [
+                            " Le prêteur peut visualiser un détailé de chaque remboursement de capitaux effectué durant l'année.",
+                            " Le prêteur peut signaler tout différence dans le compte-rendu de remboursement de la capitale."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Demande d'emprunt en ligne",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux créer un compte afin de pouvoir demander un prêt en ligne.",
+                        "acceptance_criteria": [
+                            " Le système devrait permettre aux utilisateurs de créer un compte en utilisant leur adresse e-mail et un mot de passe.",
+                            " L' système devrait envoyer un e-mail de vérification à l'adresse e-mail de l'utilisateur.",
+                            " L' système devrait permettre aux utilisateurs de vérifier leur adresse e-mail en cliquant sur un lien dans l'e-mail de vérification.",
+                            " Le système devrait permettre aux utilisateurs de se connecter en utilisant leur adresse e-mail et mot de passe.",
+                            " Le système doit permettre aux utilisateurs de réinitialiser leur mot de passe en cas d'oubli."
+                        ],
+                        "independent": true,
+                        "negotiable": false,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux télécharger et gérer les documents nécessaires pour mon dossier de demande de prêt afin de pouvoir terminer le processus de demande.",
+                        "acceptance_criteria": [
+                            " La système doit afficher une liste des documents nécessaires pour l'application de prêt.",
+                            " Le système devrait permettre aux utilisateurs de charger des documents dans les formats pris en charge (PDF, JPG, PNG).",
+                            " Le système devrait permettre aux utilisateurs de visualiser et de gérer leurs documents téléchargés.",
+                            " Le système devrait permettre aux utilisateurs de supprimer les documents téléchargés.",
+                            " Le système devrait permettre aux utilisateurs de remplacer les documents téléchargés par des nouveaux."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux suivre le statut de ma demande de prêt afin de rester informé sur le progrès de mon dossier.",
+                        "acceptance_criteria": [
+                            " L'écran doit afficher l'état de la demande de prêt de l'utilisateur.",
+                            " Le système devrait envoyer des notifications à l'utilisateur lorsque le statut de leur demande de prêt change.",
+                            " Le système devrait permettre aux utilisateurs de visualiser l'historique des changements de statut pour leur demande de prêt.",
+                            " Le système devrait permettre aux utilisateurs de visualiser les détails de chaque changement de statut, y compris la date, l'heure et la raison du changement."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux comparer différents types de prêts afin de choisir celui qui correspond le mieux à mes besoins.",
+                        "acceptance_criteria": [
+                            " Le système doit afficher une liste des types de prêts disponibles.",
+                            " Le système devrait permettre aux utilisateurs de filtrer et de trier la liste des types de prêts en fonction de différents critères (taux d'intérêt, durée du prêt, etc.).",
+                            " Le système devrait permettre aux utilisateurs de visualiser les détails de chaque type de prêt, y compris les taux d'intérêt, les frais et les termes de remboursement.",
+                            " Le système devrait permettre aux utilisateurs de comparer les détails de trois types de prêts les uns en parallèle des autres."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux calculer le coût d'un prêt afin de comprendre le coût total emprunté.",
+                        "acceptance_criteria": [
+                            " Le système devrait permettre aux utilisateurs d'introduire la somme du prêt et le terme.",
+                            " Le système doit calculer et afficher le coût total du prêt, y compris les intérêts et les frais.",
+                            " Le système devrait permettre aux utilisateurs de voir un détail du coût du prêt, comprenant la somme initiale, l'intérêt et les frais.",
+                            " Le système devrait permettre aux utilisateurs de visualiser un calendrier d'amortissement pour le prêt, montrant l'import de chaque période, les intérêts et le capital pour chacune des périodes."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux gérer mes prêts via un portail en ligne afin de pouvoir visualiser et gérer les détails et les paiements de mes prêts.",
+                        "acceptance_criteria": [
+                            " Le système doit afficher une liste des prêts actifs de l'utilisateur.",
+                            " Le système devrait permettre aux utilisateurs de visualiser les détails de chaque prêt, y compris la somme du prêt, taux d'intérêt, durée du prêt et calendrier de remboursement.",
+                            " L'écran doit permettre aux utilisateurs de visualiser l'historique des paiements pour chaque prêt, comprenant la date, montant et méthode de paiement pour chaque paiement.",
+                            " Le système devrait permettre aux utilisateurs de faire des paiements sur leurs prêts via le portail.",
+                            " Le système devrait permettre aux utilisateurs de visualiser et de gérer leurs documents de prêt, y compris les contrats de prêt et les reçus de paiement."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": false,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux voir mon score de crédit et les facteurs qui ont contribué à lui afin de comprendre ma solvabilité.",
+                        "acceptance_criteria": [
+                            " Le système doit calculer un score de crédit pour l'utilisateur en fonction de leur histoire de crédit et d'autres facteurs.",
+                            " Le système devrait afficher le score de crédit de l'utilisateur et les facteurs qui ont contribué à celui-ci.",
+                            " Le système devrait permettre aux utilisateurs de voir une analyse détaillée de leur note de crédit, y compris le poids de chaque facteur et son effet sur la note.",
+                            " L'éventuel système devrait permettre aux utilisateurs de consulter leur historique de crédit, y compris tout élément négatif qui pourrait affecter leur note.",
+                            " Le système devrait permettre aux utilisateurs de contester toute inexactitude dans leur histoire de crédit."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": false,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux recevoir des recommandations personnalisées pour améliorer mon score de crédit afin d'augmenter mes chances d'obtenir une autorisation de prêt.",
+                        "acceptance_criteria": [
+                            " Le système devrait analyser l'historique de crédit de l'utilisateur et d'autres facteurs pour identifier des zones à améliorer.",
+                            " Le système devrait fournir des recommandations personnalisées pour améliorer le score de crédit de l'utilisateur.",
+                            " Le système devrait permettre aux utilisateurs de visualiser une liste d'actions recommandées, accompagnée d'une estimation de l'impact potentiel sur leur note de crédit.",
+                            " Le système devrait permettre aux utilisateurs de suivre leur avancement vers la réalisation des actions recommandées.",
+                            " Le système devrait permettre aux utilisateurs de visualiser l'impact des actions terminées sur leur note de crédit."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être en mesure de contacter le service clientèle afin de pouvoir obtenir de l'aide pour toute question ou problème que j'ai sur mon dossier de demande de prêt ou mon compte.",
+                        "acceptance_criteria": [
+                            " Le système doit permettre aux utilisateurs de contacter le service client via plusieurs canaux (téléphone, courriel, chat).",
+                            " Le système devrait permettre aux utilisateurs de soumettre un billet de soutien via le portail.",
+                            " Le système devrait permettre aux utilisateurs de visualiser l'état de leurs billets d'aide et toute mise à jour ou réponse de la soutien client.",
+                            " Le système devrait permettre aux utilisateurs de consulter une histoire de leurs tickets de soutien passés et de leurs interactions avec le service client.",
+                            " Le système devrait permettre aux utilisateurs de fournir un avis sur leur expérience de soutien client."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Gestion des remboursements",
+                "user_stories": [
+                    {
+                        "user_story": " En tant emprunteur, je veux pouvoir voir mon calendrier de remboursement afin de planifier mes paiements de manière appropriée.",
+                        "acceptance_criteria": [
+                            " Le calendrier de remboursement doit être affiché dans l'espace utilisateur.",
+                            " Le calendrier de remboursement devrait inclure des détails tels que les dates limites, montants et méthodes de paiement.",
+                            " Le calendrier de remboursement doit être filtrable par plage temporelle.",
+                            " Le calendrier de remboursement doit être triable par date limite et montant.",
+                            " Le calendrier de remboursement doit être mis à jour en temps réel pour refléter toute modification apportée par l'officier de prêt.",
+                            " Le calendrier de remboursement doit être accessible depuis le tableau de bord de l'utilisateur.",
+                            " Le calendrier de remboursement doit être imprimable.",
+                            " Le calendrier de remboursement doit être téléchargeable au format PDF."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux être en mesure de surveiller les activités de remboursement afin de vérifier que les prêts sont remboursés à temps.",
+                        "acceptance_criteria": [
+                            " Un tableau de bord de surveillance des remboursements est disponible pour les agents de prêt.",
+                            " La tableau de bord affiche l'état actuel et l'historique des remboursements en temps réel.",
+                            " Le système informe les agents de prêt des paiements manqués ou retardés."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant emprunteur, je veux pouvoir faire mes paiements facilement afin de rembourser mon prêt de manière confortable.",
+                        "acceptance_criteria": [
+                            " Intégrez plusieurs systèmes de portes-monnaie pour une gestion facile des paiements.",
+                            " Permettre aux emprunteurs de faire des paiements via l'application ou le site web.",
+                            " Fournissez la confirmation et les récépissés pour chaque paiement effectué."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Suivi de l'état des prêts",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux suivre l'état de ma demande de prêt pour rester informé sur le progrès.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut visualiser le statut actuel de leur demande de prêt.",
+                            " L'utilisateur est informé de toute modification sur l'état de la demande de prêt."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux voir l'historique de mon statut d'application de prêt afin de comprendre le calendrier du processus.",
+                        "acceptance_criteria": [
+                            " L'utilisateur peut consulter une histoire des modifications de statut pour leur demande de prêt.",
+                            " L'utilisateur peut visualiser la date et l'heure de chaque changement d'état."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Configuration de prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de crédit, je souhaite pouvoir configurer différents produits de prêt afin que nous puissions offrir diverses options de prêt aux demandants d'emprunt.",
+                        "acceptance_criteria": [
+                            " Créez un module de configuration de prêt dans le tableau de bord administrateur.",
+                            " Permettez aux agents de crédit de déterminer les taux d'intérêt, les conditions de prêt et les autres paramètres.",
+                            " Assurez-vous de la validation pour vérifier que les configurations de prêt se trouvent dans les plages approuvées."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'applicant, je souhaite être en mesure de comparer différentes options de prêt afin de choisir celui qui correspond le mieux à mes besoins.",
+                        "acceptance_criteria": [
+                            " Affichez les options de prêt côte à côte pour une comparaison facile.",
+                            " Fournissez des informations claires sur les taux d'intérêt, les conditions de prêt et autres détails clés.",
+                            " Permettez aux candidats de choisir leur option de prêt préférée."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de prêt, je veux être en mesure d'ajuster les configurations de prêt en fonction des conditions du marché afin que nos produits de prêt restent compétitifs.",
+                        "acceptance_criteria": [
+                            " Permettez aux agents de prêt de mettre à jour les configurations de prêt selon les besoins.",
+                            " Fournir des analyses sur les tendances du marché et les offres concurrentielles.",
+                            " Approvez les flux de travail pour les modifications importantes des configurations de prêts."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            }
+        ]
+    },
+    "T2S_Gen": {
+        "epics": [
+            {
+                "epic": " Performances et Améliorations",
+                "user_stories": [
+                    {
+                        "user_story": " En tant que gestionnaire de produit, je veux surveiller les indicateurs clés de performance tels que les taux d'approbation, les temps de traitement et les taux de défaut afin de pouvoir évaluer l'efficacité et l'efficacité globales du processus d'application de prêt.",
+                        "acceptance_criteria": [
+                            " Créez un tableau de bord qui affiche des métriques de performance en temps réel.",
+                            " Assurez-vous que le tableau de bord inclut les taux d'approbation, les temps de traitement et les taux de défaut.",
+                            " Permettez le filtrage de métriques selon différentes périodes temporelles et types de prêts.",
+                            " Générer des rapports pouvant être exportés pour une analyse supplémentaire."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que spécialiste du marketing, je veux comprendre l'audience cible afin de pouvoir adapter l'application à leurs besoins et préférences spécifiques, ce qui garantit une expérience utilisateur plus agréable.",
+                        "acceptance_criteria": [
+                            " Effectuer des recherches de marché pour identifier les demographiques et les préférences de l'audience cible.",
+                            " Créez des personnages d'utilisateurs qui représentent l'audience cible.",
+                            " Intégrez les commentaires des utilisateurs pour améliorer les fonctionnalités et l'interface de l'application.",
+                            " Mette à jour régulièrement l'application en fonction des besoins des utilisateurs et des tendances du marché."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux clairement définir les produits de prêt afin que les utilisateurs comprennent les attentes et que l'application puisse évaluer et approuver les prêts en fonction des critères établis.",
+                        "acceptance_criteria": [
+                            " Développez des descriptions détaillées de produits prêt bancaire comprenant les termes, conditions et critères d'éligibilité.",
+                            " Assurez-vous que les informations sur le produit de prêt soient facilement accessibles aux utilisateurs tout au long du processus d'application.",
+                            " Implementer un système qui associe les profils utilisateur à des produits de prêt adaptés.",
+                            " Régulièrement examinez et mettez à jour les définitions des produits de prêt pour refléter les changements du marché et les commentaires des utilisateurs."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de conformité, je veux spécifier les documents nécessaires afin que le processus d'approbation du prêt soit simplifié et que les utilisateurs fournissent toutes les informations nécessaires à l'avance, ce qui réduit les retards et améliore l'efficacité.",
+                        "acceptance_criteria": [
+                            " Créez une liste de documents nécessaires pour chaque demande de prêt.",
+                            " Assurez-vous que l'application communique clairement les documents nécessaires aux utilisateurs au début du processus d'inscription.",
+                            " Réalisez un système de téléchargement et de vérification de documents qui vérifie la complétude et la précision.",
+                            " Fournir un retour en temps réel aux utilisateurs si des documents nécessaires manquent ou sont incomplets."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Réglementaire et Conformité",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de conformité, je veux vérifier que le processus d'application de prêt respecte toutes les réglementations financières locales et internationales pertinentes afin que l'entreprise évite des pénalités juridiques et maintienne une bonne réputation.",
+                        "acceptance_criteria": [
+                            " Le système doit intégrer avec des bases de données réglementaires pour vérifier la conformité.",
+                            " Le système doit générer des rapports de conformité pour des raisons d'audit.",
+                            " Le système doit fournir des alertes pour tout problème de conformité détecté."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux des révélations claires sur les conditions du prêt, taux d'intérêt, frais et obligations de remboursement afin que je puisse prendre des décisions éclairées concernant mon prêt.",
+                        "acceptance_criteria": [
+                            " Le système doit afficher clairement les conditions de prêt, taux d'intérêt, frais et obligations de remboursement sur le formulaire d'application.",
+                            " Le système doit fournir un résumé des détails clés du prêt avant la soumission finale.",
+                            " Le système doit permettre aux utilisateurs de télécharger ou d'imprimer les conditions du prêt pour leurs archives."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux être informé de mes droits et de mes protections en vertu des lois consommateurs afin de pouvoir protéger mes intérêts pendant le processus d'application de prêt.",
+                        "acceptance_criteria": [
+                            " L'application devrait afficher des informations sur les droits et protections des consommateurs dans le formulaire.",
+                            " Le système doit fournir des liens vers des ressources de protection des consommateurs pertinentes.",
+                            " Le système doit permettre aux utilisateurs de reconnaître qu'ils ont lu et compris leurs droits."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de conformité, je veux vérifier que le processus d'application de prêt respecte les lois et règlementations locales afin que l'entreprise fonctionne dans un cadre juridique valide.",
+                        "acceptance_criteria": [
+                            " Le système doit intégrer avec les bases de données réglementaires locales pour vérifier la conformité.",
+                            " Le système doit générer des rapports de conformité locaux pour des raisons d'audit.",
+                            " Le système doit fournir des alertes pour tout problème de conformité locale détecté."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux recevoir des informations annuelles sur le capital à rembourser en retard afin de pouvoir gérer mes finances efficacement.",
+                        "acceptance_criteria": [
+                            " Le système doit générer des déclarations annuelles de capitaux en retard.",
+                            " Le système doit permettre aux utilisateurs d'accéder à leurs déclarations annuelles via l'application.",
+                            " Le système doit envoyer des notifications aux utilisateurs lorsque leurs déclarations annuelles sont disponibles."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de conformité, je veux garantir que des enregistrements clairs et lisibles sont conservés sur un support durable afin que la société puisse fournir des preuves de conformité lors des vérifications.",
+                        "acceptance_criteria": [
+                            " Le système doit générer et enregistrer des enregistrements de toutes les demandes de prêt et des documents liés.",
+                            " Le système doit garantir que les enregistrements soient lisibles et conservés sur un support durable.",
+                            " Le système doit fournir accès aux enregistrements pour des fins de vérification."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Considérations Légales et Réglementaires",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de conformité, je veux vérifier que le processus d'application de prêt respecte les règles financières locales et internationales afin de pouvoir éviter des pénalités juridiques et de maintenir notre licence d'exploitation.",
+                        "acceptance_criteria": [
+                            " Vérifiez que le processus d'application respecte toutes les réglementations financières locales pertinentes.",
+                            " Assurez-vous que le processus d'application respecte les normes financières internationales.",
+                            " Vérifier et enregistrer tous les contrôles de conformité pour des fins d'audit."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que conseiller juridique, je souhaite fournir des déclarations claires sur les conditions de prêt, taux d'intérêt, frais et obligations de remboursement afin que les demandants soient pleinement informés de leurs engagements financiers.",
+                        "acceptance_criteria": [
+                            " Assurez-vous de ce que toutes les conditions de prêt, taux d'intérêt, frais et obligations de remboursement sont clairement communiqués à l'applicant.",
+                            " Fournissez des révélations dans un format facile à comprendre et accessible à tous les candidats.",
+                            " Garder un registre de toutes les révélations apportées aux candidats à des fins de référence ultérieure."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'expert en protection des consommateurs, je veux informer les candidats de leurs droits et de leur protection en vertu du droit des consommateurs afin que ceux-ci puissent prendre des décisions éclairées et protéger leurs intérêts.",
+                        "acceptance_criteria": [
+                            " Identifiez et communiquez tous les droits et protections consommateurs pertinents aux candidats.",
+                            " Informez les demandants sur comment exercer leurs droits et chercher une protection en vertu des lois consommateurs.",
+                            " Assurez-vous que toutes les communications relatives aux droits des consommateurs soient claires et facilement accessibles."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que responsable de la conformité réglementaire, je veux garantir que l'application fournit des informations annuelles sur le capital à rembourser en retard afin que les emprunteurs soient tenus au courant de leurs obligations financières.",
+                        "acceptance_criteria": [
+                            " Générez un système pour la production des déclarations annuelles de capitaux en retard pour chaque emprunteur.",
+                            " Assurez-vous que les déclarations annuelles soient fournies sur un support durable et soient facilement accessibles aux emprunteurs.",
+                            " Vérifiez que les déclarations annuelles comprennent toutes les informations pertinentes sur le capital en suspens et les termes de remboursement."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que responsable de la protection des données, j'ai pour objectif d'assurer la protection de toutes les données utilisateur et de vérifier que l'application est conforme aux règles de protection des données pertinentes afin que les informations des utilisateurs soient sécurisées et que la confidentialité soit respectée.",
+                        "acceptance_criteria": [
+                            " Appliquez des mesures de chiffrement de données solides pour protéger les informations sensibles des utilisateurs.",
+                            " Assurez-vous que l'application respecte toutes les réglementations et normes de protection des données pertinentes.",
+                            " Vérifiez et mettez régulièrement à jour les mesures de protection des données pour adresser tout nouveau risque ou changement réglementaire."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": false,
+                        "small": false,
+                        "testable": false
+                    }
+                ]
+            },
+            {
+                "epic": " Publicité et Marketing",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de conformité, je veux vérifier que les primes en nature ne dépassent pas les seuils légaux afin que l'entreprise reste conforme aux règles réglementaires.",
+                        "acceptance_criteria": [
+                            " Le système doit automatiquement vérifier et signaler toute assurance dépassant les seuils légaux.",
+                            " Le système devrait générer des rapports pour les agents de contrôle qui peuvent les examiner et prendre des mesures si cela est nécessaire."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je veux voir les informations de coût fixe TAEG et détaillées clairement affichées afin de pouvoir prendre des décisions éclairées concernant mon prêt.",
+                        "acceptance_criteria": [
+                            " Le TAEG doit être fortement mis en évidence sur toutes les pages de produit prêt.",
+                            " Les informations détaillées sur les coûts doivent être découpées et facilement consultables."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je veux voir les coûts d'assurance dans un format comparables à celui du TAEG afin de comprendre le coût total de mon prêt.",
+                        "acceptance_criteria": [
+                            " Les coûts d'assurance doivent être affichés en euros et au taux annuel efficace.",
+                            " Un document d'information normalisé doit être fourni avec tout document faisant mention des coûts d'assurance."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je souhaite utiliser une outil de simulation non contractuelle pour estimer les coûts totaux en crédit, les écheances mensuelles et le TAEG afin de planifier mes finances efficacement.",
+                        "acceptance_criteria": [
+                            " L'outil de simulation doit fournir des estimations précises en fonction des données d'entrée.",
+                            " L'outil doit être facile à utiliser et comprendre, avec des explications claires des résultats."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je veux être informé de la possibilité de combiner des incitations telles que le prémium de conversion et le bonus écologique afin de pouvoir maximiser mes économies.",
+                        "acceptance_criteria": [
+                            " Les informations sur l'association des incitations doivent être clairement présentées sur le site Web.",
+                            " Le système devrait fournir des exemples ou études de cas pour illustrer les avantages de la combinaison d'incitations."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Intégration et exigences techniques",
+                "user_stories": [
+                    {
+                        "user_story": " En tant que développeur, je veux intégrer avec les agences de crédit pour la récupération en temps réel du score de crédit afin de pouvoir évaluer la solvabilité des demandants de prêt de manière précise et efficace.",
+                        "acceptance_criteria": [
+                            " Intégration réussie de l'API avec au moins deux grands bureau de crédit majeurs.",
+                            " Récupération en temps réel des notes de crédit avec un temps de réponse inférieur à 5 secondes.",
+                            " Transmission sécurisée des données vers et depuis les bureaux de crédit.",
+                            " Gestion et enregistrement des erreurs et des échecs de tentatives de récupération."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que développeur, je souhaite intégrer des systèmes bancaires pour une vérification automatique des comptes bancaires et des revenus afin de simplifier le processus d'obtention de prêt et de réduire les efforts de vérification manuelle.",
+                        "acceptance_criteria": [
+                            " Intégration réussie avec au moins trois systèmes bancaires majeurs.",
+                            " Extraction et vérification automatique des comptes bancaires et détails de revenus.",
+                            " Transmission de données sécurisées et chiffrées entre les systèmes bancaires et notre application.",
+                            " Gestion et enregistrement des erreurs pour les essais de vérification échoués."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que développeur, je veux intégrer des portails de paiement pour une dispersion et un remboursement de prêts sans encombre afin de permettre des transactions financières fluides pour nos utilisateurs.",
+                        "acceptance_criteria": [
+                            " Intégration réussie avec au moins deux grands portails de paiement.",
+                            " Traitement sécurisé des versements et remboursements de prêts.",
+                            " Mises à jour en temps réel sur l'état des transactions.",
+                            " Gestion et enregistrement des erreurs pour les transactions échouées."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Communication Client",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de conformité, je veux vérifier que les primes en nature ne dépassent pas les seuils légaux afin que l'entreprise respecte les règles réglementaires.",
+                        "acceptance_criteria": [
+                            " Le système doit automatiquement vérifier et signaler toute prime supplémentaire inutile qui dépasse les seuils légaux.",
+                            " Le système devrait générer un rapport de toutes les assurances classées en tant que prioritaires pour examen."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je veux voir les informations de coût fixe TAEG et détaillées clairement affichées afin de pouvoir prendre des décisions éclairées concernant mon prêt.",
+                        "acceptance_criteria": [
+                            " La TAEG doit être fortement mis en évidence sur toutes les pages de prêt.",
+                            " Les informations détaillées sur les coûts doivent être découpées et facilement consultables."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je veux voir les coûts d'assurance dans un format comparables à celui du TAEG afin de comprendre le coût total de mon prêt.",
+                        "acceptance_criteria": [
+                            " Les coûts d'assurance doivent être affichés en euros et au taux annuel efficace.",
+                            " Un document d'information normalisé doit être fourni avec tout document faisant mention des coûts d'assurance."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je souhaite utiliser une outil de simulation non contractuelle pour estimer les coûts totaux en crédit, les écheances mensuelles et le TAEG afin de planifier mes finances efficacement.",
+                        "acceptance_criteria": [
+                            " L'outil de simulation doit fournir des estimations précises en fonction des données d'entrée.",
+                            " L'outil doit être facile à utiliser et comprendre."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je veux être informé de la possibilité de combiner des incitations telles que le prémium de conversion et le bonus écologique afin de pouvoir maximiser mes économies.",
+                        "acceptance_criteria": [
+                            " Les renseignements sur l'association d'incitations doivent être clairement affichés sur les pages pertinentes.",
+                            " Le système devrait fournir des exemples de comment combiner les incitations peut être bénéfique pour le client."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            }
+        ]
+    },
+    "T2S_Deg": {
+        "epics": [
+            {
+                "epic": " Communication Client",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de conformité, je veux vérifier que les primes en nature ne dépassent pas les seuils légaux afin que l'entreprise respecte les règles réglementaires.",
+                        "acceptance_criteria": [
+                            " Le système doit automatiquement vérifier et signaler toute prime supplémentaire inutile qui dépasse les seuils légaux.",
+                            " Le système devrait générer un rapport de toutes les assurances classées en tant que prioritaires pour examen."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je veux voir les informations de coût fixe TAEG et détaillées clairement affichées afin de pouvoir prendre des décisions éclairées concernant mon prêt.",
+                        "acceptance_criteria": [
+                            " La TAEG doit être fortement mis en évidence sur toutes les pages de prêt.",
+                            " Les informations détaillées sur les coûts doivent être découpées et facilement consultables."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je veux voir les coûts d'assurance dans un format comparables à celui du TAEG afin de comprendre le coût total de mon prêt.",
+                        "acceptance_criteria": [
+                            " Les coûts d'assurance doivent être affichés en euros et au taux annuel efficace.",
+                            " Un document d'information normalisé doit être fourni avec tout document faisant mention des coûts d'assurance."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je souhaite utiliser une outil de simulation non contractuelle pour estimer les coûts totaux en crédit, les écheances mensuelles et le TAEG afin de planifier mes finances efficacement.",
+                        "acceptance_criteria": [
+                            " L'outil de simulation doit fournir des estimations précises en fonction des données d'entrée.",
+                            " L'outil doit être facile à utiliser et comprendre."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant que client, je veux être informé de la possibilité de combiner des incitations telles que le prémium de conversion et le bonus écologique afin de pouvoir maximiser mes économies.",
+                        "acceptance_criteria": [
+                            " Les renseignements sur l'association d'incitations doivent être clairement affichés sur les pages pertinentes.",
+                            " Le système devrait fournir des exemples de comment combiner les incitations peut être bénéfique pour le client."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Communication et transparence",
+                "user_stories": [
+                    {
+                        "user_story": " En tant emprunteur, je souhaite recevoir des mises à jour régulières sur l'état de ma demande de prêt afin de rester informé tout au long du processus.",
+                        "acceptance_criteria": [
+                            " Le système doit envoyer des mises à jour automatisées au prêteur à chaque étape du processus de demande de prêt.",
+                            " Mises à jour devraient inclure le statut actuel de l'application, toute action requise du prêteur et les délais estimés pour les étapes suivantes."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant emprunteur, je veux une communication claire des termes et conditions du prêt afin que je comprenne ce que j'accepte d'accorder.",
+                        "acceptance_criteria": [
+                            " Les termes et les conditions de prêt doivent être clairement définis dans l'accord de prêt.",
+                            " L'accord doit être rédigé dans une langue claire et facile à comprendre.",
+                            " L'emprunteur devrait avoir l'occasion de poser des questions et d'obtenir une clarification sur tout terme qu'il ne comprend pas."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant emprunteur, je veux recevoir un état annuel sur le capital en retard pour pouvoir suivre mon solde de mon prêt.",
+                        "acceptance_criteria": [
+                            " Le système devrait générer un rapport annuel comprenant la somme de capitaux restant à rembourser.",
+                            " La déclaration doit être fournie sur papier ou tout autre support durables.",
+                            " Les informations doivent apparaître en caractères lisibles sur la première page du document fourni au prêteur."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant emprunteur, je veux que le taux d'intérêt annuel (APR) soit défini de manière précise en fonction de ma situation pour que je puisse prendre des décisions éclairées sur mon prêt.",
+                        "acceptance_criteria": [
+                            " L'APR devrait être définie après une étude de la situation du prêteur lors de leur rendez-vous avec leur conseiller.",
+                            " L'assurance obligatoire devrait être exclue de la somme des paiements mensuels, le montant total dû, le coût total et le taux annuel pourcentualaire (APR).",
+                            " Le prêteur devrait recevoir un état des intérêts accumulés sur ces montants pendant la durée projetée du prêt."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant emprunteur, je veux être informé de l'existence et de la disponibilité d'informations et de documents de prêt sur l'espace personnel sécurisé, afin que je puisse les accéder facilement.",
+                        "acceptance_criteria": [
+                            " Le prêteur devrait informer le emprunteur de l'existence et de la disponibilité de ces informations et documents dans l'espace personnel sécurisé.",
+                            " Les informations doivent être transmises par tout moyen adapté à la situation du prêteur.",
+                            " Le prêteur doit être en mesure d'accéder à ces documents et de cette information facilement via l'espace personnel sécurisé."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Évaluation du Crédit et du Risque",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux récupérer le score de crédit de l'applicant à partir d'un bureau de crédit fiable afin de pouvoir évaluer leur solvabilité.",
+                        "acceptance_criteria": [
+                            " Le système récupère le score de crédit de l'applicant à partir d'un bureau de crédit.",
+                            " Le score de crédit est affiché sur le tableau de bord du responsable des prêts.",
+                            " Le score de crédit est enregistré dans le profil de l'applicant."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je souhaite examiner l'historique de crédit de l'applicant, y compris toute défaillance, faillite ou retard de paiement, afin de pouvoir prendre une décision éclairée sur leur demande de prêt.",
+                        "acceptance_criteria": [
+                            " Le système récupère l'historique de crédit de l'applicant à partir d'un bureau de crédit.",
+                            " L'historique de crédit est affiché sur le tableau de bord du responsable des prêts.",
+                            " L'historique de crédit est enregistré dans le profil de l'applicant."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux calculer le taux de charge de dette de l'applicant afin d'évaluer leur capacité à rembourser le prêt.",
+                        "acceptance_criteria": [
+                            " Le système calcule le taux de dette sur revenu en fonction des revenus et des dettes de l'applicant.",
+                            " Le taux de dette sur les revenus est affiché sur le tableau de bord du responsable des prêts.",
+                            " Le taux de dette sur les revenus de l'applicant est enregistré dans son profil."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux vérifier l'income de l'applicant à l'aide des bulletins de salaire, des déclarations fiscales et d'autres documents pertinents afin de pouvoir confirmer leur income rapporté.",
+                        "acceptance_criteria": [
+                            " Le système permet à l'applicant de télécharger des documents de vérification des revenus.",
+                            " L'agent de prêt peut visualiser et vérifier les documents téléchargés.",
+                            " L'income vérifié est enregistré dans le profil de l'applicant."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je veux vérifier le statut d'emploi de l'applicant en utilisant une lettre de l'employeur ou un contrat d'emploi afin de confirmer leur statut d'emploi.",
+                        "acceptance_criteria": [
+                            " Le système permet à l'applicant de télécharger des documents de vérification d'emploi.",
+                            " L'agent de prêt peut visualiser et vérifier les documents téléchargés.",
+                            " Le statut d'emploi vérifié est enregistré dans le profil de l'applicant."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je souhaite examiner les derniers extraits de compte bancaire de l'applicant pour évaluer leur stabilité financière et pouvoir prendre une décision informée sur leur demande de prêt.",
+                        "acceptance_criteria": [
+                            " Le système permet à l'applicant de télécharger des déclarations bancaires récentes.",
+                            " L'agent de prêt peut visualiser et analyser les déclarations bancaires téléchargées.",
+                            " L'analyse des comptes bancaires est stockée dans le profil de l'applicant."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de crédit, je souhaite utiliser un modèle d'évaluation de crédit et des critères de risque pour décider si approuver ou refuser une demande de prêt afin que le processus de prise de décision soit standardisé et objectif.",
+                        "acceptance_criteria": [
+                            " Le système applique un modèle de notation de crédit à données de l'applicant.",
+                            " Le système affiche le score de crédit et l'évaluation du risque sur le tableau de bord de l'officier de prêt.",
+                            " L'agent de prêt peut approuver ou refuser l'application de prêt en fonction du score de crédit et de l'évaluation des risques."
+                        ],
+                        "independent": false,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": null
+                    }
+                ]
+            },
+            {
+                "epic": " Sécurité et protection des données",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux que mes données personnelles soient chiffrées pour les protéger de l'accès non autorisé.",
+                        "acceptance_criteria": [
+                            " La chiffrement des données est mis en œuvre pour tous les données sensibles des utilisateurs.",
+                            " Les clés d'encryptage sont gérées de manière sécurisée et rotatives régulièrement.",
+                            " Accès aux données chiffrées est réservé à l'personnel autorisé uniquement."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'utilisateur, je veux sécuriser mon compte avec l'authentification à facteur multiple pour empêcher l'accès non autorisé.",
+                        "acceptance_criteria": [
+                            " L'authentification multifacteur est activée pour tous les comptes d'utilisateur.",
+                            " Les utilisateurs sont invités à configurer l'authentification à facteur multiple lors du processus de inscription.",
+                            " Les utilisateurs peuvent choisir parmi plusieurs méthodes d'authentification (par exemple, SMS, courriel, application d'authentification)."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'administrateur système, je veux mettre en œuvre des mécanismes de détection de fraude pour identifier et empêcher les activités frauduleuses.",
+                        "acceptance_criteria": [
+                            " Les algorithmes de détection de fraude sont intégrés dans le système.",
+                            " Activités suspectes sont signalées et examinées par les administrateurs.",
+                            " Les utilisateurs sont informés de toute activité anormale sur leurs comptes."
+                        ],
+                        "independent": false,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'agent de conformité, je veux vérifier que le système respecte les réglementations et normes de protection des données pertinentes afin de maintenir les normes légales et industrielles.",
+                        "acceptance_criteria": [
+                            " Le système est régulièrement vérifié pour sa conformité aux règles de protection des données.",
+                            " Les politiques de protection des données sont documentées et communiquées à tous les utilisateurs.",
+                            " Les utilisateurs sont informés de leurs droits et de la manière dont leurs données sont protégées.",
+                            " Les problèmes de non-conformité sont suivis et traités sans retard.",
+                            " Les rapports de conformité sont générés et examinés par les parties prenantes."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            },
+            {
+                "epic": " Spécificités du prêt",
+                "user_stories": [
+                    {
+                        "user_story": " En tant qu'applicant de prêt, je veux spécifier le type de prêt que j'ai demandé afin que le système puisse traiter ma demande de manière appropriée.",
+                        "acceptance_criteria": [
+                            " Le système devrait fournir un menu déroulant avec différents types de prêts (par exemple, prêt personnel, prêt automobile, hypothèque).",
+                            " Le type de prêt sélectionné doit être affiché sur le formulaire d'application.",
+                            " Le type de prêt doit être enregistré avec les données de l'application."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'applicant de prêt, je souhaite entrer la somme d'argent que je demande afin que le prêteur puisse évaluer ma demande de prêt.",
+                        "acceptance_criteria": [
+                            " Le système devrait fournir un champ pour saisir la somme du prêt.",
+                            " L'amount de prêt doit être vérifié pour s'assurer qu'il est un nombre positif.",
+                            " La somme prêt doit être affichée sur le formulaire d'application et enregistrée avec les données de l'application."
+                        ],
+                        "independent": true,
+                        "negotiable": null,
+                        "valuable": null,
+                        "estimable": null,
+                        "small": null,
+                        "testable": null
+                    },
+                    {
+                        "user_story": " En tant qu'applicant de prêt, je veux spécifier le but du prêt afin que le prêteur puisse comprendre pourquoi je nécessite ce prêt.",
+                        "acceptance_criteria": [
+                            " Le système devrait fournir un champ de saisie pour entrer la raison du prêt.",
+                            " L'objectif de la prêt doit être affiché sur le formulaire d'application et enregistré avec les données de l'application."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu'applicant de prêt, je veux choisir mes termes de remboursement préférés afin de pouvoir planifier mes finances de manière appropriée.",
+                        "acceptance_criteria": [
+                            " Le système devrait offrir des options pour sélectionner la période de remboursement et la fréquence (par exemple, mensuellement, semi-hebdomadaire).",
+                            " Les termes de remboursement sélectionnés doivent être affichés sur le formulaire d'application et enregistrés avec les données de l'application."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    },
+                    {
+                        "user_story": " En tant qu applicant de prêt, je souhaite fournir des informations sur la caution si cela est applicable afin que le prêteur puisse évaluer la sécurité du prêt.",
+                        "acceptance_criteria": [
+                            " Le système devrait fournir des champs pour saisir les détails de la garantie tels que la description, la valeur et la documentation de propriété.",
+                            " Les informations de garantie doivent être affichées sur le formulaire d'application et enregistrées avec les données de l'application."
+                        ],
+                        "independent": true,
+                        "negotiable": true,
+                        "valuable": true,
+                        "estimable": true,
+                        "small": true,
+                        "testable": true
+                    }
+                ]
+            }
+        ]
+    }
+}
