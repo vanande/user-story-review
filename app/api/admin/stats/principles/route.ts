@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { openDb } from "@/lib/db";
 
@@ -43,20 +42,24 @@ export async function GET(request: Request) {
 
     const formattedStats = stats.map((stat, index) => ({
       ...stat,
-      id: `principlestat-${stat.principleName}-${stat.storyId || 'all'}-${index}`,
-      principleStringId: stat.principleName?.toLowerCase()
+      id: `principlestat-${stat.principleName}-${stat.storyId || "all"}-${index}`,
+      principleStringId: stat.principleName?.toLowerCase(),
     }));
 
     console.log(`Fetched ${formattedStats.length} principle stats from DB.`);
     return NextResponse.json({ success: true, data: formattedStats });
-
   } catch (error) {
     console.error("Error fetching principle statistics from database:", error);
     return NextResponse.json(
-        { error: "Failed to fetch principle statistics", details: error instanceof Error ? error.message : String(error) },
-        { status: 500 }
+      {
+        error: "Failed to fetch principle statistics",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
     );
   } finally {
-    if (db) { await db.close(); }
+    if (db) {
+      await db.close();
+    }
   }
 }

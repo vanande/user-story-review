@@ -1,18 +1,26 @@
-"use client"
+"use client";
 
-import { Bar, Pie } from "react-chartjs-2"
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from "chart.js"
+import { Bar, Pie } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from "chart.js";
 
-// Register ChartJS components
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 interface ChartProps {
-  data: Array<{ name: string; value: number }>
-  index: string
-  categories: string[]
-  colors: string[]
-  valueFormatter?: (value: number) => string
-  height?: number
+  data: Array<{ name: string; value: number }>;
+  index: string;
+  categories: string[];
+  colors: string[];
+  valueFormatter?: (value: number) => string;
+  height?: number;
 }
 
 export function BarChart({
@@ -33,7 +41,7 @@ export function BarChart({
         borderRadius: 4,
       },
     ],
-  }
+  };
 
   const options = {
     responsive: true,
@@ -56,13 +64,13 @@ export function BarChart({
         },
       },
     },
-  }
+  };
 
   return (
     <div style={{ height }}>
       <Bar data={chartData} options={options} />
     </div>
-  )
+  );
 }
 
 export function PieChart({ data, index, categories, colors, height = 300 }: ChartProps) {
@@ -75,7 +83,7 @@ export function PieChart({ data, index, categories, colors, height = 300 }: Char
         borderWidth: 1,
       },
     ],
-  }
+  };
 
   const options = {
     responsive: true,
@@ -85,11 +93,11 @@ export function PieChart({ data, index, categories, colors, height = 300 }: Char
         position: "bottom" as const,
       },
     },
-  }
+  };
 
   return (
     <div style={{ height }}>
       <Pie data={chartData} options={options} />
     </div>
-  )
+  );
 }

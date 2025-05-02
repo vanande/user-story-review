@@ -2,31 +2,42 @@ import { GET } from "@/app/api/stories/route";
 import fs from "fs/promises";
 import path from "path";
 
-// Mock fs/promises and Math.random as before
 jest.mock("fs/promises", () => ({
   readFile: jest.fn(),
 }));
 const mockMath = Object.create(global.Math);
-mockMath.random = () => 0.5; // Deterministic shuffle
+mockMath.random = () => 0.5;
 global.Math = mockMath;
 
-describe("Stories API Handler Logic (JSON)", () => { // Updated describe title
-
-  // Mock JSON data as before
-  const mockJsonData = { /* ... same mock data ... */
-    "source1": { "epics": [ { "epic": "Epic 1", "user_stories": [
-          { "user_story": "Story 1 desc", "acceptance_criteria": ["ac1"], "independent": true },
-          { "user_story": "Story 2 desc", "acceptance_criteria": ["ac2"], "valuable": true },
-          { "user_story": "Story 3 desc", "acceptance_criteria": ["ac3"], "testable": true },
-        ] } ] },
-    "source2": { "epics": [ { "epic": "Epic 2", "user_stories": [
-          { "user_story": "Story 4 desc", "acceptance_criteria": ["ac4"], "small": true },
-          { "user_story": "Story 5 desc", "acceptance_criteria": ["ac5"], "negotiable": false },
-          { "user_story": "Story 6 desc", "acceptance_criteria": ["ac6"], "estimable": true },
-          { "user_story": "Story 7 desc", "acceptance_criteria": ["ac7"] },
-        ] } ] }
+describe("Stories API Handler Logic (JSON)", () => {
+  const mockJsonData = {
+    /* ... same mock data ... */
+    source1: {
+      epics: [
+        {
+          epic: "Epic 1",
+          user_stories: [
+            { user_story: "Story 1 desc", acceptance_criteria: ["ac1"], independent: true },
+            { user_story: "Story 2 desc", acceptance_criteria: ["ac2"], valuable: true },
+            { user_story: "Story 3 desc", acceptance_criteria: ["ac3"], testable: true },
+          ],
+        },
+      ],
+    },
+    source2: {
+      epics: [
+        {
+          epic: "Epic 2",
+          user_stories: [
+            { user_story: "Story 4 desc", acceptance_criteria: ["ac4"], small: true },
+            { user_story: "Story 5 desc", acceptance_criteria: ["ac5"], negotiable: false },
+            { user_story: "Story 6 desc", acceptance_criteria: ["ac6"], estimable: true },
+            { user_story: "Story 7 desc", acceptance_criteria: ["ac7"] },
+          ],
+        },
+      ],
+    },
   };
-
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -34,16 +45,17 @@ describe("Stories API Handler Logic (JSON)", () => { // Updated describe title
   });
 
   it("should return 5 random stories from merged.json", async () => {
-    // Directly call the GET handler. Pass a dummy object or undefined if needed.
-    const response = await GET(); // No request object needed for this handler
+    const response = await GET();
     const data = await response.json();
 
-    // Assertions remain the same
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
-    expect(fs.readFile).toHaveBeenCalledWith(expect.stringContaining(path.join("data", "merged.json")), "utf-8");
+    expect(fs.readFile).toHaveBeenCalledWith(
+      expect.stringContaining(path.join("data", "merged.json")),
+      "utf-8"
+    );
     expect(data.stories).toHaveLength(5);
-    // ... other assertions about story structure ...
+
     const firstStory = data.stories[0];
     expect(firstStory).toHaveProperty("id");
     expect(firstStory).toHaveProperty("title");

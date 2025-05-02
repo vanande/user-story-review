@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import sqlite3 from "sqlite3";
 import path from "path";
-import { open } from "sqlite"; // Using 'sqlite' wrapper
+import { open } from "sqlite";
 
 const DB_FILE_PATH = path.join(process.cwd(), "data", "reviews.db");
 
-// Helper function to open the database connection
 async function openDb() {
   return open({
     filename: DB_FILE_PATH,
@@ -19,9 +18,8 @@ export async function GET() {
     console.log("Testing SQLite database connection...");
     console.log("DB Path:", DB_FILE_PATH);
 
-    db = await openDb(); // Open the database
+    db = await openDb();
 
-    // Check if tables exist using sqlite_master
     const tablesResult = await db.all(`
         SELECT name
         FROM sqlite_master
@@ -30,7 +28,6 @@ export async function GET() {
     const tables = tablesResult.map((row) => row.name);
     console.log("Available tables:", tables);
 
-    // Check counts (handle potential errors if tables don't exist yet)
     let storiesCount = 0;
     let criteriaCount = 0;
     let datasetsCount = 0;
@@ -38,7 +35,8 @@ export async function GET() {
 
     try {
       storiesCount = (await db.get("SELECT COUNT(*) as count FROM user_stories"))?.count ?? 0;
-      criteriaCount = (await db.get("SELECT COUNT(*) as count FROM evaluation_criteria"))?.count ?? 0;
+      criteriaCount =
+        (await db.get("SELECT COUNT(*) as count FROM evaluation_criteria"))?.count ?? 0;
       datasetsCount = (await db.get("SELECT COUNT(*) as count FROM datasets"))?.count ?? 0;
       reviewsCount = (await db.get("SELECT COUNT(*) as count FROM reviews"))?.count ?? 0;
     } catch (countError) {
@@ -60,20 +58,19 @@ export async function GET() {
       criteriaCount,
       reviewsCount,
     });
-
   } catch (error) {
     console.error("Error testing SQLite database connection:", error);
     return NextResponse.json(
-        {
-          error: "Failed to connect to SQLite database",
-          dbPath: DB_FILE_PATH, // Include path even on error
-          details: error instanceof Error ? error.message : String(error),
-        },
-        { status: 500 }
+      {
+        error: "Failed to connect to SQLite database",
+        dbPath: DB_FILE_PATH,
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
     );
   } finally {
     if (db) {
-      await db.close(); // Ensure connection is closed
+      await db.close();
       console.log("SQLite test connection closed.");
     }
   }

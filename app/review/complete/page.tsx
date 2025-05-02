@@ -1,7 +1,14 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { CheckCircle } from "lucide-react";
 
 export default function ReviewCompletePage() {
   return (
@@ -16,7 +23,8 @@ export default function ReviewCompletePage() {
         </CardHeader>
         <CardContent>
           <p className="mb-4 text-muted-foreground">
-            Your evaluations will help improve our language model's understanding of well-formed user stories.
+            Your evaluations will help improve our language model's understanding of well-formed
+            user stories.
           </p>
         </CardContent>
         <CardFooter className="flex justify-center">
@@ -26,5 +34,5 @@ export default function ReviewCompletePage() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }

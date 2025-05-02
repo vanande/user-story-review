@@ -9,6 +9,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "db:init": "node scripts/init-db.js",
+    "format:write": "prettier --write .",
     "test": "jest"
   },
   "dependencies": {
@@ -81,6 +82,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.3.2",
     "typescript": "5.8.3"

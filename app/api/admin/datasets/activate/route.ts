@@ -1,70 +1,71 @@
-// File: app/api/admin/datasets/activate/route.ts
 import { NextResponse, NextRequest } from "next/server";
 import { openDb } from "@/lib/db";
-import { checkAdminAuth } from "@/lib/auth"; // Re-including for structure
+import { checkAdminAuth } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
-    // --- Admin Check ---
-    // Placeholder check - replace with real auth later
-    const adminCheckResponse = await checkAdminAuth(request);
-    if (adminCheckResponse) {
-        // In a real scenario, this would return the 403 response.
-        console.warn("WARNING: Admin check skipped for /api/admin/datasets/activate endpoint.");
+  const adminCheckResponse = await checkAdminAuth(request);
+  if (adminCheckResponse) {
+    console.warn("WARNING: Admin check skipped for /api/admin/datasets/activate endpoint.");
+  }
+
+  let db;
+  try {
+    const body = await request.json();
+    const { datasetId } = body;
+
+    if (!datasetId || typeof datasetId !== "number" || !Number.isInteger(datasetId)) {
+      return NextResponse.json(
+        { error: "Invalid or missing datasetId in request body. It must be an integer." },
+        { status: 400 }
+      );
     }
-    // --- End Admin Check ---
 
-    let db;
-    try {
-        const body = await request.json();
-        const { datasetId } = body;
+    db = await openDb();
 
-        if (!datasetId || typeof datasetId !== 'number' || !Number.isInteger(datasetId)) {
-            return NextResponse.json({ error: 'Invalid or missing datasetId in request body. It must be an integer.' }, { status: 400 });
-        }
+    await db.exec("BEGIN TRANSACTION;");
 
-        db = await openDb();
+    const deactivateResult = await db.run("UPDATE datasets SET is_active = 0 WHERE is_active = 1;");
+    console.log(`Deactivated ${deactivateResult.changes} dataset(s).`);
 
-        // Use a transaction to ensure atomicity
-        await db.exec('BEGIN TRANSACTION;');
+    const activateResult = await db.run(
+      "UPDATE datasets SET is_active = 1 WHERE id = ?;",
+      datasetId
+    );
 
-        // Deactivate any currently active dataset
-        const deactivateResult = await db.run('UPDATE datasets SET is_active = 0 WHERE is_active = 1;');
-        console.log(`Deactivated ${deactivateResult.changes} dataset(s).`);
+    if (activateResult.changes === 0) {
+      await db.exec("ROLLBACK;");
+      await db.close();
+      return NextResponse.json(
+        { error: `Dataset with ID ${datasetId} not found.` },
+        { status: 404 }
+      );
+    }
 
-        // Activate the selected dataset
-        const activateResult = await db.run('UPDATE datasets SET is_active = 1 WHERE id = ?;', datasetId);
+    console.log(`Activated dataset ID ${datasetId}.`);
 
-        if (activateResult.changes === 0) {
-            // Rollback if the dataset to activate wasn't found
-            await db.exec('ROLLBACK;');
-            await db.close();
-            return NextResponse.json({ error: `Dataset with ID ${datasetId} not found.` }, { status: 404 });
-        }
+    await db.exec("COMMIT;");
 
-        console.log(`Activated dataset ID ${datasetId}.`);
+    await db.close();
 
-        // Commit the transaction
-        await db.exec('COMMIT;');
+    return NextResponse.json({ message: `Dataset ID ${datasetId} successfully activated.` });
+  } catch (error: any) {
+    console.error("Failed to activate dataset:", error);
 
+    if (db) {
+      try {
+        await db.exec("ROLLBACK;");
+      } catch (rollbackError) {
+        console.error("Error rolling back transaction:", rollbackError);
+      }
+      try {
         await db.close();
-
-        return NextResponse.json({ message: `Dataset ID ${datasetId} successfully activated.` });
-
-    } catch (error: any) {
-        console.error("Failed to activate dataset:", error);
-        // Rollback transaction if an error occurred after starting it
-        if (db) {
-            try {
-                await db.exec('ROLLBACK;');
-            } catch (rollbackError) {
-                console.error("Error rolling back transaction:", rollbackError);
-            }
-            try {
-                await db.close();
-            } catch (closeError) {
-                console.error("Error closing DB after activation error:", closeError);
-            }
-        }
-        return NextResponse.json({ error: "Failed to activate dataset", details: error.message }, { status: 500 });
+      } catch (closeError) {
+        console.error("Error closing DB after activation error:", closeError);
+      }
     }
+    return NextResponse.json(
+      { error: "Failed to activate dataset", details: error.message },
+      { status: 500 }
+    );
+  }
 }

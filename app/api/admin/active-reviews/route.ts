@@ -26,15 +26,14 @@ export async function GET() {
 
     console.log(`Fetched ${activeReviews.length} active reviews from DB.`);
     return NextResponse.json({ success: true, data: activeReviews });
-
   } catch (error) {
     console.error("Error fetching active reviews from database:", error);
     return NextResponse.json(
-        {
-          error: "Failed to fetch active reviews",
-          details: error instanceof Error ? error.message : String(error)
-        },
-        { status: 500 }
+      {
+        error: "Failed to fetch active reviews",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
     );
   } finally {
     if (db) {

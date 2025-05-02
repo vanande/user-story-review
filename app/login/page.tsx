@@ -1,47 +1,31 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState("")
-  // const [password, setPassword] = useState("") // Removed password state
+  const router = useRouter();
+  const [email, setEmail] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // TODO: Implement actual backend login/session handling
-    // For now, simulate storing email and redirecting
+    e.preventDefault();
+
     try {
-      // Replace with actual API call when backend is ready
-      // const response = await fetch('/api/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email }),
-      // });
-      // if (!response.ok) {
-      //   throw new Error('Login failed');
-      // }
-      // const data = await response.json();
-      // console.log('Login successful:', data);
+      console.log("Logging in with email:", email);
 
-      // Simulate success for now
-      console.log("Logging in with email:", email)
-      // Store email in localStorage for simple session persistence (replace with proper session management)
-      localStorage.setItem("userEmail", email)
+      localStorage.setItem("userEmail", email);
 
-      router.push("/dashboard") // Redirect to dashboard on successful "login"
+      router.push("/dashboard");
     } catch (error) {
-      console.error("Login error:", error)
-      // Handle login errors (e.g., show error message to user)
+      console.error("Login error:", error);
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
@@ -87,5 +71,5 @@ export default function LoginPage() {
         </CardFooter> */}
       </Card>
     </div>
-  )
+  );
 }

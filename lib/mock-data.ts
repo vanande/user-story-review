@@ -1,44 +1,45 @@
-// Mock User Stories
 export const mockUserStories = [
   {
     id: 1,
-    source_key: "mock-llm", // Added
-    epic_name: "Authentication Epic", // Added
+    source_key: "mock-llm",
+    epic_name: "Authentication Epic",
     title: "User Authentication",
-    description: "As a user, I want to log in to the application so that I can access my personalized dashboard.",
+    description:
+      "As a user, I want to log in to the application so that I can access my personalized dashboard.",
   },
   {
     id: 2,
-    source_key: "mock-llm", // Added
-    epic_name: "Product Search Epic", // Added
+    source_key: "mock-llm",
+    epic_name: "Product Search Epic",
     title: "Search Functionality",
     description:
-        "As a customer, I want to search for products by name so that I can quickly find what I'm looking for.",
+      "As a customer, I want to search for products by name so that I can quickly find what I'm looking for.",
   },
   {
     id: 3,
-    source_key: "mock-rag", // Added (example variation)
-    epic_name: "Shopping Experience Epic", // Added
+    source_key: "mock-rag",
+    epic_name: "Shopping Experience Epic",
     title: "Shopping Cart",
     description: "As a shopper, I want to add items to my cart so that I can purchase them later.",
   },
   {
     id: 4,
-    source_key: "mock-rag", // Added
-    epic_name: "Account Management Epic", // Added
+    source_key: "mock-rag",
+    epic_name: "Account Management Epic",
     title: "User Profile",
     description:
-        "As a registered user, I want to update my profile information so that my account details are current.",
+      "As a registered user, I want to update my profile information so that my account details are current.",
   },
   {
     id: 5,
-    source_key: "mock-llm", // Added
-    epic_name: "Order Management Epic", // Added
+    source_key: "mock-llm",
+    epic_name: "Order Management Epic",
     title: "Order History",
-    description: "As a customer, I want to view my order history so that I can track my past purchases.",
+    description:
+      "As a customer, I want to view my order history so that I can track my past purchases.",
   },
-]
-// Mock INVEST Principles
+];
+
 export const mockPrinciples = [
   {
     id: "independent",
@@ -70,9 +71,8 @@ export const mockPrinciples = [
     label: "Testable",
     description: "The story can be tested to verify it meets requirements.",
   },
-]
+];
 
-// Mock Active Reviews
 export const mockActiveReviews = [
   {
     id: 1,
@@ -80,7 +80,7 @@ export const mockActiveReviews = [
     testerName: "John Doe",
     storyId: 1,
     storyTitle: "User Authentication",
-    startedAt: new Date(Date.now() - 15 * 60000).toISOString(), // 15 minutes ago
+    startedAt: new Date(Date.now() - 15 * 60000).toISOString(),
     progress: 33,
   },
   {
@@ -89,7 +89,7 @@ export const mockActiveReviews = [
     testerName: "Jane Smith",
     storyId: 2,
     storyTitle: "Search Functionality",
-    startedAt: new Date(Date.now() - 5 * 60000).toISOString(), // 5 minutes ago
+    startedAt: new Date(Date.now() - 5 * 60000).toISOString(),
     progress: 67,
   },
   {
@@ -98,12 +98,11 @@ export const mockActiveReviews = [
     testerName: "Bob Johnson",
     storyId: 3,
     storyTitle: "Shopping Cart",
-    startedAt: new Date(Date.now() - 30 * 60000).toISOString(), // 30 minutes ago
+    startedAt: new Date(Date.now() - 30 * 60000).toISOString(),
     progress: 83,
   },
-]
+];
 
-// Mock Principle Statistics
 export const mockPrincipleStats = [
   {
     id: "stat1",
@@ -171,9 +170,8 @@ export const mockPrincipleStats = [
     noCount: 1,
     totalReviews: 20,
   },
-]
+];
 
-// Mock Story Statistics
 export const mockStoryStats = [
   {
     id: "story-stat1",
@@ -215,7 +213,7 @@ export const mockStoryStats = [
     totalReviews: 20,
     meetsCriteria: 16,
   },
-]
+];
 export interface TesterDistributionData {
   testerId: number;
   testerName: string;
@@ -231,9 +229,8 @@ export const mockTesterDistribution: TesterDistributionData[] = [
   { testerId: 106, testerName: "charlie.feedback@domain.org", reviewCount: 2 },
 ];
 
-// --- NEW Mock Data for Submission Count ---
-export interface SubmissionCountData { // Ensure interface is defined or imported if needed here
+export interface SubmissionCountData {
   count: number;
 }
 
-export const mockSubmissionCount: SubmissionCountData = { count: 75 }; // Example total count
+export const mockSubmissionCount: SubmissionCountData = { count: 75 };

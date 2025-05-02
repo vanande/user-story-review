@@ -1,4 +1,3 @@
-// app/api/admin/reviews/route.ts
 import { NextResponse } from "next/server";
 import { openDb } from "@/lib/db";
 
@@ -7,7 +6,6 @@ export async function GET() {
   try {
     db = await openDb();
 
-    // Fetch reviews joining with stories and testers
     const reviewsQuery = `
       SELECT
         r.id as review_id,
@@ -30,8 +28,7 @@ export async function GET() {
       return NextResponse.json({ reviews: [] });
     }
 
-    // Fetch evaluations separately and group them
-    const reviewIds = reviewsData.map(r => r.review_id);
+    const reviewIds = reviewsData.map((r) => r.review_id);
     const evaluationsQuery = `
       SELECT
         ce.review_id,
@@ -39,33 +36,36 @@ export async function GET() {
         ce.rating
       FROM criterion_evaluations ce
              JOIN evaluation_criteria ec ON ce.criterion_id = ec.id
-      WHERE ce.review_id IN (${reviewIds.map(() => '?').join(',')})
+      WHERE ce.review_id IN (${reviewIds.map(() => "?").join(",")})
     `;
     const evaluationsData = await db.all(evaluationsQuery, reviewIds);
 
     const evaluationsMap = new Map<number, { criterion: string; rating: number }[]>();
-    evaluationsData.forEach(ev => {
+    evaluationsData.forEach((ev) => {
       const existing = evaluationsMap.get(ev.review_id) || [];
       existing.push({ criterion: ev.criterion, rating: ev.rating });
       evaluationsMap.set(ev.review_id, existing);
     });
 
-    // Combine results
-    const results = reviewsData.map(review => ({
+    const results = reviewsData.map((review) => ({
       ...review,
       evaluations: evaluationsMap.get(review.review_id) || [],
     }));
 
     console.log(`Fetched ${results.length} reviews from DB for admin.`);
     return NextResponse.json({ reviews: results });
-
   } catch (error) {
     console.error("Error fetching admin reviews from database:", error);
     return NextResponse.json(
-        { error: "Failed to fetch reviews", details: error instanceof Error ? error.message : String(error) },
-        { status: 500 }
+      {
+        error: "Failed to fetch reviews",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
     );
   } finally {
-    if (db) { await db.close(); }
+    if (db) {
+      await db.close();
+    }
   }
 }

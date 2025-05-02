@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const adminNavItems = [
   {
@@ -13,10 +13,10 @@ const adminNavItems = [
     title: "Monitoring",
     href: "/admin/monitoring",
   },
-]
+];
 
 export function AdminNav() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
@@ -26,12 +26,12 @@ export function AdminNav() {
           href={item.href}
           className={cn(
             "flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-            pathname === item.href ? "bg-accent text-accent-foreground" : "transparent",
+            pathname === item.href ? "bg-accent text-accent-foreground" : "transparent"
           )}
         >
           {item.title}
         </Link>
       ))}
     </nav>
-  )
+  );
 }

@@ -1,12 +1,14 @@
-
 import { NextResponse } from "next/server";
 import { openDb } from "@/lib/db";
 
-
 const principleStringToIdMap: { [key: string]: number } = {
-  independent: 1, negotiable: 2, valuable: 3, estimable: 4, small: 5, testable: 6,
+  independent: 1,
+  negotiable: 2,
+  valuable: 3,
+  estimable: 4,
+  small: 5,
+  testable: 6,
 };
-
 
 export async function GET(request: Request) {
   let db;
@@ -49,31 +51,33 @@ export async function GET(request: Request) {
       params.push(criterionIdFilter);
     }
 
-
     query += ` GROUP BY s.id, s.title, s.source_key, s.epic_name, ec.id, ec.name ORDER BY s.id, ec.name`;
 
     const stats = await db.all(query, params);
-
 
     const formattedStats = stats.map((stat, index) => ({
       ...stat,
       averageRating: stat.averageRating || 0,
       meetsCriteria: stat.meetsCriteria || 0,
       totalReviews: stat.totalReviews || 0,
-      id: `storystat-${stat.storyId}-${stat.principleName || 'all'}-${index}`,
-      principleId: stat.principleName?.toLowerCase()
+      id: `storystat-${stat.storyId}-${stat.principleName || "all"}-${index}`,
+      principleId: stat.principleName?.toLowerCase(),
     }));
 
     console.log(`Fetched ${formattedStats.length} story stats from DB.`);
     return NextResponse.json({ success: true, data: formattedStats });
-
   } catch (error) {
     console.error("Error fetching story statistics from database:", error);
     return NextResponse.json(
-        { error: "Failed to fetch story statistics", details: error instanceof Error ? error.message : String(error) },
-        { status: 500 }
+      {
+        error: "Failed to fetch story statistics",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
     );
   } finally {
-    if (db) { await db.close(); }
+    if (db) {
+      await db.close();
+    }
   }
 }
