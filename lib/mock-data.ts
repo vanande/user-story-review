@@ -216,3 +216,24 @@ export const mockStoryStats = [
     meetsCriteria: 16,
   },
 ]
+export interface TesterDistributionData {
+  testerId: number;
+  testerName: string;
+  reviewCount: number;
+}
+
+export const mockTesterDistribution: TesterDistributionData[] = [
+  { testerId: 101, testerName: "v.khatchatrian@groupeonepoint.com", reviewCount: 25 },
+  { testerId: 102, testerName: "m.ortega@groupeonepoint.com", reviewCount: 18 },
+  { testerId: 103, testerName: "h.imhah@groupeonepoint.com", reviewCount: 15 },
+  { testerId: 104, testerName: "alice.reviewer@example.com", reviewCount: 10 },
+  { testerId: 105, testerName: "bob.tester@sample.net", reviewCount: 5 },
+  { testerId: 106, testerName: "charlie.feedback@domain.org", reviewCount: 2 },
+];
+
+// --- NEW Mock Data for Submission Count ---
+export interface SubmissionCountData { // Ensure interface is defined or imported if needed here
+  count: number;
+}
+
+export const mockSubmissionCount: SubmissionCountData = { count: 75 }; // Example total count

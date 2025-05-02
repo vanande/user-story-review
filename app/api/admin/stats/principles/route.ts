@@ -1,4 +1,4 @@
-// app/api/admin/stats/principles/route.ts
+
 import { NextResponse } from "next/server";
 import { openDb } from "@/lib/db";
 
@@ -32,23 +32,19 @@ export async function GET(request: Request) {
 
     const params: any[] = [];
 
-    // Apply story filter if provided and valid
     if (storyIdFilter && !isNaN(storyIdFilter)) {
-      // Add WHERE or AND depending on whether the dataset filter exists
       query += (query.includes("WHERE") ? " AND" : " WHERE") + ` s.id = ?`;
       params.push(storyIdFilter);
     }
 
-    // Add GROUP BY including new fields
     query += ` GROUP BY ec.id, ec.name, s.id, s.title, s.source_key, s.epic_name ORDER BY s.id, ec.id`;
 
     const stats = await db.all(query, params);
 
-    // Add a unique string ID and the string principle ID ('independent', etc.)
     const formattedStats = stats.map((stat, index) => ({
       ...stat,
       id: `principlestat-${stat.principleName}-${stat.storyId || 'all'}-${index}`,
-      principleStringId: stat.principleName?.toLowerCase() // Map name to string ID for consistency if needed
+      principleStringId: stat.principleName?.toLowerCase()
     }));
 
     console.log(`Fetched ${formattedStats.length} principle stats from DB.`);

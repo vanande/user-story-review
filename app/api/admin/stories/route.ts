@@ -1,8 +1,8 @@
-// app/api/admin/stats/stories/route.ts
+
 import { NextResponse } from "next/server";
 import { openDb } from "@/lib/db";
 
-// Get the mapping from lib/db or define it here if needed
+
 const principleStringToIdMap: { [key: string]: number } = {
   independent: 1, negotiable: 2, valuable: 3, estimable: 4, small: 5, testable: 6,
 };
@@ -13,14 +13,14 @@ export async function GET(request: Request) {
   try {
     db = await openDb();
     const { searchParams } = new URL(request.url);
-    const principleIdParam = searchParams.get("principleId"); // String like 'independent'
+    const principleIdParam = searchParams.get("principleId");
 
     let criterionIdFilter: number | null = null;
     if (principleIdParam) {
       criterionIdFilter = principleStringToIdMap[principleIdParam.toLowerCase()] || null;
       if (!criterionIdFilter) {
         console.warn(`Story Stats: Criterion not found for name: ${principleIdParam}`);
-        return NextResponse.json({ success: true, data: [] }); // Return empty if invalid filter
+        return NextResponse.json({ success: true, data: [] });
       }
     }
 
@@ -49,19 +49,19 @@ export async function GET(request: Request) {
       params.push(criterionIdFilter);
     }
 
-    // Add GROUP BY including new fields
+
     query += ` GROUP BY s.id, s.title, s.source_key, s.epic_name, ec.id, ec.name ORDER BY s.id, ec.name`;
 
     const stats = await db.all(query, params);
 
-    // Format results
+
     const formattedStats = stats.map((stat, index) => ({
       ...stat,
       averageRating: stat.averageRating || 0,
       meetsCriteria: stat.meetsCriteria || 0,
       totalReviews: stat.totalReviews || 0,
       id: `storystat-${stat.storyId}-${stat.principleName || 'all'}-${index}`,
-      principleId: stat.principleName?.toLowerCase() // Add string ID for consistency
+      principleId: stat.principleName?.toLowerCase()
     }));
 
     console.log(`Fetched ${formattedStats.length} story stats from DB.`);
