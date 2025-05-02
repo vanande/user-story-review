@@ -4,7 +4,7 @@ import path from "path";
 
 const DB_FILE_PATH = path.join(process.cwd(), "data", "reviews.db");
 
-let dbInstance: Database | null = null;
+const dbInstance: Database | null = null;
 
 export async function openDb(): Promise<Database> {
     // Return existing instance if already connected (simple singleton pattern)

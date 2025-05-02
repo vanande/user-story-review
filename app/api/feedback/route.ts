@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     try {
       // --- Find or create tester (unchanged) ---
       let testerId: number | undefined;
-      let tester = await db.get("SELECT id FROM testers WHERE email = ?", [testerEmail]);
+      const tester = await db.get("SELECT id FROM testers WHERE email = ?", [testerEmail]);
       if (!tester) {
         const testerName = testerEmail.split('@')[0];
         const result = await db.run("INSERT INTO testers (email, name) VALUES (?, ?)", [testerEmail, testerName]);

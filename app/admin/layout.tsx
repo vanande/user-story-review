@@ -7,7 +7,7 @@ import { AdminNav } from "@/components/admin/nav"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
-const ADMIN_EMAILS = ["admin@admin.com", "v.khatchatrian@groupeonepoint.com"]; // <<<--- @TODO UPDATE THIS LIST, consider moving to environment variables later
+const ADMIN_EMAILS = ["v.khatchatrian@groupeonepoint.com", "m.ortega@groupeonepoint.com", "h.imhah@groupeonepoint.com"]; // <<<--- @TODO UPDATE THIS LIST, consider moving to environment variables later
 
 export default function AdminLayout({
                                       children,

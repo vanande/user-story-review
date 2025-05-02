@@ -1,4 +1,4 @@
-// app/admin/monitoring/page.tsx
+// File: app/admin/monitoring/page.tsx
 "use client";
 
 import { useState, useEffect, SetStateAction } from "react";
@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BarChart, PieChart } from "@/components/charts";
-import { Loader2, AlertCircle, History } from "lucide-react";
+import { Loader2, AlertCircle, History, Percent } from "lucide-react"; // Added Percent icon
 import { ActiveReviewsTable } from "@/components/admin/active-reviews-table"; // Will be replaced or adapted
 import { StoryStatisticsCard } from "@/components/admin/story-statistics-card";
 import { PrincipleStatisticsCard } from "@/components/admin/principle-statistics-card";
@@ -19,6 +19,7 @@ import { mockUserStories, mockPrinciples, mockActiveReviews, mockPrincipleStats,
 import { Skeleton } from "@/components/ui/skeleton";
 import { generateShortStoryTitle, generateShortStatTitle } from "@/lib/utils"; // Import helpers
 import { formatDistanceToNow } from "date-fns"; // Import for mock date display
+import { Progress } from "@/components/ui/progress"; // <--- *** ADDED IMPORT ***
 
 // --- Interfaces ---
 interface RecentReview {
@@ -36,6 +37,12 @@ interface AdminStoryStat {
   id: string; storyId: number; storyTitle: string | null; source_key?: string | null; epic_name?: string | null; // Added fields
   principleIdNum: number | null; principleName: string | null; averageRating: number;
   totalReviews: number; meetsCriteria: number; principleId?: string;
+}
+
+interface StoriesCoverageData {
+  percentage: number;
+  totalStories: number;
+  storiesWithMultipleReviews: number;
 }
 // --- Mappings ---
 const principleStringToIdMap: { [key: string]: number } = { independent: 1, negotiable: 2, valuable: 3, estimable: 4, small: 5, testable: 6 };
@@ -59,11 +66,12 @@ export default function AdminMonitoringPage() {
   const [principleStats, setPrincipleStats] = useState<AdminPrincipleStat[]>([]);
   const [storyStats, setStoryStats] = useState<AdminStoryStat[]>([]);
   const [totalReviewSubmissions, setTotalReviewSubmissions] = useState<number>(0);
-
+  const [storiesReviewCoverage, setStoriesReviewCoverage] = useState<StoriesCoverageData>({ percentage: 0, totalStories: 0, storiesWithMultipleReviews: 0 });
+  const [loadingCoverage, setLoadingCoverage] = useState(true);
   // Filter states
   const [selectedStory, setSelectedStory] = useState<string>("all");
   const [selectedPrinciple, setSelectedPrinciple] = useState<string>("all");
-  const [selectedPeriod, setSelectedPeriod] = useState<string>("1h");
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("1h"); // Changed default period
 
   // --- Data Fetching Logic ---
 
@@ -128,7 +136,11 @@ export default function AdminMonitoringPage() {
     setLoadingAll(true);
     setLoadingStats(true);
     setLoadingRecent(true);
+    setLoadingCoverage(true); // Start loading coverage
     setError(null);
+
+    // Reset New State
+    setStoriesReviewCoverage({ percentage: 0, totalStories: 0, storiesWithMultipleReviews: 0 });
 
     if (mock) {
       console.log("Setting transformed mock data for admin monitoring.");
@@ -141,41 +153,56 @@ export default function AdminMonitoringPage() {
       const { transformedPrincipleStats, transformedStoryStats } = transformMockStats();
       setPrincipleStats(transformedPrincipleStats);
       setStoryStats(transformedStoryStats);
-
-      setLoadingAll(false);
-      setLoadingStats(false);
-      setLoadingRecent(false);
+      // Set mock coverage data
+      setStoriesReviewCoverage({ percentage: 66.7, totalStories: 3, storiesWithMultipleReviews: 2 });
+      setLoadingAll(false); setLoadingStats(false); setLoadingRecent(false); setLoadingCoverage(false); // Stop loading coverage
     } else {
       // Fetching real data logic remains the same
       console.log(`Fetching all real data for period: ${selectedPeriod}, story: ${selectedStory}, principle: ${selectedPrinciple}`);
       try {
-        const [storiesRes, principlesRes, recentRes, principleStatsRes, storyStatsRes] = await Promise.all([
+        // Add Coverage Endpoint Fetch
+        const [storiesRes, principlesRes, recentRes, principleStatsRes, storyStatsRes, coverageRes] = await Promise.all([
           fetch("/api/admin/stories"), fetch("/api/admin/principles"),
           fetch(`/api/admin/recent-reviews?period=${selectedPeriod}`),
           fetch(`/api/admin/stats/principles${selectedStory !== 'all' ? `?storyId=${selectedStory}` : ''}`),
           fetch(`/api/admin/stats/stories${selectedPrinciple !== 'all' ? `?principleId=${selectedPrinciple}` : ''}`),
+          fetch('/api/admin/stats/stories-review-coverage') // Fetch coverage data
         ]);
-        if (!storiesRes.ok || !principlesRes.ok || !recentRes.ok || !principleStatsRes.ok || !storyStatsRes.ok) {
+
+        // Check essential responses (add coverageRes)
+        if (!storiesRes.ok || !principlesRes.ok || !recentRes.ok || !principleStatsRes.ok || !storyStatsRes.ok || !coverageRes.ok) {
           const failed = [
             !storiesRes.ok && 'Stories', !principlesRes.ok && 'Principles', !recentRes.ok && 'Recent',
-            !principleStatsRes.ok && 'P.Stats', !storyStatsRes.ok && 'S.Stats'
+            !principleStatsRes.ok && 'P.Stats', !storyStatsRes.ok && 'S.Stats',
+            !coverageRes.ok && 'Coverage' // Include coverage in error check
           ].filter(Boolean).join(', ');
           throw new Error(`Failed to fetch: ${failed}`);
         }
         const storiesData = await storiesRes.json(); const principlesData = await principlesRes.json();
         const recentData = await recentRes.json(); const principleStatsData = await principleStatsRes.json();
         const storyStatsData = await storyStatsRes.json();
+        console.log(">>> Story Stats API Response:", storyStatsData); // <-- ADD THIS LINE
+        // Parse Coverage Data
+        const coverageData = await coverageRes.json();
+        console.log(">>> Coverage API Response:", coverageData); // <-- ADD THIS LINE
+
+
+        // Update State (add coverage)
         setUserStories(storiesData.data || []); setPrinciples(principlesData.data || []);
         setRecentReviews(recentData.data || []); setPrincipleStats(principleStatsData.data || []);
         setStoryStats(storyStatsData.data || []);
-        console.log("Successfully fetched all real data.");
+        setStoriesReviewCoverage(coverageData); // Update coverage state
+
+        console.log("Successfully fetched all real data including coverage.");
       } catch (err) {
         console.error("Error fetching all real data:", err);
         const errorMsg = err instanceof Error ? err.message : "Failed to fetch real-time data.";
         setError(errorMsg);
+        // Reset all states on error
         setUserStories([]); setPrinciples([]); setRecentReviews([]); setPrincipleStats([]); setStoryStats([]);
+        setStoriesReviewCoverage({ percentage: 0, totalStories: 0, storiesWithMultipleReviews: 0 });
       } finally {
-        setLoadingAll(false); setLoadingStats(false); setLoadingRecent(false);
+        setLoadingAll(false); setLoadingStats(false); setLoadingRecent(false); setLoadingCoverage(false); // Stop loading coverage
       }
     }
   };
@@ -198,7 +225,9 @@ export default function AdminMonitoringPage() {
         fetch(`/api/admin/stats/stories${selectedPrinciple !== 'all' ? `?principleId=${selectedPrinciple}` : ''}`),
       ]);
       if (!principleStatsRes.ok || !storyStatsRes.ok) throw new Error("Failed to fetch filtered stats");
-      const principleStatsData = await principleStatsRes.json(); const storyStatsData = await storyStatsRes.json();
+      const principleStatsData = await principleStatsRes.json();
+      const storyStatsData = await storyStatsRes.json();
+      console.log(">>> Story Stats API Response:", storyStatsData); // <-- ADD THIS LINE
       setPrincipleStats(principleStatsData.data || []); setStoryStats(storyStatsData.data || []);
       console.log("Successfully fetched filtered stats.");
     } catch (err) {
@@ -251,13 +280,13 @@ export default function AdminMonitoringPage() {
 
   // --- Calculations for display ---
   const totalRecentReviewsCount = recentReviews.length;
-  const reviewedStoryIds = new Set(storyStats.map(s => s.storyId));
-  const totalCompletedReviewsCount = totalReviewSubmissions;
+  // const reviewedStoryIds = new Set(storyStats.map(s => s.storyId)); // Recalculate if needed
+  const totalCompletedReviewsCount = totalReviewSubmissions; // This state needs a dedicated fetch if used
 
   const overallRatings = {
-    yes: principleStats.reduce((sum, stat) => sum + (stat.yesCount || 0), 0),
-    partial: principleStats.reduce((sum, stat) => sum + (stat.partialCount || 0), 0),
-    no: principleStats.reduce((sum, stat) => sum + (stat.noCount || 0), 0),
+    yes: Array.isArray(principleStats) ? principleStats.reduce((sum, stat) => sum + (stat.yesCount || 0), 0) : 0,
+    partial: Array.isArray(principleStats) ? principleStats.reduce((sum, stat) => sum + (stat.partialCount || 0), 0) : 0,
+    no: Array.isArray(principleStats) ? principleStats.reduce((sum, stat) => sum + (stat.noCount || 0), 0) : 0,
   };
   const overallPieData = [
     { name: "Yes", value: overallRatings.yes },
@@ -265,9 +294,19 @@ export default function AdminMonitoringPage() {
     { name: "No", value: overallRatings.no },
   ].filter(d => d.value > 0);
 
+  // Use state directly for rendering where checks are performed
   const filteredPrincipleStats = principleStats;
   const filteredStoryStats = storyStats;
   // ------------------------------
+
+  // --- Chart Data Preparation (with defensive checks) ---
+  const principlePieChartData = Array.isArray(principleStats)
+      ? principleStats.map(stat => ({ name: stat.principleName || 'Unknown', value: stat.totalReviews ?? 0 })).filter(item => item.value > 0)
+      : [];
+  const storyBarChartData = Array.isArray(storyStats)
+      ? storyStats.map(stat => ({ name: generateShortStatTitle(stat) ?? `Story #${stat.storyId}`, value: stat.averageRating ? parseFloat(stat.averageRating.toFixed(2)) : 0 })).filter(item => item.value >= 0)
+      : [];
+  // --- End Chart Data Preparation ---
 
 
   return (
@@ -298,7 +337,8 @@ export default function AdminMonitoringPage() {
           )}
 
           {/* Top Cards Grid */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"> {/* Adjusted grid cols */}
+            {/* Recent Sessions Card */}
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle>Recent Sessions</CardTitle>
@@ -310,30 +350,50 @@ export default function AdminMonitoringPage() {
                 </div>
                 <div className="mt-2 flex flex-wrap justify-center gap-1 min-h-[24px]">
                   {/* Use short title for badges */}
-                  {recentReviews.slice(0, 5).map((r) => {
-                    const shortTitle = generateShortStatTitle(r);
+                  {Array.isArray(recentReviews) && recentReviews.slice(0, 5).map((r) => {
+                    const shortTitle = generateShortStatTitle(r); // Use correct helper
                     return <Badge key={r.reviewId} variant="outline" className="text-xs" title={r.storyTitle}>{shortTitle}</Badge>
                   })}
-                  {recentReviews.length > 5 && <Badge variant="secondary" className="text-xs">+{recentReviews.length-5} more</Badge>}
-                  {recentReviews.length === 0 && !loadingRecent && !loadingAll && <p className="text-xs text-muted-foreground">No recent activity.</p>}
+                  {Array.isArray(recentReviews) && recentReviews.length > 5 && <Badge variant="secondary" className="text-xs">+{recentReviews.length-5} more</Badge>}
+                  {Array.isArray(recentReviews) && recentReviews.length === 0 && !loadingRecent && !loadingAll && <p className="text-xs text-muted-foreground">No recent activity.</p>}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Completed Reviews Card */}
+            {/* --- NEW Coverage Card --- */}
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle>Completed Reviews</CardTitle>
-                <CardDescription>Total review submissions</CardDescription>
+                <CardTitle>Story Review Coverage</CardTitle>
+                <CardDescription>% of stories with multiple reviews</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-center text-4xl font-bold min-h-[40px]">
-                  {loadingAll || loadingCount ? <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /> : totalCompletedReviewsCount}
+                  {loadingAll || loadingCoverage ? <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /> : `${storiesReviewCoverage.percentage}%`}
+                </div>
+                <div className="mt-2 text-center text-xs text-muted-foreground min-h-[16px]">
+                  {!(loadingAll || loadingCoverage) && `${storiesReviewCoverage.storiesWithMultipleReviews} of ${storiesReviewCoverage.totalStories} stories >1 review`}
+                </div>
+                <div className="mt-2 h-2"> {/* Wrapper for progress bar */}
+                  {loadingAll || loadingCoverage ? <Skeleton className="h-2 w-full" /> : <Progress value={storiesReviewCoverage.percentage} className="h-2" />}
+                </div>
+              </CardContent>
+            </Card>
+            {/* --- End NEW Coverage Card --- */}
+
+            {/* Completed Reviews Card - Placeholder Data Source */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle>Completed Reviews (Placeholder)</CardTitle>
+                <CardDescription>Total review submissions (Data Pending)</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-center text-4xl font-bold min-h-[40px]">
+                  {(loadingAll || loadingCount) ? <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /> : '-'} {/* Show dash, as totalReviewSubmissions isn't fetched here */}
                 </div>
                 <div className="mt-4 h-[100px]">
                   {(loadingAll || loadingStats) ? <Skeleton className="h-full w-full" /> :
-                      storyStats.length > 0 ? ( <BarChart data={storyStats.sort(/*...*/).slice(0, 5).map(s => ({ name: generateShortStatTitle(s).substring(0, 20) + '...', value: s.totalReviews || 0 }))} index="name" categories={["Reviews"]} colors={["#3b82f6"]} valueFormatter={(v) => `${v}`} height={100} />)
-                          : <p className="text-xs text-muted-foreground flex items-center justify-center h-full">No review data for chart.</p>}
+                      Array.isArray(storyStats) && storyStats.length > 0 ? ( <BarChart data={storyStats.sort(/*...*/).slice(0, 5).map(s => ({ name: generateShortStatTitle(s).substring(0, 20) + '...', value: s.totalReviews || 0 }))} index="name" categories={["Reviews"]} colors={["#3b82f6"]} valueFormatter={(v) => `${v}`} height={100} />)
+                          : <p className="text-xs text-muted-foreground flex items-center justify-center h-full">No data for chart.</p>}
                 </div>
               </CardContent>
             </Card>
@@ -343,7 +403,9 @@ export default function AdminMonitoringPage() {
               <CardHeader className="pb-2"><CardTitle>Overall Ratings</CardTitle><CardDescription>Distribution across all principles</CardDescription></CardHeader>
               <CardContent className="flex justify-center items-center h-[140px]">
                 {(loadingAll || loadingStats) ? <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /> :
-                    overallPieData.length > 0 ? (<PieChart data={overallPieData} index="name" categories={["value"]} colors={["#22c55e", "#f59e0b", "#ef4444"]} height={140} />)
+                    overallPieData.length > 0 ? (<PieChart data={overallPieData}
+                                                           colors={["#22c55e", "#f59e0b", "#ef4444"]} height={140}
+                                                           index={ "" } categories={[]} />)
                         : <p className="text-xs text-muted-foreground">No rating data.</p>}
               </CardContent>
             </Card>
@@ -356,26 +418,21 @@ export default function AdminMonitoringPage() {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2">
                 <h2 className="text-xl font-semibold">Recent Review Submissions</h2>
                 <Select value={selectedPeriod} onValueChange={setSelectedPeriod} disabled={loadingRecent || useMockData}>
-                  {/* ... Select options ... */}
                   <SelectTrigger className="w-full sm:w-[180px]"><SelectValue placeholder="Select Period" /></SelectTrigger>
                   <SelectContent><SelectItem value="5m">Last 5 mins</SelectItem><SelectItem value="30m">Last 30 mins</SelectItem><SelectItem value="1h">Last 1 hour</SelectItem><SelectItem value="3h">Last 3 hours</SelectItem><SelectItem value="6h">Last 6 hours</SelectItem><SelectItem value="24h">Last 24 hours</SelectItem><SelectItem value="all">All Time</SelectItem></SelectContent>
                 </Select>
               </div>
               <div className="min-h-[100px]">
-                {/* MODIFIED: Pass data for short title generation */}
                 {(loadingRecent || loadingAll) ? <div className="flex justify-center items-center h-24"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground"/></div> :
-                    recentReviews.length === 0 ? <p className="text-muted-foreground text-sm p-4 border rounded-md text-center">No reviews submitted in this period.</p> :
+                    !Array.isArray(recentReviews) || recentReviews.length === 0 ? <p className="text-muted-foreground text-sm p-4 border rounded-md text-center">No reviews submitted in this period.</p> :
                         <ActiveReviewsTable data={recentReviews.map(r => ({
                           id: r.reviewId,
                           testerId: r.testerId,
                           testerName: r.testerName,
                           storyId: r.storyId,
-                          // Generate short title here if table doesn't do it
-                          storyTitle: generateShortStatTitle(r), // Changed helper
-                          fullStoryTitle: r.storyTitle, // Pass original title too
+                          storyTitle: generateShortStatTitle(r),
+                          fullStoryTitle: r.storyTitle,
                           submittedAt: r.submittedAt,
-                          // source_key: r.source_key, // Pass if table component needs it
-                          // epic_name: r.epic_name,   // Pass if table component needs it
                         }))} />
                 }
               </div>
@@ -391,8 +448,8 @@ export default function AdminMonitoringPage() {
                     <SelectTrigger className="w-full md:w-[250px]"> <SelectValue placeholder="Filter by Story" /> </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Stories</SelectItem>
-                      {userStories?.map((story) => {
-                        const shortDisplayTitle = generateShortStoryTitle(story); // Use correct helper
+                      {Array.isArray(userStories) && userStories?.map((story) => { // Added Array.isArray check
+                        const shortDisplayTitle = generateShortStoryTitle(story);
                         return ( <SelectItem key={story.id} value={String(story.id)} title={story.title}>{shortDisplayTitle}</SelectItem> );
                       })}
                     </SelectContent>
@@ -402,7 +459,7 @@ export default function AdminMonitoringPage() {
                     <SelectTrigger className="w-full md:w-[200px]"><SelectValue placeholder="Filter by Principle" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Principles</SelectItem>
-                      {principles?.map((p) => <SelectItem key={p.id} value={p.id}>{p.label}</SelectItem>)}
+                      {Array.isArray(principles) && principles?.map((p) => <SelectItem key={p.id} value={p.id}>{p.label}</SelectItem>)} {/* Added Array.isArray check */}
                     </SelectContent>
                   </Select>
                 </div>
@@ -416,13 +473,13 @@ export default function AdminMonitoringPage() {
                 {/* Principle Stats Content */}
                 <TabsContent value="principles" className="space-y-4 mt-4 min-h-[100px]">
                   {(loadingStats || loadingAll) ? <div className="flex justify-center items-center h-24"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground"/></div> :
-                      filteredPrincipleStats.length === 0 ? <p className="text-muted-foreground text-sm text-center pt-4">No principle statistics match.</p> :
+                      !Array.isArray(filteredPrincipleStats) || filteredPrincipleStats.length === 0 ? <p className="text-muted-foreground text-sm text-center pt-4">No principle statistics match.</p> : // Added check
                           filteredPrincipleStats.map((stat) => <PrincipleStatisticsCard key={stat.id} data={stat} />)}
                 </TabsContent>
                 {/* Story Stats Content */}
                 <TabsContent value="stories" className="space-y-4 mt-4 min-h-[100px]">
                   {(loadingStats || loadingAll) ? <div className="flex justify-center items-center h-24"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground"/></div> :
-                      filteredStoryStats.length === 0 ? <p className="text-muted-foreground text-sm text-center pt-4">No story statistics match.</p> :
+                      !Array.isArray(filteredStoryStats) || filteredStoryStats.length === 0 ? <p className="text-muted-foreground text-sm text-center pt-4">No story statistics match.</p> : // Added check
                           filteredStoryStats.map((stat) => <StoryStatisticsCard key={stat.id} data={stat} />)}
                 </TabsContent>
               </Tabs>
