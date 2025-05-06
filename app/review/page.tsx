@@ -246,6 +246,7 @@ export default function ReviewPage() {
   const isFormComplete = () => investPrinciples.every((p) => evaluations[p.id]);
   const completedPrinciplesCount = investPrinciples.filter((p) => evaluations[p.id]).length;
   const principleCompletionPercentage = (completedPrinciplesCount / investPrinciples.length) * 100;
+  const currentPrincipleVisualPercentage = ((currentPrincipleIndex + 1) / investPrinciples.length) * 100;
 
   const handleNextPrinciple = () => {
     if (currentPrincipleIndex < investPrinciples.length - 1) {
@@ -361,7 +362,7 @@ export default function ReviewPage() {
           </span>
         </div>
         <div className="mt-2">
-          <Progress value={progress} className="h-2 w-full" />
+          <Progress value={currentPrincipleVisualPercentage} className="h-1.5 w-full mt-3" />
         </div>
       </div>
 
