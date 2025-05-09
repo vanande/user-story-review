@@ -8,7 +8,7 @@ const periodMap: { [key: string]: string } = {
   "3h": "-3 hours",
   "6h": "-6 hours",
   "24h": "-24 hours",
-  all: "-100 years",
+  all: "-1 years",
 };
 
 export async function GET(request: Request) {
@@ -34,7 +34,6 @@ export async function GET(request: Request) {
                      JOIN user_stories s ON r.story_id = s.id
             WHERE r.submitted_at >= datetime('now', ?)
             ORDER BY r.submitted_at DESC
-                LIMIT 100
         `;
 
     const recentReviews = await db.all(query, [timeModifier]);
