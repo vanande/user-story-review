@@ -1,0 +1,88 @@
+meta {
+  name: 2 - Submit Feedback 4
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/feedback
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "storyId": {{currentStoryIdForFeedback1}},
+    "evaluations": {{currentEvaluations1}},
+    "additionalFeedback": "{{currentFeedback1}}",
+    "email": "{{currentUserEmail}}"
+  }
+}
+
+script:pre-request {
+  // File: Bruno Request "2.1 Submit Feedback - Review 1" -> Tests / Script Tab -> Pre-Request Script
+  
+  const reviewsToSubmitCount = parseInt(bru.getVar("reviewsToSubmitCount") || "0");
+  const storyIdsJson = bru.getVar("storyIdsAvailable"); // This holds the array of IDs
+  let availableStoryIds = [];
+  
+  try {
+    if (storyIdsJson) {
+      availableStoryIds = JSON.parse(storyIdsJson);
+    }
+  } catch (e) {
+    console.error("Error parsing storyIdsAvailable JSON for Review 1:", e);
+    availableStoryIds = [];
+  }
+  
+  // This is the FIRST feedback request.
+  if (reviewsToSubmitCount >= 1 && Array.isArray(availableStoryIds) && availableStoryIds.length > 0) {
+    // Take the first ID from the array
+    const storyIdToReview = availableStoryIds.shift(); // .shift() gets the first element AND removes it
+    bru.setVar("currentStoryIdForFeedback1", storyIdToReview);
+  
+    // Save the MODIFIED array (without the used ID) back for subsequent requests
+    bru.setVar("storyIdsAvailable", JSON.stringify(availableStoryIds)); 
+  
+    const principles = ["Independent", "Negotiable", "Valuable", "Estimable", "Small", "Testable"];
+    const evaluations = {};
+    principles.forEach(principle => {
+      const rand = Math.random() * 100;
+      if (rand < 70) { // 70% chance
+        evaluations[principle] = "yes";
+      } else if (rand < 90) { // 20% chance
+        evaluations[principle] = "no";
+      } else { // 10% chance
+        evaluations[principle] = "partial";
+      }
+    });
+    bru.setVar("currentEvaluations1", JSON.stringify(evaluations));
+  
+    const userEmail = bru.getVar("currentUserEmail") || "anonymous@example.com";
+    bru.setVar("currentFeedback1", `Test feedback from ${userEmail}`);
+    
+    console.log(`PREP REVIEW 1: Targeting Story ID ${storyIdToReview}. Remaining IDs: ${JSON.stringify(availableStoryIds)}. Reviews to submit: ${reviewsToSubmitCount}`);
+  
+  } else {
+    console.log(`SKIPPING REVIEW 1: reviewsToSubmitCount is ${reviewsToSubmitCount} or no available story IDs (Length: ${availableStoryIds.length}).`);
+    // Set critical var to null to ensure body is not valid / API would reject
+    bru.setVar("currentStoryIdForFeedback1", null); 
+    // To truly skip the request if Bruno UI/runner doesn't have conditional execution for requests,
+    // this request might still be sent with currentStoryIdForFeedback1 as null.
+    // The API should ideally reject such a request.
+  }
+}
+
+script:post-response {
+  // Post-Response Script for "2.1 Submit Feedback - Review 1"
+  // Clear the skip flag if it was set
+  bru.setEnvVar("SKIP_REQUEST_2_1", null);
+  
+  if (res.getStatus() === 200 || res.getStatus() === 201) { // Typically 201 for Created, 200 for OK
+    const responseData = res.getBody();
+    console.log(`Feedback for Story ID ${bru.getVar("currentStoryIdForFeedback1")} submitted successfully. Review ID: ${responseData?.reviewId}`);
+  } else {
+    console.error(`Failed to submit feedback for Story ID ${bru.getVar("currentStoryIdForFeedback1")}. Status: ${res.getStatus()}`);
+    console.log("Response body:", res.getBody());
+  }
+}

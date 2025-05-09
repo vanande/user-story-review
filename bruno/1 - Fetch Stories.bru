@@ -1,0 +1,100 @@
+meta {
+  name: 1 - Fetch Stories
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/stories?testerId={{currentUserEmail}}
+  body: none
+  auth: none
+}
+
+params:query {
+  testerId: {{currentUserEmail}}
+}
+
+script:pre-request {
+  // File: Bruno Request "1. Fetch Stories for Review" -> Tests / Script Tab -> Pre-Request Script
+  
+  // Helper function to generate a random letter
+  function getRandomLetter() {
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    return alphabet[Math.floor(Math.random() * alphabet.length)];
+  }
+  
+  // Helper function to select a random lastname from a predefined list
+  function getRandomLastname() {
+    const lastnames = [
+      "Smith", "Jones", "Williams", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson",
+      "Thomas", "Jackson", "White", "Harris", "Martin", "Thompson", "Garcia", "Martinez", "Robinson", "Clark",
+      "Rodriguez", "Lewis", "Lee", "Walker", "Hall", "Allen", "Young", "Hernandez", "King", "Wright",
+      "Lopez", "Hill", "Scott", "Green", "Adams", "Baker", "Gonzalez", "Nelson", "Carter", "Mitchell",
+      "Perez", "Roberts", "Turner", "Phillips", "Campbell", "Parker", "Evans", "Edwards", "Collins"
+      // Add more names as desired
+    ];
+    return lastnames[Math.floor(Math.random() * lastnames.length)];
+  }
+  
+  // Helper function to generate 3 random digits
+  function getRandomDigits(count) {
+    let digits = '';
+    for (let i = 0; i < count; i++) {
+      digits += Math.floor(Math.random() * 10);
+    }
+    return digits;
+  }
+  
+  // Generate the dynamic email
+  const randomLetter = getRandomLetter();
+  const randomLastname = getRandomLastname();
+  const randomThreeDigits = getRandomDigits(3);
+  const dynamicEmail = `${randomLetter}.${randomLastname}-${randomThreeDigits}@gmail.com`.toLowerCase();
+  
+  bru.setVar("currentUserEmail", dynamicEmail);
+  console.log("Set currentUserEmail to (dynamically generated): " + dynamicEmail + " for fetching stories.");
+  
+  // Initialize variables for stories that will be picked for review later
+  bru.setVar("storyIdToReview1", null);
+  bru.setVar("storyTitle1", null);
+  bru.setVar("storyDescription1", null);
+  bru.setVar("storyAcceptanceCriteria1", null);
+  
+  bru.setVar("storyIdToReview2", null); // For potentially reviewing a second story
+  bru.setVar("storyTitle2", null);
+  bru.setVar("storyDescription2", null);
+  bru.setVar("storyAcceptanceCriteria2", null);
+  // Add more if you plan to review more than one in a sequence
+  
+  // Decide how many reviews this "user" will submit (1 or 2 for this example, can be up to stories fetched)
+  const numberOfReviewsToSubmit = Math.floor(Math.random() * 2) + 1;
+  bru.setVar("numberOfReviewsToSubmit", numberOfReviewsToSubmit);
+  console.log("Planning to extract data for " + bru.getVar("numberOfReviewsToSubmit") + " review(s).");
+}
+
+script:post-response {
+  const responseData = res.getBody();
+  let storyIdsForReview = [];
+  let reviewsToAttempt = 0;
+  
+  if (res.getStatus() === 200 && responseData?.success === true && Array.isArray(responseData.stories)) {
+    const fetchedStories = responseData.stories;
+    if (fetchedStories.length > 0) {
+      storyIdsForReview = fetchedStories.map(story => story.id).filter(id => typeof id === 'number');
+      
+      if (storyIdsForReview.length > 0) {
+        const maxReviewsPossible = storyIdsForReview.length;
+        // Decide to submit 1, 2, or 3 reviews, but not more than available unique stories
+        reviewsToAttempt = Math.floor(Math.random() * Math.min(maxReviewsPossible, 3)) + 1;
+      }
+    }
+  } else {
+    // Log error only if something unexpected happened, not for empty valid responses
+    if (res.getStatus() !== 200 || !responseData || responseData.success !== true) {
+      console.error(`Fetch Stories Error: Status ${res.getStatus()}, Success: ${responseData?.success}`);
+    }
+  }
+  
+  bru.setVar("storyIdsAvailable", JSON.stringify(storyIdsForReview)); // Store all captured IDs
+  bru.setVar("reviewsToSubmitCount", reviewsToAttempt); // How many feedback requests will try to run
+}
