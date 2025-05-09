@@ -9,6 +9,8 @@ interface DbRow {
   story_acceptance_criteria: string | null;
   story_source_key: string | null;
   story_epic_name: string | null;
+  story_epic_id: string | null;
+  original_story_id: string | null;
   review_id: number;
   review_additional_feedback: string | null;
   tester_email: string;
@@ -27,6 +29,7 @@ interface AnnotatedUserStory {
   user_story: string;
   description: string;
   acceptance_criteria?: string[];
+  id: string;
 
   annotation: {
     assessors: AssessorAnnotation[];
@@ -39,6 +42,7 @@ interface AnnotatedUserStory {
 
 interface EpicOutput {
   epic: string;
+  id: string;
   user_stories: AnnotatedUserStory[];
 }
 
@@ -46,10 +50,6 @@ interface SourceOutput {
   [epicName: string]: {
     epics: EpicOutput[];
   };
-}
-
-interface FinalOutput {
-  [sourceKey: string]: SourceOutput;
 }
 
 interface FinalOutputStructure {
@@ -76,8 +76,6 @@ export async function GET(request: NextRequest) {
   const adminCheckResponse = await checkAdminAuth(request);
   if (adminCheckResponse) {
     return adminCheckResponse;
-
-    console.warn("WARNING: Admin check skipped for /api/admin/export endpoint.");
   }
 
   const { searchParams } = request.nextUrl;
@@ -108,6 +106,8 @@ export async function GET(request: NextRequest) {
                 s.acceptance_criteria as story_acceptance_criteria,
                 s.source_key as story_source_key,
                 s.epic_name as story_epic_name,
+                s.epic_id as story_epic_id,
+                s.story_id as original_story_id,
                 r.id as review_id,
                 r.additional_feedback as review_additional_feedback,
                 t.email as tester_email,
@@ -120,7 +120,6 @@ export async function GET(request: NextRequest) {
             JOIN criterion_evaluations ce ON r.id = ce.review_id
             JOIN evaluation_criteria ec ON ce.criterion_id = ec.id
             WHERE s.dataset_id = ?
-            -- Ensure only stories with reviews are implicitly included by the JOINs
             ORDER BY
                 s.source_key,
                 s.epic_name,
@@ -155,7 +154,11 @@ export async function GET(request: NextRequest) {
 
       let epicObj = processedData[sourceKey].epics.find((e) => e.epic === epicName);
       if (!epicObj) {
-        epicObj = { epic: epicName, user_stories: [] };
+        epicObj = { 
+          epic: epicName, 
+          id: row.story_epic_id || epicName,
+          user_stories: [] 
+        };
         processedData[sourceKey].epics.push(epicObj);
       }
 
@@ -176,6 +179,7 @@ export async function GET(request: NextRequest) {
           user_story: row.story_title,
           description: row.story_description,
           acceptance_criteria: parsedAC,
+          id: row.original_story_id || `${row.story_id}`,
           annotation: { assessors: [] },
 
           __internal_story_id: storyId,

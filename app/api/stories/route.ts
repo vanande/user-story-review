@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { openDb, getActiveDatasetId } from "@/lib/db";
 import { UserStory } from "@/lib/types";
 
-export async function GET() {
+export async function GET(request: Request) {
   let db;
   try {
     db = await openDb();
@@ -15,25 +15,80 @@ export async function GET() {
     }
     console.log(`Fetching stories for active dataset ID: ${activeDatasetId}`);
 
-    const storiesFromDb = await db.all(
-      `SELECT
-           id, title, description, acceptance_criteria, independent, negotiable, valuable, estimable, small, testable,
-           source_key, epic_name -- Added new fields
-       FROM user_stories
-       WHERE dataset_id = ?
-       ORDER BY RANDOM()
-       LIMIT 5`,
-      [activeDatasetId]
-    );
+    // Get the tester email from the request parameters
+    const { searchParams } = new URL(request.url);
+    const testerEmail = searchParams.get("testerId");
 
-    const selectedStories: UserStory[] = storiesFromDb.map((story) => ({
+    if (!testerEmail) {
+      return NextResponse.json({ error: "Tester email is required" }, { status: 400 });
+    }
+
+    // Get or create tester
+    let testerId: number;
+    const tester = await db.get("SELECT id FROM testers WHERE LOWER(email) = LOWER(?)", [testerEmail]);
+    if (!tester) {
+      const testerName = testerEmail.split("@")[0];
+      const result = await db.run("INSERT INTO testers (email, name) VALUES (?, ?)", [
+        testerEmail,
+        testerName,
+      ]);
+      if (!result.lastID) {
+        throw new Error("Failed to create tester record");
+      }
+      testerId = result.lastID;
+    } else {
+      if (!tester.id) {
+        throw new Error("Invalid tester record");
+      }
+      testerId = tester.id;
+    }
+
+    // First, get all stories that haven't been reviewed by this tester
+    const storiesQuery = `
+      WITH StoryReviewCounts AS (
+        SELECT 
+          s.id,
+          COUNT(r.id) as review_count
+        FROM user_stories s
+        LEFT JOIN reviews r ON s.id = r.story_id
+        WHERE s.dataset_id = ?
+        GROUP BY s.id
+      )
+      SELECT
+        s.id,
+        s.title,
+        s.description,
+        s.acceptance_criteria,
+        s.source_key,
+        s.epic_name,
+        s.independent,
+        s.negotiable,
+        s.valuable,
+        s.estimable,
+        s.small,
+        s.testable,
+        COALESCE(src.review_count, 0) as review_count
+      FROM user_stories s
+      LEFT JOIN StoryReviewCounts src ON s.id = src.id
+      WHERE s.dataset_id = ?
+      AND s.id NOT IN (
+        SELECT story_id 
+        FROM reviews 
+        WHERE tester_id = ?
+      )
+      ORDER BY src.review_count ASC, RANDOM()
+    `;
+
+    const storiesFromDb = await db.all(storiesQuery, [activeDatasetId, activeDatasetId, testerId]);
+
+    // Take up to 5 stories
+    const selectedStories: UserStory[] = storiesFromDb.slice(0, 5).map((story) => ({
       id: story.id,
       title: story.title,
       description: story.description,
       acceptance_criteria: story.acceptance_criteria ? JSON.parse(story.acceptance_criteria) : [],
       source_key: story.source_key,
       epic_name: story.epic_name,
-
       independent: story.independent === null ? null : Boolean(story.independent),
       negotiable: story.negotiable === null ? null : Boolean(story.negotiable),
       valuable: story.valuable === null ? null : Boolean(story.valuable),
@@ -43,7 +98,7 @@ export async function GET() {
     }));
 
     console.log(
-      `Fetched ${selectedStories.length} random stories from DB (Dataset ID: ${activeDatasetId}).`
+      `Fetched ${selectedStories.length} stories from DB (Dataset ID: ${activeDatasetId}).`
     );
 
     return NextResponse.json({
@@ -51,10 +106,10 @@ export async function GET() {
       stories: selectedStories,
     });
   } catch (error) {
-    console.error("Error fetching stories from database:", error);
+    console.error("Error fetching stories:", error);
     return NextResponse.json(
       {
-        error: "Failed to fetch stories from database",
+        error: "Failed to fetch stories",
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }

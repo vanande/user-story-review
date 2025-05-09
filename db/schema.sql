@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS user_stories (
                                             dataset_id INTEGER NOT NULL,
                                             source_key TEXT, -- Added: e.g., 'llm', 'rag+CoT'
                                             epic_name TEXT,  -- Added: e.g., 'Loan Application Submission'
+                                            epic_id TEXT,    -- Added: e.g., 'llm_EP41'
+                                            story_id TEXT,   -- Added: e.g., 'llm_EP41_US0'
                                             title TEXT NOT NULL,
                                             description TEXT NOT NULL,
                                             acceptance_criteria TEXT, -- Store as JSON string
@@ -84,7 +86,8 @@ DROP INDEX IF EXISTS idx_criterion_evaluations_review_id;
 DROP INDEX IF EXISTS idx_criterion_evaluations_criterion_id;
 DROP INDEX IF EXISTS idx_user_stories_dataset_id;
 DROP INDEX IF EXISTS idx_active_sessions_tester_story;
-DROP INDEX IF EXISTS idx_user_stories_source_epic; -- Added index
+DROP INDEX IF EXISTS idx_user_stories_source_epic;
+DROP INDEX IF EXISTS idx_user_stories_ids;
 
 CREATE INDEX idx_reviews_story_id ON reviews(story_id);
 CREATE INDEX idx_reviews_tester_id ON reviews(tester_id);
@@ -92,4 +95,5 @@ CREATE INDEX idx_criterion_evaluations_review_id ON criterion_evaluations(review
 CREATE INDEX idx_criterion_evaluations_criterion_id ON criterion_evaluations(criterion_id);
 CREATE INDEX idx_user_stories_dataset_id ON user_stories(dataset_id);
 CREATE INDEX idx_active_sessions_tester_story ON active_review_sessions(tester_id, story_id);
-CREATE INDEX idx_user_stories_source_epic ON user_stories(source_key, epic_name); -- Added index
+CREATE INDEX idx_user_stories_source_epic ON user_stories(source_key, epic_name);
+CREATE INDEX idx_user_stories_ids ON user_stories(epic_id, story_id);  -- Add index for IDs

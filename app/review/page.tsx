@@ -124,7 +124,13 @@ export default function ReviewPage() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("/api/stories", { cache: "no-store" });
+        // Get user email from localStorage
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+          throw new Error('User email not found. Please log in again.');
+        }
+
+        const response = await fetch(`/api/stories?testerId=${encodeURIComponent(userEmail)}`, { cache: "no-store" });
         if (!response.ok) throw new Error(`Server error fetching stories: ${response.status}`);
         const contentType = response.headers.get("content-type");
         if (!contentType || !contentType.includes("application/json")) {
@@ -326,12 +332,13 @@ export default function ReviewPage() {
       setActiveTab("story");
       setCurrentPrincipleIndex(0);
 
-      if (safeStoryIndex < totalStories - 1) {
-        setCurrentStoryIndex(safeStoryIndex + 1);
-        setProgress(((safeStoryIndex + 1) / totalStories) * 100);
-      } else {
+      if (safeStoryIndex >= totalStories - 1) {
         router.push("/review/complete");
+        return;
       }
+
+      setCurrentStoryIndex(safeStoryIndex + 1);
+      setProgress(((safeStoryIndex + 1) / totalStories) * 100);
     } catch (error) {
       console.error("Error in submission process:", error);
       setError(
@@ -362,7 +369,7 @@ export default function ReviewPage() {
           </span>
         </div>
         <div className="mt-2">
-          <Progress value={currentPrincipleVisualPercentage} className="h-1.5 w-full mt-3" />
+          <Progress value={((safeStoryIndex + 1) / totalStories) * 100} className="h-1.5 w-full mt-3" />
         </div>
       </div>
 

@@ -181,8 +181,10 @@ async function initializeDatabase() {
 
         let storiesInDataset = 0;
         const insertStoryStmt = db.prepare(`INSERT INTO user_stories
-            (dataset_id, source_key, epic_name, title, description, acceptance_criteria, independent, negotiable, valuable, estimable, small, testable)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+            (dataset_id, source_key, epic_name, epic_id, story_id,
+            title, description, acceptance_criteria,
+            independent, negotiable, valuable, estimable, small, testable)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
 
         for (const sourceKey of Object.keys(data)) {
           const source = data[sourceKey];
@@ -212,6 +214,8 @@ async function initializeDatabase() {
                       datasetId,
                       sourceKey,
                       epicName,
+                      epic.id || null,
+                      story.id || null,
                       title,
                       description,
                       acceptance_criteria,

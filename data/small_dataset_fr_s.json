@@ -1,0 +1,25 @@
+{
+  "llm": {
+    "epics": [
+      {
+        "epic": " Gestion de la remboursement des prêts",
+        "user_stories": [
+          {
+            "user_story": " En tant qu'utilisateur, je veux voir le calendrier de répagement du prêt afin de pouvoir planifier mes finances de manière appropriée.",
+            "acceptance_criteria": [
+              " Le calendrier de réimbursement du prêt est affiché à l'utilisateur.",
+              " Le calendrier indique les dates limites et les montants pour chaque paiement.",
+              " Le calendrier est facile à comprendre et comprend une synthèse de la somme totale du prêt et de l'intérêt."
+            ],
+            "independent": true,
+            "negotiable": false,
+            "valuable": true,
+            "estimable": true,
+            "small": true,
+            "testable": true
+          }
+        ]
+      }
+    ]
+  }
+}
