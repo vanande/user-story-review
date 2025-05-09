@@ -392,7 +392,7 @@ export default function AdminMonitoringPage() {
 
   const totalRecentReviewsCount = recentReviews.length;
   const totalTesters = testerDistributionData.length;
-  const topTesters = testerDistributionData.slice(0, 3);
+  const topTesters = testerDistributionData;
 
   const filteredPrincipleStats = principleStats;
   const filteredStoryStats = storyStats;
