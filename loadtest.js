@@ -8,8 +8,8 @@ const MAX_THINK_TIME = 180; // 3 minutes in seconds
 
 export const options = {
   stages: [
-    { duration: '5s', target: 5 },
-    { duration: '3600s', target: 20 }, // Duration for VUs to run their iterations
+    { duration: '5s', target: 40 },
+    { duration: '3600s', target: 40 }, // Duration for VUs to run their iterations
     { duration: '5s', target: 0 },
   ],
   thresholds: {
@@ -33,14 +33,6 @@ const dashboardStatsDuration = new Trend('dashboard_stats_duration', true);
 
 const BASE_URL = __ENV.K6_ENV_BASE_URL || 'http://localhost:3000';
 
-// --- Helper Functions ---
-function getRandomLetter() { /* ... */ }
-function getRandomLastname() { /* ... */ }
-function getRandomDigits(count) { /* ... */ }
-function generateDynamicEmail() { /* ... */ }
-function getRandomEvaluationValue() { /* ... */ }
-function generateRandomEvaluations() { /* ... */ }
-// (Keep helper functions as they were, they are correct)
 function getRandomLetter() {
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
   return alphabet[Math.floor(Math.random() * alphabet.length)];
