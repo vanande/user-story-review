@@ -38,40 +38,40 @@ import { Skeleton } from "@/components/ui/skeleton";
 const investPrinciples: InvestPrinciple[] = [
   {
     id: "independent",
-    label: "Independent",
+    label: "Indépendant",
     description:
-      "The story should be self-contained, without inherent dependencies on other stories.",
-    question: "Can this story be developed, tested, and delivered on its own?",
+      "La user story doit être autonome, sans dépendances inhérentes à d'autres stories.",
+    question: "Cette story peut-elle être développée, testée et livrée indépendamment ?",
   },
   {
     id: "negotiable",
-    label: "Negotiable",
-    description: "Stories are not contracts; leave space for discussion about details.",
-    question: "Is the scope flexible enough to allow for negotiation?",
+    label: "Négociable",
+    description: "Les stories ne sont pas des contrats ; elles laissent place à la discussion sur les détails.",
+    question: "Le périmètre est-il suffisamment flexible pour permettre la négociation ?",
   },
   {
     id: "valuable",
     label: "Valuable",
-    description: "It must deliver value to the end-user or customer.",
-    question: "Is the benefit to the user clear and significant?",
+    description: "Elle doit apporter de la valeur à l'utilisateur final ou au client.",
+    question: "Le bénéfice pour l'utilisateur est-il clair et significatif ?",
   },
   {
     id: "estimable",
     label: "Estimable",
-    description: "You must be able to estimate the size/effort required to implement the story.",
-    question: "Can the team reasonably estimate the effort for this story?",
+    description: "Il doit être possible d'estimer la taille/l'effort nécessaire pour réaliser la story.",
+    question: "L'équipe peut-elle raisonnablement estimer l'effort pour cette story ?",
   },
   {
     id: "small",
-    label: "Small",
-    description: "Stories should be small enough to be completed within an iteration.",
-    question: "Is the story small enough to be completed in one sprint/iteration?",
+    label: "Petite",
+    description: "Les stories doivent être suffisamment petites pour être terminées en une itération.",
+    question: "La story est-elle assez petite pour être réalisée en un sprint/itération ?",
   },
   {
     id: "testable",
     label: "Testable",
-    description: "The story must have defined acceptance criteria that can be tested.",
-    question: "Are there clear acceptance criteria to confirm completion?",
+    description: "La story doit avoir des critères d'acceptation définis et testables.",
+    question: "Y a-t-il des critères d'acceptation clairs pour valider la complétion ?",
   },
 ];
 
@@ -181,7 +181,7 @@ export default function ReviewPage() {
   if (loading) {
     return (
       <div className="container mx-auto max-w-4xl p-4 text-center">
-        <h1 className="text-xl font-semibold mb-4">Loading User Story...</h1>
+        <h1 className="text-xl font-semibold mb-4">Chargement de la user story...</h1>
         {/* Use Skeletons for a better loading UI */}
         <Card className="mb-6">
           <CardHeader>
@@ -206,13 +206,13 @@ export default function ReviewPage() {
       <div className="container mx-auto max-w-4xl p-4">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error Loading Stories</AlertTitle>
-          <AlertDescription>{error || "Could not load stories for review."}</AlertDescription>
+          <AlertTitle>Erreur lors du chargement des stories</AlertTitle>
+          <AlertDescription>{error || "Impossible de charger les stories à annoter."}</AlertDescription>
         </Alert>
         <div className="mt-4 space-x-2">
-          <Button onClick={() => window.location.reload()}>Refresh Page</Button>
+          <Button onClick={() => window.location.reload()}>Rafraîchir la page</Button>
           <Button onClick={() => router.push("/dashboard")} variant="outline">
-            Go to Dashboard
+            Aller au tableau de bord
           </Button>
         </div>
       </div>
@@ -224,14 +224,13 @@ export default function ReviewPage() {
       <div className="container mx-auto max-w-4xl p-4">
         <Alert>
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>No Stories Available</AlertTitle>
+          <AlertTitle>Aucune story disponible</AlertTitle>
           <AlertDescription>
-            There are currently no user stories available for review in the active dataset. Please
-            check back later or contact an administrator.
+            Il n'y a actuellement aucune user story à annoter dans le jeu de données actif. Merci de réessayer plus tard ou de contacter un administrateur.
           </AlertDescription>
         </Alert>
         <Button onClick={() => router.push("/dashboard")} className="mt-4">
-          Return to Dashboard
+          Retour au tableau de bord
         </Button>
       </div>
     );
@@ -363,9 +362,9 @@ export default function ReviewPage() {
       {/* Progress header */}
       <div className="mb-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Review User Story</h1>
+          <h1 className="text-2xl font-bold">Annotation de user story</h1>
           <span className="text-sm font-medium">
-            Story {safeStoryIndex + 1} of {totalStories}
+            Story {safeStoryIndex + 1} sur {totalStories}
           </span>
         </div>
         <div className="mt-2">
@@ -375,29 +374,29 @@ export default function ReviewPage() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="story">Story Details</TabsTrigger>
-          <TabsTrigger value="evaluate">Evaluate Principles</TabsTrigger>
-          <TabsTrigger value="feedback">Feedback</TabsTrigger>
+          <TabsTrigger value="story">Détails de la story</TabsTrigger>
+          <TabsTrigger value="evaluate">Évaluer les principes</TabsTrigger>
+          <TabsTrigger value="feedback">Retour</TabsTrigger>
         </TabsList>
 
         {/* Story Details Tab */}
         <TabsContent value="story" className="mt-4">
           <Card>
             <CardHeader>
-              <CardTitle>{currentStory.title || "User Story Title Not Available"}</CardTitle>
+              <CardTitle>{currentStory.title || "Titre de la user story non disponible"}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="mb-2 text-lg font-semibold">User Story Description:</h3>
+                <h3 className="mb-2 text-lg font-semibold">Description de la user story :</h3>
                 <div className="rounded-md bg-muted p-4">
                   <p className="text-base max-h-60 overflow-y-auto">
-                    {currentStory.description || "No description available."}
+                    {currentStory.description || "Aucune description disponible."}
                   </p>
                 </div>
               </div>
               {currentStory.acceptance_criteria && currentStory.acceptance_criteria.length > 0 ? (
                 <div>
-                  <h3 className="mb-2 text-lg font-semibold">Acceptance Criteria:</h3>
+                  <h3 className="mb-2 text-lg font-semibold">Critères d'acceptation :</h3>
                   <ul className="list-disc space-y-1 rounded-md bg-muted p-4 pl-8 max-h-60 overflow-y-auto">
                     {currentStory.acceptance_criteria.map((criterion, index) => (
                       <li key={index} className="text-sm">
@@ -408,7 +407,7 @@ export default function ReviewPage() {
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground italic mt-4">
-                  No acceptance criteria provided.
+                  Aucun critère d'acceptation fourni.
                 </p>
               )}
             </CardContent>
@@ -418,7 +417,7 @@ export default function ReviewPage() {
                 className="w-full"
                 disabled={isSubmitting}
               >
-                Start Evaluation <ChevronRight className="ml-1 h-4 w-4" />
+                Commencer l'évaluation <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
             </CardFooter>
           </Card>
@@ -431,12 +430,12 @@ export default function ReviewPage() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center">
                 <Info className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
-                Story Under Review: {shortTitle}
+                Story en cours d'annotation : {shortTitle}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm space-y-3">
               <div>
-                <p className="font-semibold mb-1">Full Description:</p>
+                <p className="font-semibold mb-1">Description complète :</p>
                 <p className="pl-2 text-muted-foreground max-h-20 overflow-y-auto">
                   {currentStory.description}
                 </p>
@@ -446,7 +445,7 @@ export default function ReviewPage() {
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="item-1" className="border-none">
                       <AccordionTrigger className="font-semibold text-sm pt-0 pb-1 hover:no-underline">
-                        Acceptance Criteria ({currentStory.acceptance_criteria.length})
+                        Critères d'acceptation ({currentStory.acceptance_criteria.length})
                       </AccordionTrigger>
                       <AccordionContent>
                         <ul className="list-disc space-y-1 pl-6 text-xs text-muted-foreground max-h-32 overflow-y-auto">
@@ -460,7 +459,7 @@ export default function ReviewPage() {
                 </div>
               ) : (
                 <p className="text-xs text-muted-foreground italic">
-                  No acceptance criteria provided.
+                  Aucun critère d'acceptation fourni.
                 </p>
               )}
             </CardContent>
@@ -471,12 +470,12 @@ export default function ReviewPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>INVEST Principles</CardTitle>
+                <CardTitle>Principes INVEST</CardTitle>
                 <span className="text-sm font-medium text-muted-foreground">
                   {currentPrincipleIndex + 1} / {investPrinciples.length}
                 </span>
               </div>
-              <CardDescription>Evaluate if this user story meets the principle:</CardDescription>
+              <CardDescription>Évaluez si cette user story respecte le principe suivant :</CardDescription>
               <Progress value={principleCompletionPercentage} className="h-1.5 w-full mt-3" />
               <div className="flex justify-between mt-1 text-xs text-muted-foreground">
                 <span>{investPrinciples[0].label}</span>
@@ -506,8 +505,7 @@ export default function ReviewPage() {
                       onClick={() => handleEvaluationChange(currentPrinciple.id, "yes")}
                       disabled={isSubmitting}
                     >
-                      {" "}
-                      <ThumbsUp className="h-5 w-5 md:h-6 md:w-6 mb-1" /> Yes{" "}
+                      <ThumbsUp className="h-5 w-5 md:h-6 md:w-6 mb-1" /> Oui
                     </Button>
                     <Button
                       variant={
@@ -522,8 +520,7 @@ export default function ReviewPage() {
                       onClick={() => handleEvaluationChange(currentPrinciple.id, "partial")}
                       disabled={isSubmitting}
                     >
-                      {" "}
-                      <HelpCircle className="h-5 w-5 md:h-6 md:w-6 mb-1" /> Partially{" "}
+                      <HelpCircle className="h-5 w-5 md:h-6 md:w-6 mb-1" /> Partiellement
                     </Button>
                     <Button
                       variant={evaluations[currentPrinciple.id] === "no" ? "default" : "outline"}
@@ -536,8 +533,7 @@ export default function ReviewPage() {
                       onClick={() => handleEvaluationChange(currentPrinciple.id, "no")}
                       disabled={isSubmitting}
                     >
-                      {" "}
-                      <ThumbsDown className="h-5 w-5 md:h-6 md:w-6 mb-1" /> No{" "}
+                      <ThumbsDown className="h-5 w-5 md:h-6 md:w-6 mb-1" /> Non
                     </Button>
                   </div>
                 </div>
@@ -546,21 +542,21 @@ export default function ReviewPage() {
             <CardFooter className="flex justify-between">
               <Button variant="outline" onClick={handlePreviousPrinciple} disabled={isSubmitting}>
                 <ChevronLeft className="mr-1 h-4 w-4" />
-                {currentPrincipleIndex === 0 ? "Story Details" : "Previous"}
+                {currentPrincipleIndex === 0 ? "Détails de la story" : "Précédent"}
               </Button>
               {currentPrincipleIndex === investPrinciples.length - 1 ? (
                 <Button
                   onClick={() => setActiveTab("feedback")}
                   disabled={!evaluations[currentPrinciple.id] || isSubmitting}
                 >
-                  Continue to Feedback <ChevronRight className="ml-1 h-4 w-4" />
+                  Continuer vers le retour <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
               ) : (
                 <Button
                   onClick={handleNextPrinciple}
                   disabled={!evaluations[currentPrinciple.id] || isSubmitting}
                 >
-                  Next Principle <ChevronRight className="ml-1 h-4 w-4" />
+                  Principe suivant <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
               )}
             </CardFooter>
@@ -592,16 +588,16 @@ export default function ReviewPage() {
         <TabsContent value="feedback" className="mt-4">
           <Card>
             <CardHeader>
-              <CardTitle>Additional Feedback</CardTitle>
+              <CardTitle>Retour supplémentaire</CardTitle>
               <CardDescription>
-                Provide any additional comments or suggestions for improving this user story.
+                Ajoutez tout commentaire ou suggestion pour améliorer cette user story.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Textarea
                 value={additionalFeedback}
                 onChange={(e) => setAdditionalFeedback(e.target.value)}
-                placeholder="What would make this user story better? Any specific suggestions for improvement?"
+                placeholder="Qu'est-ce qui pourrait améliorer cette user story ? Des suggestions spécifiques ?"
                 className="min-h-[150px]"
                 disabled={isSubmitting}
               />
@@ -612,15 +608,15 @@ export default function ReviewPage() {
                 onClick={() => setActiveTab("evaluate")}
                 disabled={isSubmitting}
               >
-                <ChevronLeft className="mr-1 h-4 w-4" /> Back to Evaluation
+                <ChevronLeft className="mr-1 h-4 w-4" /> Retour à l'évaluation
               </Button>
               <Button onClick={handleSubmit} disabled={!isFormComplete() || isSubmitting}>
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Envoi en cours...
                   </>
                 ) : (
-                  "Submit & Continue"
+                  "Envoyer & Continuer"
                 )}
               </Button>
             </CardFooter>

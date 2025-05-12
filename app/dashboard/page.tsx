@@ -54,7 +54,7 @@ export default function DashboardPage() {
         setIsAdmin(true);
       }
     } else {
-      console.warn("User email not found in localStorage on dashboard.");
+      console.warn("Email utilisateur non trouvé sur le tableau de bord. Veuillez vous reconnecter.");
       router.push("/login");
     }
   }, [router]);
@@ -64,7 +64,7 @@ export default function DashboardPage() {
     setLoadingLeaderboard(true);
     setStatsError(null);
     setLeaderboardError(null);
-    console.log(`Fetching dashboard data for ${email}...`);
+    console.log(`Récupération des données du tableau de bord pour ${email}...`);
 
     try {
       const [statsResponse, leaderboardResponse] = await Promise.all([
@@ -73,47 +73,47 @@ export default function DashboardPage() {
       ]);
 
       if (!statsResponse.ok) {
-        let errorMsg = `Failed to fetch stats: ${statsResponse.statusText}`;
+        let errorMsg = `Échec de la récupération des statistiques : ${statsResponse.statusText}`;
         try {
           const errData = await statsResponse.json();
           errorMsg = errData.error || errData.details || errorMsg;
         } catch (e) {
-          throw new Error("Failed to parse stats response : " + e);
+          throw new Error("Échec de l'analyse de la réponse des statistiques : " + e);
         }
         throw new Error(errorMsg);
       }
       const statsResult = await statsResponse.json();
       if (statsResult.success && statsResult.data) {
         setStats(statsResult.data);
-        console.log("Dashboard stats fetched:", statsResult.data);
+        console.log("Statistiques du tableau de bord récupérées :", statsResult.data);
       } else {
-        throw new Error(statsResult.error || "Failed to get valid stats data from API");
+        throw new Error(statsResult.error || "Échec de l'obtention de données de statistiques valides depuis l'API");
       }
 
       if (!leaderboardResponse.ok) {
-        let errorMsg = `Failed to fetch leaderboard: ${leaderboardResponse.statusText}`;
+        let errorMsg = `Échec de la récupération du classement : ${leaderboardResponse.statusText}`;
         try {
           const errData = await leaderboardResponse.json();
           errorMsg = errData.error || errData.details || errorMsg;
         } catch (e) {
-          throw new Error("Failed to parse leaderboard response : " + e);
+          throw new Error("Échec de l'analyse de la réponse du classement : " + e);
         }
         throw new Error(errorMsg);
       }
       const leaderboardResult = await leaderboardResponse.json();
       if (leaderboardResult.success && Array.isArray(leaderboardResult.data)) {
         setLeaderboardData(leaderboardResult.data);
-        console.log("Leaderboard data fetched:", leaderboardResult.data);
+        console.log("Données du classement récupérées :", leaderboardResult.data);
       } else {
-        throw new Error(leaderboardResult.error || "Failed to get valid leaderboard data from API");
+        throw new Error(leaderboardResult.error || "Échec de l'obtention de données de classement valides depuis l'API");
       }
     } catch (error) {
-      console.error("Error fetching dashboard data:", error);
-      const errorMsg = error instanceof Error ? error.message : "Could not load dashboard data.";
-      if (errorMsg.includes("stats")) {
+      console.error("Erreur lors de la récupération des données du tableau de bord :", error);
+      const errorMsg = error instanceof Error ? error.message : "Impossible de charger les données du tableau de bord.";
+      if (errorMsg.includes("statistiques")) {
         setStatsError(errorMsg);
         setStats(null);
-      } else if (errorMsg.includes("leaderboard")) {
+      } else if (errorMsg.includes("classement")) {
         setLeaderboardError(errorMsg);
         setLeaderboardData([]);
       } else {
@@ -154,7 +154,7 @@ export default function DashboardPage() {
         {/* --- Header --- */}
         <div className="mb-8 flex items-center justify-between flex-wrap gap-2">
           <h1 className="text-3xl font-bold">
-            {userName ? `Hello, ${userName}!` : "Tester Dashboard"}
+            {userName ? `Bonjour, ${userName} !` : "Tableau de bord Testeur"}
           </h1>
           <div className="flex items-center space-x-2">
             {/* Refresh Button */}
@@ -166,8 +166,8 @@ export default function DashboardPage() {
             >
               <RefreshCcw
                 className={`mr-2 h-4 w-4 ${loadingStats || loadingLeaderboard ? "animate-spin" : ""}`}
-              />{" "}
-              Refresh
+              />
+              Rafraîchir
             </Button>
 
             {/* Admin Area Button (Conditional & FIXED) */}
@@ -176,7 +176,7 @@ export default function DashboardPage() {
                 <Link href="/admin">
                   {/* Wrap Link content in a single span */}
                   <span className="flex items-center">
-                    <UserCog className="mr-2 h-4 w-4" /> Admin Area
+                    <UserCog className="mr-2 h-4 w-4" /> Zone Admin
                   </span>
                 </Link>
               </Button>
@@ -184,7 +184,7 @@ export default function DashboardPage() {
 
             {/* Logout Button */}
             <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" /> Logout
+              <LogOut className="mr-2 h-4 w-4" /> Déconnexion
             </Button>
           </div>
         </div>
@@ -195,64 +195,59 @@ export default function DashboardPage() {
         {/* Review Statistics Card */}
         <Card>
           <CardHeader>
-            {" "}
-            <CardTitle>Your Review Statistics</CardTitle>{" "}
-            <CardDescription>Your progress on the current dataset</CardDescription>{" "}
+            <CardTitle>Vos statistiques d'annotation</CardTitle>
+            <CardDescription>Votre progression sur le jeu de données actuel</CardDescription>
           </CardHeader>
           <CardContent>
             {statsError && (
               <Alert variant="destructive" className="mb-4">
-                {" "}
-                <AlertCircle className="h-4 w-4" />{" "}
-                <AlertTitle>Error Loading Your Stats</AlertTitle>{" "}
-                <AlertDescription>{statsError}</AlertDescription>{" "}
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Erreur de chargement de vos statistiques</AlertTitle>
+                <AlertDescription>{statsError}</AlertDescription>
               </Alert>
             )}
             <div className="grid gap-2">
               {/* User Rank Display */}
               <div className="flex items-center justify-between text-sm pt-1">
-                <span className="font-medium">Your Rank:</span>
+                <span className="font-medium">Votre classement :</span>
                 {loadingLeaderboard ? (
                   <Skeleton className="h-5 w-12" />
                 ) : loggedInUserRank ? (
                   <span className="font-bold">
-                    #{loggedInUserRank}{" "}
+                    #{loggedInUserRank}
                     <span className="text-xs text-muted-foreground">
-                      ({loggedInUserStats?.reviewCount} reviews)
+                      ({loggedInUserStats?.reviewCount} annotations)
                     </span>
                   </span>
                 ) : (
-                  <span className="italic text-muted-foreground">No reviews yet</span>
+                  <span className="italic text-muted-foreground">Aucune annotation pour l'instant</span>
                 )}
               </div>
               <hr className="my-1" />
               {/* Other Stats */}
               <div className="flex items-center justify-between">
-                {" "}
-                <span className="text-sm font-medium">Reviews Completed</span>{" "}
+                <span className="text-sm font-medium">Annotations terminées</span>
                 {loadingStats ? (
                   <Skeleton className="h-5 w-10" />
                 ) : (
                   <span className="text-sm font-bold">{stats?.completed ?? 0}</span>
-                )}{" "}
+                )}
               </div>
               <div className="flex items-center justify-between">
-                {" "}
-                <span className="text-sm font-medium">Reviews Left</span>{" "}
+                <span className="text-sm font-medium">Annotations restantes</span>
                 {loadingStats ? (
                   <Skeleton className="h-5 w-10" />
                 ) : (
                   <span className="text-sm font-bold">{stats?.left ?? "?"}</span>
-                )}{" "}
+                )}
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
-                {" "}
-                <span className="italic">Total in Dataset</span>{" "}
+                <span className="italic">Total dans le jeu de données</span>
                 {loadingStats ? (
                   <Skeleton className="h-4 w-8" />
                 ) : (
                   <span className="italic">{stats?.total ?? "?"}</span>
-                )}{" "}
+                )}
               </div>
             </div>
           </CardContent>
@@ -261,9 +256,8 @@ export default function DashboardPage() {
         {/* Start New Review Card */}
         <Card>
           <CardHeader>
-            {" "}
-            <CardTitle>Start New Review</CardTitle>{" "}
-            <CardDescription>Evaluate user stories against INVEST principles</CardDescription>{" "}
+            <CardTitle>Commencer une nouvelle annotation</CardTitle>
+            <CardDescription>Évaluez les user stories selon les principes INVEST</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
             {loadingLeaderboard ? (
@@ -271,14 +265,12 @@ export default function DashboardPage() {
             ) : (
               loggedInUserRank === null && (
                 <p className="mb-4 text-center text-sm text-green-700 dark:text-green-400 font-medium">
-                  {" "}
-                  Start reviewing stories to get on the leaderboard!{" "}
+                  Commencez à annoter pour apparaître dans le classement !
                 </p>
               )
             )}
             <p className="mb-4 text-center text-sm text-muted-foreground">
-              {" "}
-              You will be presented with one user story at a time from the active dataset.{" "}
+              Une user story du jeu de données actif vous sera présentée à la fois.
             </p>
             <Button
               size="lg"
@@ -286,12 +278,11 @@ export default function DashboardPage() {
               className="w-full"
               disabled={loadingStats || (stats !== null && stats.left === 0)}
             >
-              {" "}
               {loadingStats
-                ? "Loading..."
+                ? "Chargement..."
                 : stats !== null && stats.left === 0
-                  ? "All Stories Reviewed!"
-                  : "Start Review"}{" "}
+                  ? "Toutes les stories sont annotées !"
+                  : "Commencer l'annotation"}
             </Button>
           </CardContent>
         </Card>
@@ -299,33 +290,30 @@ export default function DashboardPage() {
         {/* Tester Leaderboard Card */}
         <Card>
           <CardHeader>
-            {" "}
             <CardTitle className="flex items-center">
               <Users className="mr-2 h-5 w-5" />
-              Leaderboard
-            </CardTitle>{" "}
-            <CardDescription>Top reviewers (Active Dataset)</CardDescription>{" "}
+              Classement
+            </CardTitle>
+            <CardDescription>Top annotateurs (Jeu de données actif)</CardDescription>
           </CardHeader>
           <CardContent>
             {leaderboardError && (
               <Alert variant="destructive" className="mb-4">
-                {" "}
-                <AlertCircle className="h-4 w-4" />{" "}
-                <AlertTitle>Error Loading Leaderboard</AlertTitle>{" "}
-                <AlertDescription>{leaderboardError}</AlertDescription>{" "}
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Erreur de chargement du classement</AlertTitle>
+                <AlertDescription>{leaderboardError}</AlertDescription>
               </Alert>
             )}
             <div className="min-h-[90px]">
               {loadingLeaderboard ? (
                 <div className="space-y-2">
-                  {" "}
-                  <Skeleton className="h-4 w-3/4" /> <Skeleton className="h-4 w-1/2" />{" "}
-                  <Skeleton className="h-4 w-2/3" /> <Skeleton className="h-4 w-5/6" />{" "}
-                  <Skeleton className="h-4 w-1/2" />{" "}
+                  <Skeleton className="h-4 w-3/4" /> <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="h-4 w-2/3" /> <Skeleton className="h-4 w-5/6" />
+                  <Skeleton className="h-4 w-1/2" />
                 </div>
               ) : leaderboardData.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center pt-4">
-                  No reviews submitted yet.
+                  Aucune annotation soumise pour le moment.
                 </p>
               ) : (
                 <ul className="space-y-1">
@@ -392,39 +380,34 @@ export default function DashboardPage() {
 
       {/* INVEST Principles Reference Card */}
       <div className="mt-8">
-        {" "}
         <Card>
-          {" "}
           <CardHeader>
-            {" "}
-            <CardTitle>INVEST Principles Reference</CardTitle>{" "}
-            <CardDescription>A quick reminder of what each principle means</CardDescription>{" "}
-          </CardHeader>{" "}
+            <CardTitle>Référence Principes INVEST</CardTitle>
+            <CardDescription>Un rappel rapide de ce que chaque principe signifie</CardDescription>
+          </CardHeader>
           <CardContent>
-            {" "}
             <ul className="grid gap-3 text-sm">
-              {" "}
               <li>
-                <strong>Independent:</strong> The story should be self-contained...
-              </li>{" "}
+                <strong>Indépendant :</strong> La story doit être autonome...
+              </li>
               <li>
-                <strong>Negotiable:</strong> Details can be discussed...
-              </li>{" "}
+                <strong>Négociable :</strong> Les détails peuvent être discutés...
+              </li>
               <li>
-                <strong>Valuable:</strong> The story delivers value...
-              </li>{" "}
+                <strong>Valuable :</strong> La story apporte de la valeur...
+              </li>
               <li>
-                <strong>Estimable:</strong> The size of the story can be estimated...
-              </li>{" "}
+                <strong>Estimable :</strong> La taille de la story peut être estimée...
+              </li>
               <li>
-                <strong>Small:</strong> The story is small enough...
-              </li>{" "}
+                <strong>Petite :</strong> La story est suffisamment petite...
+              </li>
               <li>
-                <strong>Testable:</strong> The story can be tested...
-              </li>{" "}
-            </ul>{" "}
-          </CardContent>{" "}
-        </Card>{" "}
+                <strong>Testable :</strong> La story peut être testée...
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

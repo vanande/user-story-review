@@ -26,16 +26,16 @@ export function StoryStatisticsCard({ data }: StoryStatisticsCardProps) {
   const averageRating = data.averageRating || 0;
   const meetsPercentage = totalReviews > 0 ? Math.round((meetsCriteria / totalReviews) * 100) : 0;
   let status: "positive" | "warning" | "negative" | "neutral" = "neutral";
-  let statusText = "Neutral";
+  let statusText = "Neutre";
   if (meetsPercentage >= 80) {
     status = "positive";
-    statusText = "Strong";
+    statusText = "Fort";
   } else if (meetsPercentage >= 50) {
     status = "warning";
-    statusText = "Moderate";
+    statusText = "Modéré";
   } else if (totalReviews > 0) {
     status = "negative";
-    statusText = "Weak";
+    statusText = "Faible";
   }
 
   const displayTitle = generateShortStatTitle(data);
@@ -63,7 +63,7 @@ export function StoryStatisticsCard({ data }: StoryStatisticsCardProps) {
           </Badge>
         </div>
         <CardDescription>
-          {data.principleName ? `For "${data.principleName}" principle` : "Across all principles"}
+          {data.principleName ? `Pour le principe "${data.principleName}"` : "Tous principes confondus"}
           {/* Optional: Show long title on hover over short title */}
           {data.storyTitle && (
             <span
@@ -79,21 +79,21 @@ export function StoryStatisticsCard({ data }: StoryStatisticsCardProps) {
         {/* ... rest of card content ... */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Meets Criteria</span>
+            <span className="text-sm font-medium">Respecte les critères</span>
             <span className="text-sm font-medium">
-              {meetsCriteria} of {totalReviews} ({meetsPercentage}%)
+              {meetsCriteria} sur {totalReviews} ({meetsPercentage}%)
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Average Rating</span>
+            <span className="text-sm font-medium">Note moyenne</span>
             <div className="flex items-center">
               {/* Star logic */}
               <span className="ml-1 text-sm font-medium">{averageRating.toFixed(1)}</span>
             </div>
           </div>
           <div className="pt-2 text-sm text-muted-foreground">
-            Based on {totalReviews} evaluations{" "}
-            {data.principleName ? ` for ${data.principleName}` : ""}
+            Basé sur {totalReviews} évaluations
+            {data.principleName ? ` pour ${data.principleName}` : ""}
           </div>
         </div>
       </CardContent>

@@ -37,7 +37,7 @@ export function PrincipleStatisticsCard({ data }: PrincipleStatisticsCardProps) 
         <CardTitle className="text-lg">{data.principleName}</CardTitle>
         <CardDescription>
           {/* Use the generated short title */}
-          {data.storyId !== null ? `For Story: "${displayTitle}"` : "Across all stories"}
+          {data.storyId !== null ? `Pour la story : "${displayTitle}"` : "Toutes stories confondues"}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -45,7 +45,7 @@ export function PrincipleStatisticsCard({ data }: PrincipleStatisticsCardProps) 
         <div className="space-y-2">
           {/* Yes */}
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-green-600">Yes</span>
+            <span className="text-sm font-medium text-green-600">Oui</span>
             <span className="text-sm font-medium">
               {yesCount} ({yesPercentage}%)
             </span>
@@ -53,7 +53,7 @@ export function PrincipleStatisticsCard({ data }: PrincipleStatisticsCardProps) 
           <Progress value={yesPercentage} className="h-2 [&>div]:bg-green-500" />
           {/* Partially */}
           <div className="flex items-center justify-between mt-1">
-            <span className="text-sm font-medium text-amber-600">Partially</span>
+            <span className="text-sm font-medium text-amber-600">Partiellement</span>
             <span className="text-sm font-medium">
               {partialCount} ({partialPercentage}%)
             </span>
@@ -61,7 +61,7 @@ export function PrincipleStatisticsCard({ data }: PrincipleStatisticsCardProps) 
           <Progress value={partialPercentage} className="h-2 [&>div]:bg-amber-500" />
           {/* No */}
           <div className="flex items-center justify-between mt-1">
-            <span className="text-sm font-medium text-red-600">No</span>
+            <span className="text-sm font-medium text-red-600">Non</span>
             <span className="text-sm font-medium">
               {noCount} ({noPercentage}%)
             </span>
@@ -69,7 +69,7 @@ export function PrincipleStatisticsCard({ data }: PrincipleStatisticsCardProps) 
           <Progress value={noPercentage} className="h-2 [&>div]:bg-red-500" />
           {/* Total */}
           <div className="pt-2 text-sm text-muted-foreground">
-            Based on {total || 0} evaluations
+            Basé sur {total || 0} évaluations
           </div>
         </div>
       </CardContent>

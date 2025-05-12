@@ -31,7 +31,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [router]);
 
   if (isLoading) {
-    return <div className="container mx-auto p-10">Loading admin area...</div>;
+    return <div className="container mx-auto p-10">Chargement de la zone administrateur...</div>;
   }
 
   if (!isAuthorized) {
@@ -39,16 +39,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="container mx-auto max-w-md p-10">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Unauthorized Access</AlertTitle>
+          <AlertTitle>Accès non autorisé</AlertTitle>
           <AlertDescription>
-            You do not have permission to view this page. Please log in with an administrator
-            account.
+            Vous n'avez pas la permission de voir cette page. Veuillez vous connecter avec un compte administrateur.
           </AlertDescription>
         </Alert>
         <Button onClick={() => router.push("/login")} className="mt-4">
-          Go to Login
+          Aller à la connexion
         </Button>{" "}
-        {/* Added login button */}
       </div>
     );
   }
@@ -63,7 +61,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Button to go back to User Dashboard */}
             <Button variant="outline" size="sm" asChild className="justify-start">
               <Link href="/dashboard">
-                <Home className="mr-2 h-4 w-4" /> User Dashboard
+                <Home className="mr-2 h-4 w-4" /> Tableau de bord utilisateur
               </Link>
             </Button>
           </div>

@@ -20,7 +20,7 @@ export type Review = {
 export const columns: ColumnDef<Review>[] = [
   {
     accessorKey: "story_title",
-    header: "Story Title",
+    header: "Titre de la story",
     cell: ({ row }) => {
       const storyDataForTitle = {
         id: row.original.storyId,
@@ -34,11 +34,11 @@ export const columns: ColumnDef<Review>[] = [
   },
   {
     accessorKey: "tester_name",
-    header: "Tester",
+    header: "Testeur",
   },
   {
     accessorKey: "submitted_at",
-    header: "Submitted",
+    header: "Soumis le",
     cell: ({ row }) => {
       const submittedDate = new Date(row.original.submitted_at);
       return (
@@ -75,11 +75,11 @@ export const columns: ColumnDef<Review>[] = [
   },
   {
     accessorKey: "additional_feedback",
-    header: "Feedback",
+    header: "Retour",
     cell: ({ row }) => (
       <p className="max-w-xs text-xs truncate" title={row.original.additional_feedback || ""}>
         {row.original.additional_feedback || (
-          <span className="italic text-muted-foreground">None</span>
+          <span className="italic text-muted-foreground">Aucun</span>
         )}
       </p>
     ),

@@ -39,8 +39,8 @@ export function ActiveReviewsTable({ data }: RecentReviewsTableProps) {
         hour12: false,
       });
     } catch (e) {
-      console.error("Error formatting date:", e);
-      return "Invalid Date";
+      console.error("Erreur de formatage de la date:", e);
+      return "Date invalide";
     }
   };
 
@@ -49,16 +49,16 @@ export function ActiveReviewsTable({ data }: RecentReviewsTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Tester</TableHead>
-            <TableHead>Story (Short Title)</TableHead>
-            <TableHead>Submitted At (Paris Time)</TableHead>
+            <TableHead>Testeur</TableHead>
+            <TableHead>Story (Titre court)</TableHead>
+            <TableHead>Soumis le (Heure Paris)</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.length === 0 ? (
             <TableRow>
               <TableCell colSpan={3} className="h-24 text-center">
-                No recent reviews found for the selected period.
+                Aucune annotation récente trouvée pour la période sélectionnée.
               </TableCell>
             </TableRow>
           ) : (

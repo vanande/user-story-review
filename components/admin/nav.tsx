@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const adminNavItems = [
   {
-    title: "Dashboard",
+    title: "Tableau de bord",
     href: "/admin",
   },
   {

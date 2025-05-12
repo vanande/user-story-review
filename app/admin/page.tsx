@@ -240,15 +240,15 @@ export default function AdminPage() {
     <div className="container mx-auto py-10 space-y-6">
       {/* Header remains the same */}
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Admin - Reviews & Datasets</h1>
+        <h1 className="text-3xl font-bold">Administration - Annotations & Jeux de données</h1>
         <div className="flex items-center space-x-2">
           <Switch
             id="mock-data-switch"
             checked={useMockData}
             onCheckedChange={handleMockDataToggle}
-            aria-label="Toggle mock data"
+            aria-label="Basculer sur les données de test"
           />
-          <Label htmlFor="mock-data-switch">Use Mock Data</Label>
+          <Label htmlFor="mock-data-switch">Données de test</Label>
         </div>
       </div>
 
@@ -331,7 +331,7 @@ export default function AdminPage() {
       {datasetsError && (
         <Alert variant="destructive" className="mt-2">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error Fetching Datasets</AlertTitle>
+          <AlertTitle>Erreur lors du chargement des jeux de données</AlertTitle>
           <AlertDescription>{datasetsError}</AlertDescription>
         </Alert>
       )}
@@ -340,7 +340,7 @@ export default function AdminPage() {
       {error && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error Fetching Reviews</AlertTitle>
+          <AlertTitle>Erreur lors du chargement des annotations</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
@@ -348,7 +348,7 @@ export default function AdminPage() {
       {isLoading ? (
         <div className="flex justify-center items-center p-10">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-          <span className="ml-2 text-muted-foreground">Loading reviews...</span>
+          <span className="ml-2 text-muted-foreground">Chargement des annotations...</span>
         </div>
       ) : (
         <DataTable columns={columns} data={reviews} />

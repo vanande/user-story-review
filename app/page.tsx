@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Onestory",
-  description: "Log in with your corporate email to review user stories",
+  description: "Annotation de user story",
 };
 
 import Link from "next/link";
@@ -19,21 +19,21 @@ export default function Home() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">User Story Review Platform</CardTitle>
-          <CardDescription>Log in to review user stories against INVEST principles</CardDescription>
+          <CardTitle className="text-2xl">Plateforme d'annotation de user stories</CardTitle>
+          <CardDescription>Connectez-vous avec votre email onepoint pour annoter les user stories selon les principes INVEST</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
             <Button asChild variant="outline">
-              <Link href="/login">Login</Link>
+              <Link href="/login">Connexion</Link>
             </Button>
             <Button asChild>
-              <Link href="/login">Sign Up</Link>
+              <Link href="/login">Créer un compte</Link>
             </Button>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col items-center justify-between text-sm text-muted-foreground">
-          <p>Improve language model training through structured feedback</p>
+          <p>Améliorez l'entraînement des modèles de langage grâce à des retours structurés</p>
         </CardFooter>
       </Card>
     </div>

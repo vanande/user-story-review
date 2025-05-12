@@ -402,17 +402,17 @@ export default function AdminMonitoringPage() {
       <div className="flex flex-col gap-6">
         {/* Header and Refresh */}
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-3xl font-bold">Review Monitoring Dashboard</h1>
+          <h1 className="text-3xl font-bold">Tableau de bord de monitoring des annotations</h1>
           <div className="flex items-center space-x-2 sm:space-x-4">
             <div className="flex items-center space-x-2">
               <Switch
                 id="mock-data"
                 checked={useMockData}
                 onCheckedChange={setUseMockData}
-                aria-label="Toggle Mock Data"
+                aria-label="Basculer sur les données de test"
               />
               <Label htmlFor="mock-data" className="text-sm">
-                Use Mock Data
+                Utiliser les données de test
               </Label>
             </div>
             <Button
@@ -424,7 +424,7 @@ export default function AdminMonitoringPage() {
               {loadingAll && !useMockData ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
-              Refresh All Live Data
+              Rafraîchir les données réelles
             </Button>
           </div>
         </div>
@@ -432,9 +432,8 @@ export default function AdminMonitoringPage() {
         {/* Error Alert */}
         {error && (
           <Alert variant="destructive">
-            {" "}
-            <AlertCircle className="h-4 w-4" /> <AlertTitle>Error</AlertTitle>{" "}
-            <AlertDescription>{error}</AlertDescription>{" "}
+            <AlertCircle className="h-4 w-4" /> <AlertTitle>Erreur</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
@@ -443,18 +442,16 @@ export default function AdminMonitoringPage() {
           {/* Recent Sessions Card */}
           <Card>
             <CardHeader className="pb-2">
-              {" "}
-              <CardTitle>Recent Sessions</CardTitle>{" "}
-              <CardDescription>Reviews submitted recently</CardDescription>{" "}
+              <CardTitle>Sessions récentes</CardTitle>
+              <CardDescription>Annotations soumises récemment</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-center text-4xl font-bold min-h-[40px]">
-                {" "}
                 {loadingRecent || loadingAll ? (
                   <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                 ) : (
                   totalRecentReviewsCount
-                )}{" "}
+                )}
               </div>
               <div className="mt-2 flex flex-wrap justify-center gap-1 min-h-[24px]">
                 {Array.isArray(recentReviews) &&
@@ -473,14 +470,14 @@ export default function AdminMonitoringPage() {
                   })}
                 {Array.isArray(recentReviews) && recentReviews.length > 5 && (
                   <Badge variant="secondary" className="text-xs">
-                    +{recentReviews.length - 5} more
+                    +{recentReviews.length - 5} autres
                   </Badge>
                 )}
                 {Array.isArray(recentReviews) &&
                   recentReviews.length === 0 &&
                   !loadingRecent &&
                   !loadingAll && (
-                    <p className="text-xs text-muted-foreground">No recent activity.</p>
+                    <p className="text-xs text-muted-foreground">Aucune activité récente.</p>
                   )}
               </div>
             </CardContent>
@@ -489,31 +486,27 @@ export default function AdminMonitoringPage() {
           {/* Story Review Coverage Card */}
           <Card>
             <CardHeader className="pb-2">
-              {" "}
-              <CardTitle>Story Review Coverage</CardTitle>{" "}
-              <CardDescription>% of stories with {">"}=1 review</CardDescription>{" "}
+              <CardTitle>Couverture d'annotation des stories</CardTitle>
+              <CardDescription>% de stories avec {">"}=1 annotation</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-center text-4xl font-bold min-h-[40px]">
-                {" "}
                 {loadingAll || loadingCoverage ? (
                   <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                 ) : (
                   `${storiesReviewCoverage.percentage}%`
-                )}{" "}
+                )}
               </div>
               <div className="mt-2 text-center text-xs text-muted-foreground min-h-[16px]">
-                {" "}
                 {!(loadingAll || loadingCoverage) &&
-                  `${storiesReviewCoverage.storiesWithMultipleReviews} of ${storiesReviewCoverage.totalStories} stories >=1 review`}{" "}
+                  `${storiesReviewCoverage.storiesWithMultipleReviews} sur ${storiesReviewCoverage.totalStories} stories >=1 annotation`}
               </div>
               <div className="mt-2 h-2">
-                {" "}
                 {loadingAll || loadingCoverage ? (
                   <Skeleton className="h-2 w-full" />
                 ) : (
                   <Progress value={storiesReviewCoverage.percentage} className="h-2" />
-                )}{" "}
+                )}
               </div>
             </CardContent>
           </Card>
@@ -523,22 +516,21 @@ export default function AdminMonitoringPage() {
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center">
                 <Users className="mr-2 h-5 w-5" />
-                Tester Leaderboard
+                Classement des testeurs
               </CardTitle>
-              <CardDescription>Top reviewers (Active Dataset)</CardDescription>
+              <CardDescription>Top annotateurs (Dataset Actif)</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="min-h-[60px]">
                 {/* Combined loading check */}
                 {loadingAll || loadingTesterDistribution || loadingSubmissionCount ? (
                   <div className="space-y-2">
-                    {" "}
-                    <Skeleton className="h-4 w-3/4" /> <Skeleton className="h-4 w-1/2" />{" "}
-                    <Skeleton className="h-4 w-2/3" />{" "}
+                    <Skeleton className="h-4 w-3/4" /> <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-4 w-2/3" />
                   </div>
                 ) : testerDistributionData.length === 0 ? (
                   <p className="text-sm text-muted-foreground text-center pt-4">
-                    No reviews submitted yet.
+                    Aucune annotation soumise pour le moment.
                   </p>
                 ) : (
                   <ul className="space-y-1">
@@ -560,7 +552,7 @@ export default function AdminMonitoringPage() {
                             {index > 2 && <span className="mr-1.5 h-4 w-4"></span>}
                             {tester.testerName}
                           </span>
-                          <Badge variant="secondary" title={`${percentage}% of total reviews`}>
+                          <Badge variant="secondary" title={`${percentage}% des annotations totales`}>
                             {tester.reviewCount} ({percentage}%)
                           </Badge>
                         </li>
@@ -574,8 +566,8 @@ export default function AdminMonitoringPage() {
                 {!(loadingAll || loadingTesterDistribution || loadingSubmissionCount) &&
                   totalTesters > 0 &&
                   (totalTesters <= topTesters.length
-                    ? `Showing all ${totalTesters} reviewer(s)`
-                    : `Top ${topTesters.length} contribute ${topTesters.reduce((sum, t) => sum + t.reviewCount, 0)} of ${totalSubmissionCount} reviews`)}
+                    ? `Affichage des ${totalTesters} annotateur(s)`
+                    : `Le top ${topTesters.length} contribue à ${topTesters.reduce((sum, t) => sum + t.reviewCount, 0)} des ${totalSubmissionCount} annotations`)}
               </div>
             </CardContent>
           </Card>
@@ -586,23 +578,23 @@ export default function AdminMonitoringPage() {
           {/* Recent Review Submissions Section */}
           <div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2">
-              <h2 className="text-xl font-semibold">Recent Review Submissions</h2>
+              <h2 className="text-xl font-semibold">Soumissions d'annotations récentes</h2>
               <Select
                 value={selectedPeriod}
                 onValueChange={setSelectedPeriod}
                 disabled={loadingRecent || useMockData}
               >
                 <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Select Period" />
+                  <SelectValue placeholder="Sélectionner la période" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="5m">Last 5 mins</SelectItem>
-                  <SelectItem value="30m">Last 30 mins</SelectItem>
-                  <SelectItem value="1h">Last 1 hour</SelectItem>
-                  <SelectItem value="3h">Last 3 hours</SelectItem>
-                  <SelectItem value="6h">Last 6 hours</SelectItem>
-                  <SelectItem value="24h">Last 24 hours</SelectItem>
-                  <SelectItem value="all">All Time</SelectItem>
+                  <SelectItem value="5m">5 dernières min</SelectItem>
+                  <SelectItem value="30m">30 dernières min</SelectItem>
+                  <SelectItem value="1h">Dernière heure</SelectItem>
+                  <SelectItem value="3h">3 dernières heures</SelectItem>
+                  <SelectItem value="6h">6 dernières heures</SelectItem>
+                  <SelectItem value="24h">24 dernières heures</SelectItem>
+                  <SelectItem value="all">Tout</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -613,7 +605,7 @@ export default function AdminMonitoringPage() {
                 </div>
               ) : !Array.isArray(recentReviews) || recentReviews.length === 0 ? (
                 <p className="text-muted-foreground text-sm p-4 border rounded-md text-center">
-                  No reviews submitted in this period.
+                  Aucune annotation soumise durant cette période.
                 </p>
               ) : (
                 <ActiveReviewsTable
@@ -634,7 +626,7 @@ export default function AdminMonitoringPage() {
           {/* Filtered Statistics Section */}
           <div>
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
-              <h2 className="text-xl font-semibold">Filtered Statistics</h2>
+              <h2 className="text-xl font-semibold">Statistiques filtrées</h2>
               <div className="flex flex-wrap gap-2">
                 {/* Story Filter */}
                 <Select
@@ -643,11 +635,10 @@ export default function AdminMonitoringPage() {
                   disabled={loadingStats || useMockData || loadingAll}
                 >
                   <SelectTrigger className="w-full md:w-[250px]">
-                    {" "}
-                    <SelectValue placeholder="Filter by Story" />{" "}
+                    <SelectValue placeholder="Filtrer par Story" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Stories</SelectItem>
+                    <SelectItem value="all">Toutes les stories</SelectItem>
                     {Array.isArray(userStories) &&
                       userStories?.map((story) => {
                         const shortDisplayTitle = generateShortStoryTitle(story);
@@ -666,10 +657,10 @@ export default function AdminMonitoringPage() {
                   disabled={loadingStats || useMockData || loadingAll}
                 >
                   <SelectTrigger className="w-full md:w-[200px]">
-                    <SelectValue placeholder="Filter by Principle" />
+                    <SelectValue placeholder="Filtrer par Principe" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Principles</SelectItem>
+                    <SelectItem value="all">Tous les principes</SelectItem>
                     {Array.isArray(principles) &&
                       principles?.map((p) => (
                         <SelectItem key={p.id} value={p.id}>
@@ -683,8 +674,8 @@ export default function AdminMonitoringPage() {
             {/* Tabs for Principles/Stories Stats */}
             <Tabs defaultValue="principles" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="principles">Stats by Principle</TabsTrigger>
-                <TabsTrigger value="stories">Stats by Story</TabsTrigger>
+                <TabsTrigger value="principles">Stats par Principe</TabsTrigger>
+                <TabsTrigger value="stories">Stats par Story</TabsTrigger>
               </TabsList>
               {/* Principles Tab Content */}
               <TabsContent value="principles" className="space-y-4 mt-4 min-h-[100px]">
@@ -695,7 +686,7 @@ export default function AdminMonitoringPage() {
                 ) : !Array.isArray(filteredPrincipleStats) ||
                   filteredPrincipleStats.length === 0 ? (
                   <p className="text-muted-foreground text-sm text-center pt-4">
-                    No principle statistics match.
+                    Aucune statistique de principe ne correspond.
                   </p>
                 ) : (
                   filteredPrincipleStats.map((stat) => (
@@ -711,7 +702,7 @@ export default function AdminMonitoringPage() {
                   </div>
                 ) : !Array.isArray(filteredStoryStats) || filteredStoryStats.length === 0 ? (
                   <p className="text-muted-foreground text-sm text-center pt-4">
-                    No story statistics match.
+                    Aucune statistique de story ne correspond.
                   </p>
                 ) : (
                   filteredStoryStats.map((stat) => (
