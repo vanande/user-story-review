@@ -34,44 +34,45 @@ import {
 } from "@/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
 const investPrinciples: InvestPrinciple[] = [
   {
     id: "independent",
     label: "Indépendant",
     description:
-      "La user story doit être autonome, sans dépendances inhérentes à d'autres stories.",
-    question: "Cette story peut-elle être développée, testée et livrée indépendamment ?",
+      "Chaque user story doit pouvoir exister par elle-même. Elle devrait idéalement pouvoir être développée et testée indépendamment des autres. Cette autonomie permet plus de flexibilité dans la planification et la priorisation des tâches, facilitant une réponse agile aux changements",
+    question: "Est-ce que cette user story peut être développée sans dépendre de la complétion d'une autre user story spécifique ?",
   },
   {
     id: "negotiable",
     label: "Négociable",
-    description: "Les stories ne sont pas des contrats ; elles laissent place à la discussion sur les détails.",
-    question: "Le périmètre est-il suffisamment flexible pour permettre la négociation ?",
+    description: "Une user story n\'est pas un contrat figé, mais un point de départ pour la conversation. Elle est flexible et ouverte aux ajustements basés sur les insights de l\'équipe et l\'évolution des besoins.",
+    question: "Est-ce que cette user story est suffisamment flexible pour permettre à l\'équipe de discuter et d\'affiner les détails de la solution pendant le développement ?",
   },
   {
     id: "valuable",
     label: "Valuable",
-    description: "Elle doit apporter de la valeur à l'utilisateur final ou au client.",
-    question: "Le bénéfice pour l'utilisateur est-il clair et significatif ?",
+    description: "L\'essence d\'une user story est la valeur qu\'elle apporte à l\'utilisateur final, elle doit être orientée utilisateur. Chaque user story doit contribuer de manière significative à la satisfaction des besoins utilisateurs et à l\'amélioration de leur appréciation du produit.",
+    question: "Est-ce que cette user story apporte une valeur tangible et identifiable à l\'utilisateur final ou à un stakeholder ?",
   },
   {
     id: "estimable",
     label: "Estimable",
-    description: "Il doit être possible d'estimer la taille/l'effort nécessaire pour réaliser la story.",
-    question: "L'équipe peut-elle raisonnablement estimer l'effort pour cette story ?",
+    description: "La user story peut être estimée sans nécessairement l\'être lors de sa création initiale, par exemple lors d'une session de Planning Poker. Les user stories trop grandes sont plus difficiles à estimer.",
+    question: "L\'équipe Agile est-elle en mesure de fournir une estimation raisonnable (même approximative) de l\'effort nécessaire pour réaliser cette user story ?",
   },
   {
     id: "small",
     label: "Petite",
-    description: "Les stories doivent être suffisamment petites pour être terminées en une itération.",
-    question: "La story est-elle assez petite pour être réalisée en un sprint/itération ?",
+    description: "Pour maintenir l\'élan et assurer une livraison continue, les user stories doivent être d\'une taille suffisamment restreintepour être complétées au cours d\'un seul sprint. Une bonne règle générale est qu\'une seule user story ne devrait pas prendre plus de 50 % d\'une itération (par exemple, pas plus de 5 jours pour un sprint de 2 semaines).",
+    question: "Cette user story est-elle suffisamment petite pour être raisonnablement complétée au cours d\'un seul sprint ?",
   },
   {
     id: "testable",
     label: "Testable",
-    description: "La story doit avoir des critères d'acceptation définis et testables.",
-    question: "Y a-t-il des critères d'acceptation clairs pour valider la complétion ?",
+    description: "Un aspect clé d\'une user story est sa capacité à être testée. Il doit y avoir des critères clairs pour vérifier que les objectifs de cette dernière ont été atteints et qu\'elle répond aux besoins définis de l\'utilisateur. Une description et des critères d'acceptation clairs sans termes ambigus sont généralement un bon indicateur de la testabilité de la user story.",
+    question: "Est-il possible de rédiger les cas de teste pour la user story en se basant sur les informations contenues dans la description et les critères d'acceptation ?",
   },
 ];
 
@@ -118,6 +119,51 @@ export default function ReviewPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("story");
+
+  // Moved useEffect for debugging the epic filter UP to obey Rules of Hooks
+  useEffect(() => {
+    // Note: currentStory might not be defined on initial renders before stories load
+    const storyForLog = userStories ? userStories[currentStoryIndex] : null;
+
+    if (storyForLog && userStories && userStories.length > 0) {
+      console.groupCollapsed(`DEBUG: Epic Filter for Story ID ${storyForLog.id}`);
+      console.log("Current Story for epic comparison:", {
+        id: storyForLog.id,
+        epicName: storyForLog.epic_name,
+        title: storyForLog.title,
+      });
+
+      const allStoriesForDebug = userStories.map((s) => ({
+        id: s.id,
+        epicName: s.epic_name,
+        title: s.title,
+      }));
+      console.log("All User Stories (for epic comparison):", allStoriesForDebug);
+
+      const calculatedStoriesInSameEpicForDebug = userStories
+        .filter(
+          (story) =>
+            story.epic_name === storyForLog.epic_name && story.id !== storyForLog.id
+        )
+        .map((s) => ({ id: s.id, epicName: s.epic_name, title: s.title }));
+
+      console.log(
+        "Calculated 'storiesInSameEpic' (result of filter):",
+        calculatedStoriesInSameEpicForDebug
+      );
+
+      if (
+        calculatedStoriesInSameEpicForDebug.length === 0 &&
+        storyForLog.epic_name &&
+        storyForLog.epic_name.trim() !== ""
+      ) {
+        console.warn(
+          `WARN: No other stories found in epic "${storyForLog.epic_name}". Check data for consistency (e.g., exact name match, case sensitivity, leading/trailing spaces) if this is unexpected.`
+        );
+      }
+      console.groupEnd();
+    }
+  }, [currentStoryIndex, userStories]); // Adjusted dependencies
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -241,6 +287,12 @@ export default function ReviewPage() {
   const totalStories = userStories.length;
   const currentPrinciple = investPrinciples[currentPrincipleIndex];
   const shortTitle = generateShortStoryTitle(currentStory);
+
+  const storiesInSameEpic = userStories.filter((story) => {
+    const currentEpic = currentStory.epic_name?.trim().toLowerCase() || "";
+    const storyEpic = story.epic_name?.trim().toLowerCase() || "";
+    return storyEpic === currentEpic && story.id !== currentStory.id;
+  });
 
   const handleEvaluationChange = (principleId: string, value: string) => {
     setEvaluations((prev) => ({ ...prev, [principleId]: value }));
@@ -383,7 +435,7 @@ export default function ReviewPage() {
         <TabsContent value="story" className="mt-4">
           <Card>
             <CardHeader>
-              <CardTitle>{currentStory.title || "Titre de la user story non disponible"}</CardTitle>
+              <CardTitle>{shortTitle}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -492,6 +544,29 @@ export default function ReviewPage() {
                   <div className="bg-muted p-4 rounded-md mb-6">
                     <p className="text-center font-medium">{currentPrinciple.question}</p>
                   </div>
+
+                  {/* Conditionally add Accordion for 'Independent' principle */}
+                  {currentPrinciple.id === "independent" && storiesInSameEpic.length > 0 && (
+                    <div className="mb-6 text-left">
+                      <Accordion type="single" collapsible className="w-full">
+                        <AccordionItem value="related-stories" className="border rounded-md px-3">
+                          <AccordionTrigger className="text-sm font-medium hover:no-underline py-2">
+                            Voir {storiesInSameEpic.length} autre(s) story(s) dans l'épique "{currentStory.epic_name || 'N/A'}"
+                          </AccordionTrigger>
+                          <AccordionContent className="pt-2 pb-3">
+                            <ul className="list-disc space-y-1 pl-5 text-xs text-muted-foreground max-h-40 overflow-y-auto">
+                              {storiesInSameEpic.map((story) => (
+                                <li key={story.id}>
+                                  #{story.id}: {story.title || "(Pas de titre)"}
+                                </li>
+                              ))}
+                            </ul>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    </div>
+                  )}
+
                   {/* Buttons */}
                   <div className="grid grid-cols-3 gap-4">
                     <Button

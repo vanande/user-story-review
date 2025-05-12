@@ -386,26 +386,72 @@ export default function DashboardPage() {
             <CardDescription>Un rappel rapide de ce que chaque principe signifie</CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="grid gap-3 text-sm">
+            <ul className="grid gap-4 text-sm">
               <li>
-                <strong>Indépendant :</strong> La story doit être autonome...
+                <strong>Indépendant (I) :</strong>
+                <p className="text-muted-foreground mt-1">
+                  La user story est autonome et peut être développée et livrée sans dépendre d'autres stories.
+                </p>
+                <p className="mt-1 text-xs italic text-muted-foreground/80">
+                  Questions clés : Peut-on la prioriser indépendamment ? Peut-on la réaliser sans autre story ?
+                </p>
               </li>
               <li>
-                <strong>Négociable :</strong> Les détails peuvent être discutés...
+                <strong>Négociable (N) :</strong>
+                <p className="text-muted-foreground mt-1">
+                  Les détails de la story sont discutables et affinables entre le Product Owner et l'équipe de développement. Elle n'est pas un contrat figé.
+                </p>
+                <p className="mt-1 text-xs italic text-muted-foreground/80">
+                  Questions clés : Y a-t-il de la place pour la discussion sur les détails ? La portée est-elle flexible ?
+                </p>
               </li>
               <li>
-                <strong>Valuable :</strong> La story apporte de la valeur...
+                <strong>Valeur (V) :</strong>
+                <p className="text-muted-foreground mt-1">
+                  La story apporte une valeur métier claire et identifiable pour l'utilisateur final ou le client.
+                </p>
+                <p className="mt-1 text-xs italic text-muted-foreground/80">
+                  Questions clés : Pourquoi faisons-nous cela ? Quel bénéfice pour l'utilisateur ?
+                </p>
               </li>
               <li>
-                <strong>Estimable :</strong> La taille de la story peut être estimée...
+                <strong>Estimable (E) :</strong>
+                <p className="text-muted-foreground mt-1">
+                  L'équipe de développement peut estimer l'effort nécessaire pour réaliser la story, même approximativement.
+                </p>
+                <p className="mt-1 text-xs italic text-muted-foreground/80">
+                  Questions clés : L'équipe comprend-elle assez la story pour l'estimer ? Les dépendances ou incertitudes sont-elles gérables ?
+                </p>
               </li>
               <li>
-                <strong>Petite :</strong> La story est suffisamment petite...
+                <strong>Petite (S - Small) :</strong>
+                <p className="text-muted-foreground mt-1">
+                  La story est suffisamment petite pour être réalisable en une seule itération (sprint) par l'équipe.
+                </p>
+                <p className="mt-1 text-xs italic text-muted-foreground/80">
+                  Questions clés : Peut-on la finir en un sprint ? Est-elle décomposable si trop grosse ?
+                </p>
               </li>
               <li>
-                <strong>Testable :</strong> La story peut être testée...
+                <strong>Testable (T) :</strong>
+                <p className="text-muted-foreground mt-1">
+                  Il existe des critères d'acceptation clairs et concrets permettant de vérifier que la story est terminée et fonctionne comme attendu.
+                </p>
+                <p className="mt-1 text-xs italic text-muted-foreground/80">
+                  Questions clés : Comment saurons-nous que c'est terminé ? Pouvons-nous écrire des tests (automatisés ou manuels) ?
+                </p>
               </li>
             </ul>
+            <div className="mt-6 text-center">
+              <a
+                href="https://actually-hyacinth-caf.notion.site/INVEST-Method-1ebd5c7edeb58096955ed814b01d738b?pvs=4"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                En savoir plus sur la méthode INVEST
+              </a>
+            </div>
           </CardContent>
         </Card>
       </div>
