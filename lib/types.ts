@@ -16,6 +16,7 @@ export interface UserStory {
   acceptance_criteria: string[];
   source_key?: string | null;
   epic_name?: string | null;
+  epicId?: string | null;
   independent?: boolean | null;
   negotiable?: boolean | null;
   valuable?: boolean | null;

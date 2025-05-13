@@ -61,13 +61,13 @@ export async function POST(request: Request) {
 
       const criteriaMap = new Map<string, number>();
       const criteria = await db.all("SELECT id, name FROM evaluation_criteria");
-      criteria.forEach((c) => criteriaMap.set(c.name, c.id));
+      criteria.forEach((c) => criteriaMap.set(c.name.toLowerCase(), c.id));
       for (const [criterionName, ratingStr] of Object.entries(data.evaluations)) {
         const ratingInt = ratingMap[(ratingStr as string).toLowerCase()];
-        const criterionId = criteriaMap.get(criterionName);
+        const criterionId = criteriaMap.get(criterionName.toLowerCase());
         if (!criterionId) {
-          /* ... handle error, rollback ... */
           await db.exec("ROLLBACK TRANSACTION");
+          console.error(`Unknown criterion after attempting lowercase match: ${criterionName}`);
           return NextResponse.json(
             { error: `Unknown criterion: ${criterionName}` },
             { status: 400 }

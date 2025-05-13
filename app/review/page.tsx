@@ -24,7 +24,7 @@ import {
   Info,
   Loader2,
 } from "lucide-react";
-import { cn, generateShortStoryTitle } from "@/lib/utils";
+import { cn, generateShortStoryTitle, generateFullStoryTitle } from "@/lib/utils";
 import { type InvestPrinciple, type UserStory, type FeedbackData } from "@/lib/types";
 import {
   Accordion,
@@ -47,25 +47,25 @@ const investPrinciples: InvestPrinciple[] = [
   {
     id: "negotiable",
     label: "Négociable",
-    description: "Une user story n\'est pas un contrat figé, mais un point de départ pour la conversation. Elle est flexible et ouverte aux ajustements basés sur les insights de l\'équipe et l\'évolution des besoins.",
-    question: "Est-ce que cette user story est suffisamment flexible pour permettre à l\'équipe de discuter et d\'affiner les détails de la solution pendant le développement ?",
+    description: "Une user story n'est pas un contrat figé, mais un point de départ pour la conversation. Elle est flexible et ouverte aux ajustements basés sur les insights de l'équipe et l'évolution des besoins.",
+    question: "Est-ce que cette user story est suffisamment flexible pour permettre à l'équipe de discuter et d'affiner les détails de la solution pendant le développement ?",
   },
   {
     id: "valuable",
     label: "Valuable",
-    description: "L\'essence d\'une user story est la valeur qu\'elle apporte à l\'utilisateur final, elle doit être orientée utilisateur. Chaque user story doit contribuer de manière significative à la satisfaction des besoins utilisateurs et à l\'amélioration de leur appréciation du produit.",
-    question: "Est-ce que cette user story apporte une valeur tangible et identifiable à l\'utilisateur final ou à un stakeholder ?",
+    description: "L'essence d'une user story est la valeur qu'elle apporte à l'utilisateur final, elle doit être orientée utilisateur. Chaque user story doit contribuer de manière significative à la satisfaction des besoins utilisateurs et à l'amélioration de leur appréciation du produit.",
+    question: "Est-ce que cette user story apporte une valeur tangible et identifiable à l'utilisateur final ou à un stakeholder ?",
   },
   {
     id: "estimable",
     label: "Estimable",
-    description: "La user story peut être estimée sans nécessairement l\'être lors de sa création initiale, par exemple lors d'une session de Planning Poker. Les user stories trop grandes sont plus difficiles à estimer.",
-    question: "L\'équipe Agile est-elle en mesure de fournir une estimation raisonnable (même approximative) de l\'effort nécessaire pour réaliser cette user story ?",
+    description: "La user story peut être estimée sans nécessairement l'être lors de sa création initiale, par exemple lors d'une session de Planning Poker. Les user stories trop grandes sont plus difficiles à estimer.",
+    question: "L'équipe Agile est-elle en mesure de fournir une estimation raisonnable (même approximative) de l'effort nécessaire pour réaliser cette user story ?",
   },
   {
     id: "small",
     label: "Petite",
-    description: "Pour maintenir l\'élan et assurer une livraison continue, les user stories doivent être d\'une taille suffisamment restreintepour être complétées au cours d\'un seul sprint. Une bonne règle générale est qu\'une seule user story ne devrait pas prendre plus de 50 % d\'une itération (par exemple, pas plus de 5 jours pour un sprint de 2 semaines).",
+    description: "Pour maintenir l'élan et assurer une livraison continue, les user stories doivent être d'une taille suffisamment restreintepour être complétées au cours d'un seul sprint. Une bonne règle générale est qu\'une seule user story ne devrait pas prendre plus de 50 % d\'une itération (par exemple, pas plus de 5 jours pour un sprint de 2 semaines).",
     question: "Cette user story est-elle suffisamment petite pour être raisonnablement complétée au cours d\'un seul sprint ?",
   },
   {
@@ -242,11 +242,31 @@ export default function ReviewPage() {
   const totalStories = userStories.length;
   const currentPrinciple = investPrinciples[currentPrincipleIndex];
   const shortTitle = generateShortStoryTitle(currentStory);
+  const fullStoryDisplayTitle = generateFullStoryTitle(currentStory);
 
   const storiesInSameEpic = userStories.filter((story) => {
-    const currentEpic = currentStory.epic_name?.trim().toLowerCase() || "";
-    const storyEpic = story.epic_name?.trim().toLowerCase() || "";
-    return storyEpic === currentEpic && story.id !== currentStory.id;
+    if (story.id === currentStory.id) {
+      return false; // Exclude the current story itself
+    }
+
+    // Check if currentStory has a valid, non-empty epicId
+    const currentStoryHasEpicId = currentStory.epicId && typeof currentStory.epicId === 'string' && currentStory.epicId.trim() !== "";
+
+    if (currentStoryHasEpicId) {
+      // Scenario 1: currentStory has epicId. Match other stories by epicId.
+      // The other story must also have a valid, non-empty epicId that matches.
+      const storyHasEpicId = story.epicId && typeof story.epicId === 'string' && story.epicId.trim() !== "";
+      return storyHasEpicId && story.epicId === currentStory.epicId;
+    } else {
+      // Scenario 2: currentStory does NOT have a valid epicId. Match by epic_name AND source_key.
+      const currentEpicName = currentStory.epic_name?.trim().toLowerCase() || "";
+      const storyEpicName = story.epic_name?.trim().toLowerCase() || "";
+
+      const currentSourceKey = currentStory.source_key?.trim().toLowerCase() || "";
+      const storySourceKey = story.source_key?.trim().toLowerCase() || "";
+
+      return storyEpicName === currentEpicName && storySourceKey === currentSourceKey;
+    }
   });
 
   const handleEvaluationChange = (principleId: string, value: string) => {
@@ -301,7 +321,7 @@ export default function ReviewPage() {
 
       const evaluationData: Record<string, string> = {};
       investPrinciples.forEach((principle) => {
-        evaluationData[principle.label] = evaluations[principle.id] || "";
+        evaluationData[principle.id] = evaluations[principle.id] || "";
       });
 
       const feedbackData: FeedbackData = {
@@ -368,9 +388,11 @@ export default function ReviewPage() {
 
       {/* Progress header */}
       <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Annotation de user story</h1>
-          <span className="text-sm font-medium">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <h1 className="text-2xl font-bold mr-4">
+            Annotation : {fullStoryDisplayTitle}
+          </h1>
+          <span className="text-sm font-medium whitespace-nowrap">
             Story {safeStoryIndex + 1} sur {totalStories}
           </span>
         </div>
@@ -437,7 +459,7 @@ export default function ReviewPage() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center">
                 <Info className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
-                Story en cours d'annotation : {shortTitle}
+                Story en cours d'annotation : {fullStoryDisplayTitle}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm space-y-3">
@@ -618,7 +640,7 @@ export default function ReviewPage() {
         <TabsContent value="feedback" className="mt-4">
           <Card>
             <CardHeader>
-              <CardTitle>Retour supplémentaire</CardTitle>
+              <CardTitle>Feedback</CardTitle>
               <CardDescription>
                 Ajoutez tout commentaire ou suggestion pour améliorer cette user story.
               </CardDescription>
