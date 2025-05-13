@@ -56,6 +56,7 @@ export async function GET(request: Request) {
       )
       SELECT
         s.id,
+        s.dataset_id,
         s.title,
         s.description,
         s.acceptance_criteria,
@@ -85,6 +86,7 @@ export async function GET(request: Request) {
     // Take up to 5 stories
     const selectedStories: UserStory[] = storiesFromDb.slice(0, 5).map((story) => ({
       id: story.id,
+      datasetId: story.dataset_id,
       title: story.title,
       description: story.description,
       acceptance_criteria: story.acceptance_criteria ? JSON.parse(story.acceptance_criteria) : [],

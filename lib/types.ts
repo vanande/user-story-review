@@ -11,6 +11,7 @@ export interface RawUserStory {
 
 export interface UserStory {
   id: number;
+  datasetId: number;
   title: string;
   description: string;
   acceptance_criteria: string[];
