@@ -120,51 +120,6 @@ export default function ReviewPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("story");
 
-  // Moved useEffect for debugging the epic filter UP to obey Rules of Hooks
-  useEffect(() => {
-    // Note: currentStory might not be defined on initial renders before stories load
-    const storyForLog = userStories ? userStories[currentStoryIndex] : null;
-
-    if (storyForLog && userStories && userStories.length > 0) {
-      console.groupCollapsed(`DEBUG: Epic Filter for Story ID ${storyForLog.id}`);
-      console.log("Current Story for epic comparison:", {
-        id: storyForLog.id,
-        epicName: storyForLog.epic_name,
-        title: storyForLog.title,
-      });
-
-      const allStoriesForDebug = userStories.map((s) => ({
-        id: s.id,
-        epicName: s.epic_name,
-        title: s.title,
-      }));
-      console.log("All User Stories (for epic comparison):", allStoriesForDebug);
-
-      const calculatedStoriesInSameEpicForDebug = userStories
-        .filter(
-          (story) =>
-            story.epic_name === storyForLog.epic_name && story.id !== storyForLog.id
-        )
-        .map((s) => ({ id: s.id, epicName: s.epic_name, title: s.title }));
-
-      console.log(
-        "Calculated 'storiesInSameEpic' (result of filter):",
-        calculatedStoriesInSameEpicForDebug
-      );
-
-      if (
-        calculatedStoriesInSameEpicForDebug.length === 0 &&
-        storyForLog.epic_name &&
-        storyForLog.epic_name.trim() !== ""
-      ) {
-        console.warn(
-          `WARN: No other stories found in epic "${storyForLog.epic_name}". Check data for consistency (e.g., exact name match, case sensitivity, leading/trailing spaces) if this is unexpected.`
-        );
-      }
-      console.groupEnd();
-    }
-  }, [currentStoryIndex, userStories]); // Adjusted dependencies
-
   useEffect(() => {
     const fetchStories = async () => {
       setLoading(true);
@@ -554,10 +509,10 @@ export default function ReviewPage() {
                             Voir {storiesInSameEpic.length} autre(s) story(s) dans l'épique "{currentStory.epic_name || 'N/A'}"
                           </AccordionTrigger>
                           <AccordionContent className="pt-2 pb-3">
-                            <ul className="list-disc space-y-1 pl-5 text-xs text-muted-foreground max-h-40 overflow-y-auto">
+                            <ul className="list-disc space-y-1.5 pl-5 text-xs text-muted-foreground max-h-48 overflow-y-auto">
                               {storiesInSameEpic.map((story) => (
-                                <li key={story.id}>
-                                  #{story.id}: {story.title || "(Pas de titre)"}
+                                <li key={story.id} className="break-words">
+                                  <span className="font-semibold text-foreground">#{story.id}:</span> {story.description || "(Pas de description)"}
                                 </li>
                               ))}
                             </ul>
