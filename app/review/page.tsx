@@ -412,7 +412,7 @@ export default function ReviewPage() {
         <TabsContent value="story" className="mt-4">
           <Card>
             <CardHeader>
-              <CardTitle>{shortTitle}</CardTitle>
+              <CardTitle>{fullStoryDisplayTitle}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
