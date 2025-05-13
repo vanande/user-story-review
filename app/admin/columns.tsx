@@ -75,7 +75,7 @@ export const columns: ColumnDef<Review>[] = [
   },
   {
     accessorKey: "additional_feedback",
-    header: "Retour",
+    header: "Feedback",
     cell: ({ row }) => (
       <p className="max-w-xs text-xs truncate" title={row.original.additional_feedback || ""}>
         {row.original.additional_feedback || (

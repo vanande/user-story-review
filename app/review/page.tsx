@@ -406,7 +406,7 @@ export default function ReviewPage() {
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="story">Détails de la story</TabsTrigger>
           <TabsTrigger value="evaluate">Évaluer les principes</TabsTrigger>
-          <TabsTrigger value="feedback">Retour</TabsTrigger>
+          <TabsTrigger value="feedback">Feedback</TabsTrigger>
         </TabsList>
 
         <TabsContent value="story" className="mt-4">

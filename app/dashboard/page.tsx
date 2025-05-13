@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LogOut, RefreshCcw, AlertCircle, Users, Medal, UserCog } from "lucide-react";
+import { LogOut, RefreshCcw, AlertCircle, Users, Medal, UserCog, ClipboardList, Edit3, BookOpenText, Play } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -195,7 +195,10 @@ export default function DashboardPage() {
         {/* Review Statistics Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Vos statistiques d'annotation</CardTitle>
+            <CardTitle className="flex items-center">
+              <ClipboardList className="mr-2 h-5 w-5" />
+              Vos statistiques d'annotation
+            </CardTitle>
             <CardDescription>Votre progression sur le jeu de données actuel</CardDescription>
           </CardHeader>
           <CardContent>
@@ -256,7 +259,10 @@ export default function DashboardPage() {
         {/* Start New Review Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Commencer une nouvelle annotation</CardTitle>
+            <CardTitle className="flex items-center">
+              <Edit3 className="mr-2 h-5 w-5" />
+              Commencer une nouvelle annotation
+            </CardTitle>
             <CardDescription>Évaluez les user stories selon les principes INVEST</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
@@ -278,6 +284,7 @@ export default function DashboardPage() {
               className="w-full"
               disabled={loadingStats || (stats !== null && stats.left === 0)}
             >
+              {(loadingStats || (stats !== null && stats.left === 0)) ? null : <Play className="mr-2 h-5 w-5" />}
               {loadingStats
                 ? "Chargement..."
                 : stats !== null && stats.left === 0
@@ -382,7 +389,10 @@ export default function DashboardPage() {
       <div className="mt-8">
         <Card>
           <CardHeader>
-            <CardTitle>Référence Principes INVEST</CardTitle>
+            <CardTitle className="flex items-center">
+              <BookOpenText className="mr-2 h-6 w-6" />
+              Référence Principes INVEST
+            </CardTitle>
             <CardDescription>Un rappel rapide de ce que chaque principe signifie</CardDescription>
           </CardHeader>
           <CardContent>
